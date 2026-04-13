@@ -2,7 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-url = "https://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps4"
+query = "juegos digitales ps4 uruguay precio"
+url = f"https://www.google.com/search?q={query}"
 
 headers = {
     "User-Agent": "Mozilla/5.0"
@@ -13,23 +14,15 @@ soup = BeautifulSoup(response.text, "html.parser")
 
 juegos = []
 
-productos = soup.find_all("div", class_="item")
+resultados = soup.find_all("h3")
 
-for p in productos:
-    try:
-        nombre = p.find("h3")
-        precio = p.find("span", class_="amount")
-
-        if nombre and precio:
-            juegos.append({
-                "Nombre": nombre.text.strip(),
-                "Precio": precio.text.strip()
-            })
-    except:
-        pass
+for r in resultados:
+    juegos.append({
+        "Nombre": r.text,
+        "Precio": "Consultar"
+    })
 
 df = pd.DataFrame(juegos)
-
 df.to_excel("juegos_ps4.xlsx", index=False)
 
-print("✅ Excel con datos")
+print("✅ Excel generado")
