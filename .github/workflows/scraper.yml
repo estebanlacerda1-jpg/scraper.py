@@ -22,8 +22,8 @@ jobs:
         uses: browser-actions/setup-chrome@v1
 
       - name: Instalar librerías
-        run: pip install selenium pandas openpyxl
-
+        run: pip install selenium pandas openpyxl 
+             webdriver-manager
       - name: Ejecutar script
         run: python scraper.py
 
