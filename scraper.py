@@ -1,47 +1,46 @@
-import requests
-from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 import pandas as pd
 import time
 
-headers = {
-    "User-Agent": "Mozilla/5.0"
-}
+options = Options()
+options.add_argument("--headless")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
 
-base_url = "https://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps4"
+driver = webdriver.Chrome(options=options)
+
+url = "https://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps4"
+driver.get(url)
+
+time.sleep(5)
 
 juegos = []
-page = 1
 
 while True:
-    url = f"{base_url}?page={page}"
-    print(f"Página {page}")
-
-    response = requests.get(url, headers=headers)
-
-    if response.status_code != 200:
-        print("Error al entrar a la página")
-        break
-
-    soup = BeautifulSoup(response.text, "html.parser")
-
-    productos = soup.find_all("div", class_="product-item")
-
-    if not productos:
-        print("No hay más productos")
-        break
+    productos = driver.find_elements(By.CLASS_NAME, "product-item")
 
     for p in productos:
-        nombre = p.find("h4")
-        precio = p.find("span", class_="price")
+        try:
+            nombre = p.find_element(By.TAG_NAME, "h4").text
+            precio = p.find_element(By.CLASS_NAME, "price").text
 
-        if nombre and precio:
             juegos.append({
-                "Nombre": nombre.text.strip(),
-                "Precio": precio.text.strip()
+                "Nombre": nombre,
+                "Precio": precio
             })
+        except:
+            pass
 
-    page += 1
-    time.sleep(2)  # importante para no ser bloqueado
+    try:
+        siguiente = driver.find_element(By.LINK_TEXT, "Siguiente")
+        siguiente.click()
+        time.sleep(5)
+    except:
+        break
+
+driver.quit()
 
 df = pd.DataFrame(juegos)
 
@@ -49,4 +48,4 @@ if df.empty:
     print("⚠️ No se encontraron datos")
 else:
     df.to_excel("juegos_ps4.xlsx", index=False)
-    print("✅ Excel creado con datos")
+    print("✅ Excel creado")
