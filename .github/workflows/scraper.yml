@@ -18,8 +18,11 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Instalar Chrome
+        uses: browser-actions/setup-chrome@v1
+
       - name: Instalar librerías
-        run: pip install requests beautifulsoup4 pandas openpyxl
+        run: pip install selenium pandas openpyxl
 
       - name: Ejecutar script
         run: python scraper.py
@@ -29,5 +32,5 @@ jobs:
           git config --global user.name "bot"
           git config --global user.email "bot@github.com"
           git add juegos_ps4.xlsx
-          git commit -m "update excel"
+          git commit -m "update excel" || echo "no changes"
           git push
