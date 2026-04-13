@@ -1,38 +1,43 @@
-import requests
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 import pandas as pd
+import time
 
-url = "https://juegosdigitalesuruguay.com/api/products"
+# iniciar navegador
+driver = webdriver.Chrome()
+
+driver.get("https://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps4")
+
+time.sleep(5)  # esperar que cargue
 
 juegos = []
 
-page = 1
-
-while page <= 20:
-    print(f"Página {page}")
-    
-    params = {
-        "category": "juegos-digitales-ps4",
-        "page": page
-    }
-
-    response = requests.get(url, params=params)
-
-    data = response.json()
-
-    productos = data.get("data", [])
-
-    if not productos:
-        break
+while True:
+    productos = driver.find_elements(By.CLASS_NAME, "product")
 
     for p in productos:
-        juegos.append({
-            "Nombre": p.get("name"),
-            "Precio": p.get("price")
-        })
+        try:
+            nombre = p.find_element(By.TAG_NAME, "h4").text
+            precio = p.find_element(By.CLASS_NAME, "price").text
 
-    page += 1
+            juegos.append({
+                "Nombre": nombre,
+                "Precio": precio
+            })
+        except:
+            pass
+
+    # intentar botón siguiente
+    try:
+        siguiente = driver.find_element(By.LINK_TEXT, "Siguiente")
+        siguiente.click()
+        time.sleep(3)
+    except:
+        break
 
 df = pd.DataFrame(juegos)
 df.to_excel("juegos_ps4.xlsx", index=False)
 
-print("✅ Excel con datos reales")
+driver.quit()
+
+print("✅ Excel completo")
