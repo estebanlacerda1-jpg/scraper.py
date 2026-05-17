@@ -1,37 +1,38 @@
-name: Scraping PlayXD
+name: ABC Gaming Scraper
 
 on:
+  workflow_dispatch:        # botón manual en GitHub
   schedule:
-    - cron: '0 12 * * *'  # ⏰ 09:00 Uruguay (UTC-3)
-  workflow_dispatch:
+    - cron: "0 8 * * *"    # también corre automático cada día a las 8 AM UTC
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    timeout-minutes: 360    # máximo 6 horas
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
 
-    - name: Instalar Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Instalar dependencias
-      run: |
-        pip install selenium pandas openpyxl
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-    - name: Instalar Chrome
-      uses: browser-actions/setup-chrome@v1
+      - name: Instalar dependencias
+        run: |
+          pip install pandas openpyxl beautifulsoup4 lxml playwright requests
+          playwright install chromium
+          playwright install-deps chromium
 
-    - name: Ejecutar scraper
-      run: python scraper.py
+      - name: Correr scraper
+        run: python scraper.py
 
-    - name: Guardar Excel en repo
-      run: |
-        git config --global user.name "bot"
-        git config --global user.email "bot@github.com"
-        git add .
-        git commit -m "update excel" || echo "no changes"
-        git push
+      - name: Subir Excel como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: catalogo-abc-gaming
+          path: catalogo_completo_abc_gaming.xlsx
+          retention-days: 30    # disponible para descargar por 30 días
+
