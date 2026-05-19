@@ -1,15 +1,17 @@
 name: ABC Gaming Scraper
 
 on:
-  workflow_dispatch:        # botón manual en GitHub
+  workflow_dispatch:
   schedule:
-    - cron: "0 8 * * *"    # también corre automático cada día a las 8 AM UTC
+    - cron: "0 8 * * *"
+
 permissions:
   contents: write
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 360    # máximo 6 horas
+    timeout-minutes: 360
 
     steps:
 
@@ -30,21 +32,20 @@ jobs:
       - name: Correr scraper
         run: python scraper.py
 
-- name: Guardar Excel actualizado
-      run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
+      - name: Guardar Excel actualizado
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
 
-        git add .
+          git add .
 
-        git commit -m "Excel actualizado automatico" || echo "Sin cambios"
+          git commit -m "Excel actualizado automatico" || echo "Sin cambios"
 
-        git push
+          git push
 
       - name: Subir Excel como artefacto
         uses: actions/upload-artifact@v4
         with:
           name: catalogo-abc-gaming
           path: catalogo_completo_abc_gaming.xlsx
-          retention-days: 30    # disponible para descargar por 30 días
-
+          retention-days: 30
