@@ -3,8 +3,8 @@
 # NORMALIZACION + MONEDAS + MEJORES PRECIOS + MULTI HOJAS
 # =========================================================
 
-import nest_asyncio
-nest_asyncio.apply()
+import asyncio
+
 
 import re
 import asyncio
