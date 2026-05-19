@@ -4,7 +4,8 @@ on:
   workflow_dispatch:        # botón manual en GitHub
   schedule:
     - cron: "0 8 * * *"    # también corre automático cada día a las 8 AM UTC
-
+permissions:
+  contents: write
 jobs:
   scrape:
     runs-on: ubuntu-latest
