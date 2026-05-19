@@ -30,6 +30,17 @@ jobs:
       - name: Correr scraper
         run: python scraper.py
 
+- name: Guardar Excel actualizado
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+
+        git add .
+
+        git commit -m "Excel actualizado automatico" || echo "Sin cambios"
+
+        git push
+
       - name: Subir Excel como artefacto
         uses: actions/upload-artifact@v4
         with:
