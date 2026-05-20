@@ -1,51 +1,52 @@
 name: ABC Gaming Scraper
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: "0 8 * * *"
-
-permissions:
-  contents: write
+    # Corre todos los dias a las 06:00 UTC (03:00 Uruguay)
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    # Permite correrlo manualmente desde la pestaña Actions
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 360
+    timeout-minutes: 90
 
     steps:
-
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Instalar Python
+      - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Instalar dependencias
+      - name: Instalar dependencias Python
         run: |
-          pip install pandas openpyxl beautifulsoup4 lxml playwright requests
-          playwright install chromium
-          playwright install-deps chromium
+          pip install --upgrade pip
+          pip install pandas openpyxl beautifulsoup4 lxml requests playwright
+
+      - name: Instalar Playwright + Chromium
+        run: playwright install chromium --with-deps
 
       - name: Correr scraper
-        run: python scraper.py
+        run: python scraper_abc_gaming.py
 
-      - name: Guardar Excel actualizado
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-
-          git add .
-
-          git commit -m "Excel actualizado automatico" || echo "Sin cambios"
-
-          git push
-
-      - name: Subir Excel como artefacto
+      - name: Subir Excel como artefacto de GitHub
         uses: actions/upload-artifact@v4
         with:
           name: catalogo-abc-gaming
           path: catalogo_completo_abc_gaming.xlsx
           retention-days: 30
+
+      # Opcional: hace commit del Excel al repo para tenerlo siempre actualizado
+      - name: Commit del catalogo actualizado
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add catalogo_completo_abc_gaming.xlsx || true
+          git diff --staged --quiet || git commit -m "chore: catalogo actualizado $(date -u '+%Y-%m-%d')"
+          git push || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
