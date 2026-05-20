@@ -30,8 +30,7 @@ jobs:
         run: playwright install chromium --with-deps
 
       - name: Correr scraper
-        run: python scraper_abc_gaming.py
-
+        run: python ${{ github.workspace }}/scraper 
       - name: Subir Excel como artefacto de GitHub
         uses: actions/upload-artifact@v4
         with:
