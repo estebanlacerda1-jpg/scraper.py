@@ -1,0 +1,829 @@
+# =========================================================
+# ABC GAMING - SCRAPER COMPLETO
+# Adaptado para GitHub Actions (sin Google Colab)
+# Salida: catalogo_completo_abc_gaming.xlsx
+# =========================================================
+
+import re
+import asyncio
+import requests
+import pandas as pd
+from bs4 import BeautifulSoup
+from playwright.async_api import async_playwright
+from openpyxl import load_workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+from openpyxl.utils import get_column_letter
+
+# =========================================================
+# CONFIG GLOBAL
+# =========================================================
+
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36"}
+PAGINAS = 2
+USD_TO_UYU = 40
+ARS_TO_UYU = 0.035
+
+# =========================================================
+# NORMALIZACION DE NOMBRES
+# =========================================================
+
+BASURA_NOMBRES = [
+    "DIGITAL", "PRIMARIO", "SECUNDARIO", "CUENTA",
+    "OFFLINE", "ONLINE", "PS4", "PS5", "PS3",
+    "XBOX", "NINTENDO", "STANDARD", "DELUXE", "ULTIMATE",
+    "LATAM", "GLOBAL", "STEAM KEY", "KEY", "PC",
+    "CODIGO", "CÓDIGO", "ACCOUNT"
+]
+
+def normalizar_nombre(nombre):
+    nombre = str(nombre).upper()
+    for b in BASURA_NOMBRES:
+        nombre = nombre.replace(b, "")
+    return re.sub(r"\s+", " ", nombre).strip()
+
+def limpiar_nombre_eneba(nombre):
+    remover = [
+        "Código de Steam", "Steam Key", "Steam", "GLOBAL", "LATAM", "EUROPE",
+        "United States", "UNITED STATES", "Xbox Live", "Xbox", "PSN", "Nintendo",
+        "Código de", "Código", "Key",
+    ]
+    for r in remover:
+        nombre = nombre.replace(r, "")
+    return re.sub(r"\s+", " ", nombre).strip()
+
+# =========================================================
+# MANEJO DE MONEDAS Y PRECIOS
+# =========================================================
+
+def detectar_moneda(precio_txt):
+    txt = str(precio_txt).upper()
+    if "USD" in txt or "US$" in txt:
+        return "USD"
+    if "ARS" in txt:
+        return "ARS"
+    if "$U" in txt or "UYU" in txt:
+        return "UYU"
+    return "UYU"
+
+def limpiar_precio(precio_txt):
+    txt = str(precio_txt)
+    moneda = detectar_moneda(txt)
+    numero = re.search(r"[\d,.]+", txt)
+    if not numero:
+        return None, moneda
+    valor = numero.group().replace(".", "").replace(",", ".")
+    try:
+        return float(valor), moneda
+    except:
+        return None, moneda
+
+def convertir_uyu(valor, moneda):
+    if valor is None:
+        return None
+    if moneda == "USD":
+        return round(valor * USD_TO_UYU, 2)
+    if moneda == "ARS":
+        return round(valor * ARS_TO_UYU, 2)
+    return round(valor, 2)
+
+def extraer_precio_eneba(texto):
+    texto = texto.replace("Desde", "").replace("From", "").strip()
+    match = re.search(r'(\d+[.,]?\d*)\s*US\$', texto)
+    if match:
+        try:
+            return f"{float(match.group(1).replace(',', '.')):.2f} USD"
+        except:
+            pass
+    match2 = re.search(r'\$\s*(\d+[.,]\d+)', texto)
+    if match2:
+        try:
+            return f"{float(match2.group(1).replace(',', '.')):.2f} USD"
+        except:
+            pass
+    return ""
+
+# =========================================================
+# DETECTAR PLATAFORMA
+# =========================================================
+
+def detectar_plataforma(nombre, tienda):
+    txt = f"{nombre} {tienda}".upper()
+    if "PS5" in txt:
+        return "PS5"
+    if "PS4" in txt:
+        return "PS4"
+    if "PS3" in txt:
+        return "PS3"
+    if "XBOX" in txt or "GAME PASS" in txt or "GAMEPASS" in txt:
+        return "Xbox"
+    if "NINTENDO" in txt or "SWITCH" in txt:
+        return "Nintendo"
+    if "STEAM" in txt:
+        return "Steam"
+    if "FORTNITE" in txt or "PAVOS" in txt or "V-BUCK" in txt:
+        return "Fortnite"
+    if "ROBLOX" in txt or "ROBUX" in txt:
+        return "Robux"
+    if "FREE FIRE" in txt or "FREEFIRE" in txt:
+        return "Free Fire"
+    if "GENSHIN" in txt:
+        return "Genshin"
+    if "VALORANT" in txt or "RIOT" in txt:
+        return "Valorant"
+    if "PUBG" in txt:
+        return "PUBG"
+    if "FC POINT" in txt or "FIFA" in txt or "FUT" in txt:
+        return "FC Points"
+    if "GTA" in txt or "SHARK" in txt:
+        return "GTA"
+    if "EA PLAY" in txt or "ORIGIN" in txt:
+        return "EA Play"
+    if "UBISOFT" in txt or "UPLAY" in txt:
+        return "Ubisoft"
+    if "EPIC" in txt:
+        return "Epic Games"
+    if "GOG" in txt:
+        return "GOG"
+    if "BATTLE" in txt or "BLIZZARD" in txt:
+        return "BattleNet"
+    if "DISCORD" in txt:
+        return "Discord"
+    if "TWITCH" in txt:
+        return "Twitch"
+    if "RAZER" in txt:
+        return "Razer Gold"
+    if "GOOGLE PLAY" in txt:
+        return "Google Play"
+    if "PSN" in txt or "PS PLUS" in txt or "PLAYSTATION PLUS" in txt:
+        return "PSN Membresia"
+    if "GIFT" in txt or "CARD" in txt or "GIFTCARD" in txt:
+        return "Gift Cards"
+    return "Otros"
+
+# =========================================================
+# SCRAPERS SINCRONOS (requests + BeautifulSoup)
+# =========================================================
+
+def scrape_shopify(url, paginas=PAGINAS):
+    productos = []
+    for page in range(1, paginas + 1):
+        page_url = f"{url}/products.json?limit=250&page={page}"
+        try:
+            r = requests.get(page_url, headers=HEADERS, timeout=30)
+            data = r.json()
+            for p in data.get("products", []):
+                try:
+                    precio_raw = float(p["variants"][0]["price"])
+                    productos.append({
+                        "nombre": p["title"],
+                        "precio_original": f"{precio_raw} USD",
+                        "precio": precio_raw,
+                        "moneda": "USD",
+                        "precio_uyu": convertir_uyu(precio_raw, "USD"),
+                        "link": f"{url.split('/collections')[0]}/products/{p['handle']}"
+                    })
+                except:
+                    continue
+        except:
+            continue
+    return productos
+
+
+def scrape_woocommerce(url, paginas=PAGINAS):
+    productos = []
+    selectors = [
+        "li.product", "div.product", ".product-small",
+        ".type-product", ".product-grid-item", ".wd-product", ".product-item"
+    ]
+    for page in range(1, paginas + 1):
+        page_url = url if page == 1 else f"{url.rstrip('/')}/page/{page}/"
+        try:
+            r = requests.get(page_url, headers=HEADERS, timeout=30)
+            soup = BeautifulSoup(r.text, "html.parser")
+            cards = []
+            for sel in selectors:
+                cards.extend(soup.select(sel))
+            for c in cards:
+                try:
+                    nombre_el = c.select_one(
+                        "h2, h3, h4, .product-title, .woocommerce-loop-product__title, .wd-entities-title"
+                    )
+                    precio_el = c.select_one(".price, .amount, bdi")
+                    if not nombre_el or not precio_el:
+                        continue
+                    nombre = nombre_el.get_text(strip=True)
+                    precio_txt = precio_el.get_text(" ", strip=True)
+                    valor, moneda = limpiar_precio(precio_txt)
+                    if valor is None or valor < 1:
+                        continue
+                    link_el = c.select_one("a")
+                    link = link_el["href"] if link_el else url
+                    productos.append({
+                        "nombre": nombre,
+                        "precio_original": precio_txt,
+                        "precio": valor,
+                        "moneda": moneda,
+                        "precio_uyu": convertir_uyu(valor, moneda),
+                        "link": link
+                    })
+                except:
+                    continue
+        except Exception as e:
+            print(f"   ERROR requests: {e}")
+    return productos
+
+
+def scrape_tiendanube(url, paginas=PAGINAS):
+    productos = []
+    for page in range(1, paginas + 1):
+        page_url = url if page == 1 else f"{url}?mpage={page}"
+        try:
+            r = requests.get(page_url, headers=HEADERS, timeout=30)
+            soup = BeautifulSoup(r.text, "html.parser")
+            for c in soup.select(".js-item-product"):
+                try:
+                    nombre = c.select_one(".js-item-name").get_text(strip=True)
+                    precio_txt = c.select_one(".js-price-display").get_text(strip=True)
+                    valor, moneda = limpiar_precio(precio_txt)
+                    if valor is None:
+                        continue
+                    link = c.select_one("a")["href"]
+                    productos.append({
+                        "nombre": nombre,
+                        "precio_original": precio_txt,
+                        "precio": valor,
+                        "moneda": moneda,
+                        "precio_uyu": convertir_uyu(valor, moneda),
+                        "link": link
+                    })
+                except:
+                    continue
+        except:
+            continue
+    return productos
+
+
+def scrape_flatsome_requests(url, paginas=PAGINAS):
+    return scrape_woocommerce(url, paginas)
+
+# =========================================================
+# SCRAPER TIENDANEGOCIO (zonadigitalmd.com)
+# =========================================================
+
+def scrape_tiendanegocio(url, paginas=PAGINAS):
+    productos = []
+    if not url.startswith("http"):
+        url = "https://" + url
+    for page in range(1, paginas + 1):
+        page_url = url if page == 1 else f"{url}?pagina={page}"
+        try:
+            r = requests.get(page_url, headers=HEADERS, timeout=30)
+            soup = BeautifulSoup(r.text, "html.parser")
+            for c in soup.select(".product-item, .item-producto, article.producto, .card"):
+                try:
+                    nombre_el = c.select_one("h2, h3, h4, .product-name, .nombre")
+                    precio_el = c.select_one(".price, .precio, .product-price")
+                    if not nombre_el or not precio_el:
+                        continue
+                    nombre = nombre_el.get_text(strip=True)
+                    precio_txt = precio_el.get_text(strip=True)
+                    valor, moneda = limpiar_precio(precio_txt)
+                    if valor is None:
+                        continue
+                    link_el = c.select_one("a")
+                    link = link_el["href"] if link_el else url
+                    productos.append({
+                        "nombre": nombre,
+                        "precio_original": precio_txt,
+                        "precio": valor,
+                        "moneda": moneda,
+                        "precio_uyu": convertir_uyu(valor, moneda),
+                        "link": link
+                    })
+                except:
+                    continue
+        except Exception as e:
+            print(f"   ERROR TiendaNegocio: {e}")
+    return productos
+
+# =========================================================
+# CATALOGO COMPLETO DE TIENDAS
+# =========================================================
+
+CATALOGOS = {
+
+    # ---- ALPHA (Shopify) ----
+    "Alpha PS5 Primaria":       {"tipo": "shopify",     "url": "https://alphajuegosdigitales.com/collections/ps5-principal"},
+    "Alpha PS5 Secundaria":     {"tipo": "shopify",     "url": "https://alphajuegosdigitales.com/collections/juegos-ps5"},
+    "Alpha PS4 Primaria":       {"tipo": "shopify",     "url": "https://alphajuegosdigitales.com/collections/ps4-principal"},
+    "Alpha PS4 Secundaria":     {"tipo": "shopify",     "url": "https://alphajuegosdigitales.com/collections/juegos-ps4"},
+    "Alpha Xbox":               {"tipo": "shopify",     "url": "https://alphajuegosdigitales.com/collections/juegos-xbox"},
+
+    # ---- DIGITALWORLD (WooCommerce) ----
+    "DigitalWorld PS4":         {"tipo": "woocommerce", "url": "https://digitalworldpsn.com/es/juegos-digitales-ps4/?v=1b23f8a4c97c"},
+    "DigitalWorld PS5":         {"tipo": "woocommerce", "url": "https://digitalworldpsn.com/es/juegos-digitales-ps5/?v=1b23f8a4c97c"},
+    "DigitalWorld VR":          {"tipo": "woocommerce", "url": "https://digitalworldpsn.com/es/juegos-ps-vr-vr2/?v=1b23f8a4c97c"},
+    "DigitalWorld Xbox":        {"tipo": "woocommerce", "url": "https://digitalworldpsn.com/es/juegos-digitales-xbox/?v=1b23f8a4c97c"},
+    "DigitalWorld Switch":      {"tipo": "woocommerce", "url": "https://digitalworldpsn.com/es/juegos-digitales-switch/?v=1b23f8a4c97c"},
+
+    # ---- DIXGAMER (WooCommerce) ----
+    "Dix Fortnite":             {"tipo": "woocommerce", "url": "https://dixgamer.com/categoria-producto/tarjetas/fortnite/"},
+    "Dix PS5":                  {"tipo": "woocommerce", "url": "https://dixgamer.com/categoria-producto/juegos/ps5/"},
+    "Dix PS4":                  {"tipo": "woocommerce", "url": "https://dixgamer.com/categoria-producto/juegos/ps4/"},
+    "Dix PS3":                  {"tipo": "woocommerce", "url": "https://dixgamer.com/categoria-producto/juegos/ps3/"},
+    "Dix FC Points":            {"tipo": "woocommerce", "url": "https://dixgamer.com/categoria-producto/tarjetas/fc-points/"},
+    "Dix Nintendo":             {"tipo": "woocommerce", "url": "https://dixgamer.com/categoria-producto/tarjetas/nintendo/"},
+    "Dix Playstation":          {"tipo": "woocommerce", "url": "https://dixgamer.com/categoria-producto/tarjetas/ps/"},
+    "Dix Razer":                {"tipo": "woocommerce", "url": "https://dixgamer.com/categoria-producto/tarjetas/razer-gold/"},
+    "Dix Steam":                {"tipo": "woocommerce", "url": "https://dixgamer.com/categoria-producto/tarjetas/steam/"},
+    "Dix Xbox":                 {"tipo": "woocommerce", "url": "https://dixgamer.com/categoria-producto/tarjetas/xbox/"},
+
+    # ---- ESTACIONPLAY (Tiendanube) ----
+    "EstacionPlay PS4":         {"tipo": "tiendanube",  "url": "https://estacionplay.com/videojuegos/playstation-4/"},
+    "EstacionPlay PS5":         {"tipo": "tiendanube",  "url": "https://estacionplay.com/videojuegos/playstation-5/"},
+    "EstacionPlay Memb":        {"tipo": "tiendanube",  "url": "https://estacionplay.com/videojuegos/psn-card-y-plus/"},
+
+    # ---- GAMERLAB (Shopify) ----
+    "GamerLab PS4":             {"tipo": "shopify",     "url": "https://juegosdigitalesgamerlab.com/collections/frontpage"},
+    "GamerLab PS5":             {"tipo": "shopify",     "url": "https://juegosdigitalesgamerlab.com/collections/juegos-ps5"},
+    "GamerLab EA Play":         {"tipo": "shopify",     "url": "https://juegosdigitalesgamerlab.com/collections/membresia-ea-play"},
+    "GamerLab PSN":             {"tipo": "shopify",     "url": "https://juegosdigitalesgamerlab.com/collections/play-station-plus"},
+    "GamerLab All":             {"tipo": "shopify",     "url": "https://juegosdigitalesgamerlab.com/collections/all"},
+
+    # ---- JUEGOSDIGITALESPS4PS5 (WooCommerce) ----
+    "JDP4P5 PS4":               {"tipo": "woocommerce", "url": "https://juegosdigitalesps4ps5.com/juegos-ps4/"},
+    "JDP4P5 PS5":               {"tipo": "woocommerce", "url": "https://juegosdigitalesps4ps5.com/juegos-ps5/"},
+    "JDP4P5 Switch":            {"tipo": "woocommerce", "url": "https://juegosdigitalesps4ps5.com/juegos-nintendo/"},
+    "JDP4P5 PS Plus":           {"tipo": "woocommerce", "url": "https://juegosdigitalesps4ps5.com/membresias-ps-plus/"},
+    "JDP4P5 GamePass":          {"tipo": "woocommerce", "url": "https://juegosdigitalesps4ps5.com/membresias-game-pass/"},
+    "JDP4P5 Nintendo Online":   {"tipo": "woocommerce", "url": "https://juegosdigitalesps4ps5.com/suscripcion-nintendo-online/"},
+
+    # ---- JUEGOSDIGITALESURUGUAY (WooCommerce) ----
+    "UruguayDigital PS3":       {"tipo": "woocommerce", "url": "https://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps3"},
+    "UruguayDigital PS4":       {"tipo": "woocommerce", "url": "https://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps4"},
+    "UruguayDigital PS5":       {"tipo": "woocommerce", "url": "http://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps5"},
+    "UruguayDigital Switch1":   {"tipo": "woocommerce", "url": "https://juegosdigitalesuruguay.com/categorias/nintendo-switch/juegos-nintendo-switch"},
+    "UruguayDigital Switch2":   {"tipo": "woocommerce", "url": "https://www.juegosdigitalesuruguay.com/categorias/nintendo-switch-2"},
+    "UruguayDigital Xbox One":  {"tipo": "woocommerce", "url": "https://juegosdigitalesuruguay.com/categorias/xbox/juegos-xbox-one"},
+    "UruguayDigital Xbox XS":   {"tipo": "woocommerce", "url": "https://juegosdigitalesuruguay.com/categorias/xbox/juegos-xbox-series-xs"},
+    "UruguayDigital PSN Plus":  {"tipo": "woocommerce", "url": "https://juegosdigitalesuruguay.com/categorias/cuenta-psn-plus-global"},
+    "UruguayDigital Nintendo":  {"tipo": "woocommerce", "url": "https://juegosdigitalesuruguay.com/categorias/nintendo-membresia"},
+    "UruguayDigital GamePass":  {"tipo": "woocommerce", "url": "https://juegosdigitalesuruguay.com/categorias/membresias-xbox"},
+
+    # ---- MDQ STORE (WooCommerce) ----
+    "MDQ PS5":                  {"tipo": "woocommerce", "url": "https://mdqstore.com/categoria-producto/juegos-ps5/"},
+    "MDQ PS4":                  {"tipo": "woocommerce", "url": "https://mdqstore.com/categoria-producto/juegos-ps4/"},
+    "MDQ PS3":                  {"tipo": "woocommerce", "url": "https://mdqstore.com/categoria-producto/juegos-ps3/"},
+    "MDQ PS Plus":              {"tipo": "woocommerce", "url": "https://mdqstore.com/categoria-producto/playstation-plus/"},
+    "MDQ PSN Card":             {"tipo": "woocommerce", "url": "https://mdqstore.com/categoria-producto/psn-card/"},
+    "MDQ Fortnite":             {"tipo": "woocommerce", "url": "https://mdqstore.com/categoria-producto/fornite/"},
+
+    # ---- PLAYX DIGITAL (WooCommerce) ----
+    "PlayX PS4":                {"tipo": "woocommerce", "url": "https://playxdigital.com/categoria-producto/psn/ps4"},
+    "PlayX PS5":                {"tipo": "woocommerce", "url": "https://playxdigital.com/categoria-producto/psn/ps5"},
+    "PlayX Xbox One":           {"tipo": "woocommerce", "url": "https://playxdigital.com/categoria-producto/xbox/xbox-one"},
+    "PlayX Xbox XS":            {"tipo": "woocommerce", "url": "https://playxdigital.com/categoria-producto/xbox/xbox-series-x-s"},
+    "PlayX Switch":             {"tipo": "woocommerce", "url": "https://playxdigital.com/categoria-producto/nintendo/nintendo-switch"},
+    "PlayX Switch 2":           {"tipo": "woocommerce", "url": "https://playxdigital.com/categoria-producto/nintendo/switch2/"},
+    "PlayX Steam":              {"tipo": "woocommerce", "url": "https://playxdigital.com/categoria-producto/steam"},
+    "PlayX PSN Plus":           {"tipo": "woocommerce", "url": "https://playxdigital.com/membresias/psn-plus"},
+    "PlayX GamePass":           {"tipo": "woocommerce", "url": "https://playxdigital.com/membresias/game-pass-ultimate"},
+    "PlayX Switch Online":      {"tipo": "woocommerce", "url": "https://playxdigital.com/membresias/swicth-online/"},
+
+    # ---- PORTAL GAMES (WooCommerce / Flatsome) ----
+    "PortalGames PS3":          {"tipo": "playwright",  "url": "https://portalgames.com.ar/product-category/juegos-ps3/"},
+    "PortalGames PS4":          {"tipo": "playwright",  "url": "https://portalgames.com.ar/product-category/juegos-ps4/"},
+    "PortalGames PS5":          {"tipo": "playwright",  "url": "https://portalgames.com.ar/product-category/juegos-ps5/"},
+    "PortalGames Switch":       {"tipo": "playwright",  "url": "https://portalgames.com.ar/product-category/nintendo-switch/"},
+
+    # ---- TODO DIGITAL SHOP (WooCommerce / Flatsome) ----
+    "TodoDigital PS4":          {"tipo": "playwright",  "url": "https://tododigitalshop.com/juegos-digitales-ps4/"},
+    "TodoDigital PS5":          {"tipo": "playwright",  "url": "https://tododigitalshop.com/juegos-digitales-ps5/"},
+    "TodoDigital Switch":       {"tipo": "playwright",  "url": "https://tododigitalshop.com/juegos-digitales-nintendo-switch/"},
+
+    # ---- URUGUAY JUEGOS DIGITALES (WooCommerce) ----
+    "UYJuegos PS4":             {"tipo": "woocommerce", "url": "https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/"},
+    "UYJuegos PS4 VR":          {"tipo": "woocommerce", "url": "https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/vr/"},
+    "UYJuegos PS5":             {"tipo": "woocommerce", "url": "https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps5/"},
+    "UYJuegos PC":              {"tipo": "woocommerce", "url": "https://uruguayjuegosdigitales.com/product-category/juegos-digitales-pc/todos-los-juegos-pc/"},
+    "UYJuegos Xbox XS":         {"tipo": "woocommerce", "url": "https://uruguayjuegosdigitales.com/product-category/juegos-digitales-xbox/juegos-digitales-xbox-series-x-s/"},
+    "UYJuegos Xbox One":        {"tipo": "woocommerce", "url": "https://uruguayjuegosdigitales.com/product-category/juegos-digitales-xbox/juegos-digitales-xbox-one/"},
+    "UYJuegos Nintendo":        {"tipo": "woocommerce", "url": "https://uruguayjuegosdigitales.com/product-category/juegos-nintendo/juegos-nintendo-switch/"},
+    "UYJuegos Nintendo2":       {"tipo": "woocommerce", "url": "https://uruguayjuegosdigitales.com/product-category/nintendo-switch-2"},
+    "UYJuegos GiftCard Amazon": {"tipo": "woocommerce", "url": "https://uruguayjuegosdigitales.com/product-category/gift-cards/tarjetas-de-regalo-amazon/"},
+    "UYJuegos GiftCard iTunes": {"tipo": "woocommerce", "url": "https://uruguayjuegosdigitales.com/product-category/gift-cards/itunes/"},
+
+    # ---- WEB-GAME.NET (WooCommerce) ----
+    "WebGame PS4":              {"tipo": "woocommerce", "url": "https://web-game.net/categoria/juegos-ps4/"},
+    "WebGame PS5":              {"tipo": "woocommerce", "url": "https://web-game.net/categoria/juegos-ps5/"},
+    "WebGame GiftCards":        {"tipo": "woocommerce", "url": "https://web-game.net/categoria/gift-card/"},
+
+    # ---- ZONADIGITALMD (TiendaNegocio) ----
+    "ZonaDigital PS4":          {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/juegosps4"},
+    "ZonaDigital PS5":          {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/juegosps5"},
+    "ZonaDigital PC Codigo":    {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/juegospccodigo"},
+    "ZonaDigital PC Cuenta":    {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/juegospccuenta"},
+    "ZonaDigital Xbox":         {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/juegosxbox"},
+    "ZonaDigital Apex":         {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/monedasapexlegends"},
+    "ZonaDigital Fortnite VB":  {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/fortnitevbucks"},
+    "ZonaDigital Fortnite":     {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/cargafortnite"},
+    "ZonaDigital GiftCard PSN": {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardps3ps4ps5"},
+    "ZonaDigital GiftCard Steam":{"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardsteam"},
+    "ZonaDigital Roblox":       {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardroblox"},
+    "ZonaDigital GiftCard Xbox":{"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardxbox"},
+    "ZonaDigital BattleNet":    {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardbattlenet"},
+    "ZonaDigital Riot":         {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardriotlatam"},
+    "ZonaDigital FreeFire":     {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardfreefire"},
+    "ZonaDigital Google Play":  {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardgoogleplayusa"},
+    "ZonaDigital Apple":        {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardappleusa"},
+    "ZonaDigital Switch":       {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/nintendoswitch"},
+    "ZonaDigital Switch USA":   {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardusa"},
+    "ZonaDigital GamePass":     {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/suscripcioncodigo"},
+    "ZonaDigital EA Play":      {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/eaplaycodigo"},
+}
+
+# =========================================================
+# PAGINAS ENEBA
+# =========================================================
+
+PAGINAS_ENEBA = [
+    ("FreeFire",      "https://www.eneba.com/latam/top-up-free-fire-diamonds-global",                    "producto"),
+    ("Genshin",       "https://www.eneba.com/latam/top-up-genshin-impact-genesis-crystals-latin-america","producto"),
+    ("Robux",         "https://www.eneba.com/latam/store/all?text=robux",                                "tienda"),
+    ("PUBG",          "https://www.eneba.com/latam/store/all?text=pubg+uc",                              "tienda"),
+    ("FC Points",     "https://www.eneba.com/latam/store/fc-points",                                     "tienda"),
+    ("FUT Points",    "https://www.eneba.com/latam/store/game-points-fut",                               "tienda"),
+    ("GTA Shark",     "https://www.eneba.com/latam/store/gta-shark-cards",                               "tienda"),
+    ("Valorant",      "https://www.eneba.com/latam/store/riot-valorant-points",                          "tienda"),
+    ("COD Points",    "https://www.eneba.com/latam/store/cod-points",                                    "tienda"),
+    ("Fortnite",      "https://www.eneba.com/latam/store/fortnite-v-bucks-gift-cards",                   "tienda"),
+    ("Xbox",          "https://www.eneba.com/latam/store/xbox-gift-cards",                               "tienda"),
+    ("Xbox Points",   "https://www.eneba.com/latam/store/xbox-game-points",                              "tienda"),
+    ("Xbox GamePass", "https://www.eneba.com/latam/store/xbox-game-pass",                                "tienda"),
+    ("Xbox Games",    "https://www.eneba.com/latam/store/xbox-games",                                    "tienda"),
+    ("PlayStation",   "https://www.eneba.com/latam/store/psn-games",                                     "tienda"),
+    ("PSN GiftCards", "https://www.eneba.com/latam/store/psn-gift-cards",                                "tienda"),
+    ("PSN Plus",      "https://www.eneba.com/latam/store/psn-subscriptions",                             "tienda"),
+    ("Nintendo",      "https://www.eneba.com/latam/store/nintendo-games",                                "tienda"),
+    ("Nintendo Gift", "https://www.eneba.com/latam/store/nintendo-gift-cards",                           "tienda"),
+    ("Nintendo Subs", "https://www.eneba.com/latam/store/nintendo-subscriptions",                        "tienda"),
+    ("Steam",         "https://www.eneba.com/latam/store/steam-games",                                   "tienda"),
+    ("Steam Wallet",  "https://www.eneba.com/latam/store/steam-gift-cards",                              "tienda"),
+    ("EA Play",       "https://www.eneba.com/latam/store/ea-play",                                       "tienda"),
+    ("Origin",        "https://www.eneba.com/latam/store/origin-games",                                  "tienda"),
+    ("Ubisoft",       "https://www.eneba.com/latam/store/uplay-games",                                   "tienda"),
+    ("Epic Games",    "https://www.eneba.com/latam/store/epic-games",                                    "tienda"),
+    ("GOG",           "https://www.eneba.com/latam/store/gog-games",                                     "tienda"),
+    ("BattleNet",     "https://www.eneba.com/latam/store/battle-net-games",                              "tienda"),
+    ("BattleNetPts",  "https://www.eneba.com/latam/store/battle-net-game-points",                        "tienda"),
+    ("Google Play",   "https://www.eneba.com/latam/store/google-play-gift-cards",                        "tienda"),
+    ("Razer Gold",    "https://www.eneba.com/latam/store/razer-gold-gift-cards",                         "tienda"),
+    ("Discord",       "https://www.eneba.com/latam/store/discord-gift-cards",                            "tienda"),
+    ("Twitch",        "https://www.eneba.com/latam/store/twitch-gift-cards",                             "tienda"),
+    ("Blizzard",      "https://www.eneba.com/latam/store/blizzard-gift-card",                            "tienda"),
+]
+
+# =========================================================
+# MAIN ASYNC
+# =========================================================
+
+async def main():
+
+    todos = []
+
+    # --------------------------------------------------
+    # Playwright generico para WooCommerce / Flatsome
+    # --------------------------------------------------
+
+    async def scrape_playwright(url, paginas=PAGINAS):
+        prods = []
+        selectors = [
+            "li.product", "div.product", ".product-small",
+            ".type-product", ".product-grid-item", ".wd-product", ".product-item"
+        ]
+        async with async_playwright() as pw:
+            browser = await pw.chromium.launch(headless=True, args=["--no-sandbox", "--disable-dev-shm-usage"])
+            page = await browser.new_page(
+                user_agent=HEADERS["User-Agent"],
+                locale="es-419"
+            )
+            for num in range(1, paginas + 1):
+                page_url = url if num == 1 else f"{url.rstrip('/')}/page/{num}/"
+                try:
+                    await page.goto(page_url, wait_until="domcontentloaded", timeout=40000)
+                    await page.wait_for_timeout(3000)
+                    html = await page.content()
+                    soup = BeautifulSoup(html, "html.parser")
+                    cards = []
+                    for sel in selectors:
+                        cards.extend(soup.select(sel))
+                    for c in cards:
+                        try:
+                            nombre_el = c.select_one(
+                                "h2, h3, h4, .product-title, .woocommerce-loop-product__title, .wd-entities-title"
+                            )
+                            precio_el = c.select_one(".price, .amount, bdi")
+                            if not nombre_el or not precio_el:
+                                continue
+                            nombre = nombre_el.get_text(strip=True)
+                            precio_txt = precio_el.get_text(" ", strip=True)
+                            valor, moneda = limpiar_precio(precio_txt)
+                            if valor is None or valor < 1:
+                                continue
+                            link_el = c.select_one("a")
+                            link = link_el["href"] if link_el else url
+                            prods.append({
+                                "nombre": nombre,
+                                "precio_original": precio_txt,
+                                "precio": valor,
+                                "moneda": moneda,
+                                "precio_uyu": convertir_uyu(valor, moneda),
+                                "link": link
+                            })
+                        except:
+                            continue
+                except Exception as e:
+                    print(f"   ERROR Playwright p{num}: {e}")
+            await browser.close()
+        return prods
+
+    # --------------------------------------------------
+    # PARTE 1: CATALOGO MAESTRO + TIENDAS EXTRA
+    # --------------------------------------------------
+
+    print("\n" + "="*60)
+    print("SCRAPEANDO CATALOGO DE TIENDAS")
+    print("="*60)
+
+    for nombre_tienda, cfg in CATALOGOS.items():
+        print(f"\n  {nombre_tienda}...", end=" ", flush=True)
+        try:
+            tipo = cfg["tipo"]
+            url  = cfg["url"]
+
+            if tipo == "shopify":
+                productos = scrape_shopify(url)
+            elif tipo == "tiendanube":
+                productos = scrape_tiendanube(url)
+            elif tipo == "tiendanegocio":
+                productos = scrape_tiendanegocio(url)
+            elif tipo == "playwright":
+                productos = await scrape_playwright(url)
+            else:
+                # woocommerce: intentar con requests, si da 0 usar playwright
+                productos = scrape_woocommerce(url)
+                if len(productos) == 0:
+                    print("(retry playwright)", end=" ", flush=True)
+                    productos = await scrape_playwright(url)
+
+            print(f"{len(productos)} productos")
+
+            for p in productos:
+                p["tienda"] = nombre_tienda
+                p["fuente"] = tipo.capitalize()
+                p["nombre_normalizado"] = normalizar_nombre(p["nombre"])
+                p["plataforma"] = detectar_plataforma(p["nombre"], nombre_tienda)
+                todos.append(p)
+
+        except Exception as e:
+            print(f"ERROR: {e}")
+
+    # --------------------------------------------------
+    # PARTE 2: ENEBA
+    # --------------------------------------------------
+
+    print("\n" + "="*60)
+    print("SCRAPEANDO ENEBA")
+    print("="*60)
+
+    BASE_ENEBA = "https://www.eneba.com"
+    vistos_eneba = set()
+
+    async def cerrar_popups(page):
+        for texto in ["Aceptar todo", "Accept all", "Entendido"]:
+            try:
+                b = await page.query_selector(f"button:has-text('{texto}')")
+                if b:
+                    await b.click()
+                    await page.wait_for_timeout(800)
+            except:
+                pass
+        try:
+            await page.keyboard.press("Escape")
+        except:
+            pass
+
+    async with async_playwright() as pw:
+        browser = await pw.chromium.launch(
+            headless=True,
+            args=["--no-sandbox", "--disable-dev-shm-usage"]
+        )
+
+        for categoria, url, tipo in PAGINAS_ENEBA:
+            print(f"  Eneba {categoria}...", end=" ", flush=True)
+            try:
+                page = await browser.new_page(
+                    viewport={"width": 1366, "height": 768},
+                    user_agent=HEADERS["User-Agent"],
+                    locale="es-419",
+                    extra_http_headers={"Accept-Language": "es-419,es;q=0.9"}
+                )
+                await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                await page.wait_for_timeout(3000)
+                await cerrar_popups(page)
+                await page.wait_for_timeout(1500)
+
+                for _ in range(4):
+                    await page.mouse.wheel(0, 4000)
+                    await page.wait_for_timeout(1200)
+
+                html = await page.content()
+                soup = BeautifulSoup(html, "html.parser")
+                count = 0
+
+                if tipo == "producto":
+                    cards = soup.find_all("div", class_="vNgEk7")
+                    for card in cards:
+                        try:
+                            lineas = [l.strip() for l in card.get_text("\n").split("\n") if l.strip()]
+                            nombre = lineas[0] if lineas else ""
+                            precio = next((extraer_precio_eneba(l) for l in lineas if extraer_precio_eneba(l)), "")
+                            if not nombre or not precio:
+                                continue
+                            clave = (nombre, precio)
+                            if clave in vistos_eneba:
+                                continue
+                            vistos_eneba.add(clave)
+                            valor, moneda = limpiar_precio(precio)
+                            todos.append({
+                                "nombre": nombre,
+                                "precio_original": precio,
+                                "precio": valor,
+                                "moneda": moneda,
+                                "precio_uyu": convertir_uyu(valor, moneda),
+                                "link": url,
+                                "tienda": f"Eneba - {categoria}",
+                                "fuente": "Eneba",
+                                "nombre_normalizado": limpiar_nombre_eneba(nombre),
+                                "plataforma": detectar_plataforma(nombre, categoria)
+                            })
+                            count += 1
+                        except:
+                            pass
+
+                elif tipo == "tienda":
+                    cards = soup.find_all("div", class_="b3POZC")
+                    for card in cards:
+                        try:
+                            a = card.find("a", href=True)
+                            if not a and card.parent:
+                                a = card.parent.find("a", href=True)
+                            nombre = ""
+                            link = url
+                            if a:
+                                nombre = a.get("title", "").strip()
+                                if not nombre:
+                                    img = a.find("img")
+                                    if img:
+                                        nombre = img.get("alt", "").strip()
+                                href = a.get("href", "")
+                                link = BASE_ENEBA + href if href.startswith("/") else href
+                            nombre = limpiar_nombre_eneba(nombre)
+                            precio = next(
+                                (extraer_precio_eneba(l.strip()) for l in card.get_text("\n").split("\n") if extraer_precio_eneba(l.strip())),
+                                ""
+                            )
+                            if not nombre or not precio:
+                                continue
+                            clave = (nombre, precio)
+                            if clave in vistos_eneba:
+                                continue
+                            vistos_eneba.add(clave)
+                            valor, moneda = limpiar_precio(precio)
+                            todos.append({
+                                "nombre": nombre,
+                                "precio_original": precio,
+                                "precio": valor,
+                                "moneda": moneda,
+                                "precio_uyu": convertir_uyu(valor, moneda),
+                                "link": link,
+                                "tienda": f"Eneba - {categoria}",
+                                "fuente": "Eneba",
+                                "nombre_normalizado": limpiar_nombre_eneba(nombre),
+                                "plataforma": detectar_plataforma(nombre, categoria)
+                            })
+                            count += 1
+                        except:
+                            pass
+
+                print(f"{count} productos")
+                await page.close()
+
+            except Exception as e:
+                print(f"ERROR: {e}")
+
+        await browser.close()
+
+    # --------------------------------------------------
+    # PARTE 3: ARMAR Y EXPORTAR EXCEL
+    # --------------------------------------------------
+
+    print("\n" + "="*60)
+    print("ARMANDO EXCEL")
+    print("="*60)
+
+    df = pd.DataFrame(todos)
+    print(f"Total bruto: {len(df)} productos")
+
+    if len(df) == 0:
+        print("Sin datos. Saliendo.")
+        return
+
+    # Filtro precios absurdos
+    df = df[
+        (df["precio_uyu"].notna()) &
+        (df["precio_uyu"] > 5) &
+        (df["precio_uyu"] < 500000)
+    ].copy()
+
+    df = df.sort_values("precio_uyu")
+
+    # Mejor precio por juego (nombre normalizado)
+    idx_mejores = df.groupby("nombre_normalizado")["precio_uyu"].idxmin()
+    mejores = df.loc[idx_mejores].sort_values("precio_uyu").copy()
+
+    COLS_DISPLAY = ["fuente", "tienda", "nombre", "nombre_normalizado", "precio_original", "precio_uyu", "moneda", "plataforma", "link"]
+    COLS_LABELS  = ["Fuente", "Tienda", "Nombre", "Nombre Limpio", "Precio Original", "Precio UYU", "Moneda", "Plataforma", "Link"]
+
+    ARCHIVO = "catalogo_completo_abc_gaming.xlsx"
+
+    with pd.ExcelWriter(ARCHIVO, engine="openpyxl") as writer:
+
+        # Hoja TODO
+        df[COLS_DISPLAY].rename(columns=dict(zip(COLS_DISPLAY, COLS_LABELS))).to_excel(
+            writer, sheet_name="TODO", index=False
+        )
+
+        # Hoja MEJORES PRECIOS
+        mejores[COLS_DISPLAY].rename(columns=dict(zip(COLS_DISPLAY, COLS_LABELS))).to_excel(
+            writer, sheet_name="MEJORES_PRECIOS", index=False
+        )
+
+        # Hoja ENEBA
+        eneba_df = df[df["fuente"] == "Eneba"]
+        if len(eneba_df) > 0:
+            eneba_df[COLS_DISPLAY].rename(columns=dict(zip(COLS_DISPLAY, COLS_LABELS))).to_excel(
+                writer, sheet_name="ENEBA", index=False
+            )
+
+        # Una hoja por plataforma
+        for plataforma in sorted(df["plataforma"].unique()):
+            temp = df[df["plataforma"] == plataforma]
+            if len(temp) == 0:
+                continue
+            nombre_hoja = plataforma[:31]
+            temp[COLS_DISPLAY].rename(columns=dict(zip(COLS_DISPLAY, COLS_LABELS))).to_excel(
+                writer, sheet_name=nombre_hoja, index=False
+            )
+
+    # Formateo visual con openpyxl
+    wb = load_workbook(ARCHIVO)
+    HEADER_FILL = PatternFill("solid", start_color="1E1E2E", end_color="1E1E2E")
+    HEADER_FONT = Font(bold=True, color="00D4FF", name="Arial", size=10)
+    ALT_FILL    = PatternFill("solid", start_color="F5F5F5", end_color="F5F5F5")
+
+    for ws in wb.worksheets:
+        # Cabecera
+        for cell in ws[1]:
+            cell.fill = HEADER_FILL
+            cell.font = HEADER_FONT
+            cell.alignment = Alignment(horizontal="center", vertical="center")
+
+        # Filas alternas y anchos
+        for i, row in enumerate(ws.iter_rows(min_row=2), start=2):
+            if i % 2 == 0:
+                for cell in row:
+                    cell.fill = ALT_FILL
+
+        # Ajuste de anchos
+        for col_idx, col in enumerate(ws.columns, start=1):
+            max_len = max((len(str(c.value)) for c in col if c.value), default=10)
+            ws.column_dimensions[get_column_letter(col_idx)].width = min(max_len + 3, 60)
+
+        ws.freeze_panes = "A2"
+        ws.auto_filter.ref = ws.dimensions
+
+    wb.save(ARCHIVO)
+
+    print(f"\nTotal productos finales: {len(df)}")
+    print(f"Juegos únicos (mejor precio): {len(mejores)}")
+    print(f"Archivo generado: {ARCHIVO}")
+
+
+# =========================================================
+# EJECUTAR
+# =========================================================
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
