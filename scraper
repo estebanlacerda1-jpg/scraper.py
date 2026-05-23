@@ -442,6 +442,8 @@ def scrape_tiendanube(url, nombre_tienda, paginas=PAGINAS):
 
 
 def scrape_tiendanegocio(url, nombre_tienda, paginas=PAGINAS):
+    # ZonaDigital es Angular — necesita Playwright, no requests.
+    # Esta función queda como fallback para otros TiendaNegocio si los hubiera.
     productos = []
     if not url.startswith("http"):
         url = "https://" + url
@@ -476,6 +478,266 @@ def scrape_tiendanegocio(url, nombre_tienda, paginas=PAGINAS):
         except Exception as e:
             print(f"   ERROR TiendaNegocio: {e}")
             break
+    return productos
+
+
+# =========================================================
+# SCRAPER URUGUAYDIGITAL
+# Sistema custom — cards son LI con clase d-flex.
+# Nombre y precio vienen juntos en el texto del LI.
+# Necesita Playwright porque carga con JS.
+# =========================================================
+
+async def scrape_uruguaydigital(url, nombre_tienda, paginas=PAGINAS):
+    productos = []
+    async with async_playwright() as pw:
+        browser = await pw.chromium.launch(
+            headless=True,
+            args=["--no-sandbox", "--disable-dev-shm-usage"]
+        )
+        page = await browser.new_page(
+            user_agent=HEADERS["User-Agent"],
+            locale="es-419"
+        )
+        for num in range(1, paginas + 1):
+            # UruguayDigital usa ?pagina=N
+            page_url = url if num == 1 else f"{url}?pagina={num}"
+            try:
+                await page.goto(page_url, wait_until="domcontentloaded", timeout=40000)
+                await page.wait_for_timeout(3000)
+                html = await page.content()
+                soup = BeautifulSoup(html, "html.parser")
+
+                # Cards: LI con clase que incluye "d-flex no-wrap justify-content-start align-items-center"
+                cards = soup.select("li.d-flex.no-wrap.justify-content-start.align-items-center")
+
+                if not cards:
+                    break
+
+                for c in cards:
+                    try:
+                        texto = c.get_text("\n", strip=True)
+                        lineas = [l.strip() for l in texto.split("\n") if l.strip()]
+                        if len(lineas) < 2:
+                            continue
+
+                        # Nombre: primera línea que no sea precio
+                        nombre = ""
+                        precio_txt = ""
+                        for linea in lineas:
+                            if re.search(r"\$[\d.,]+", linea):
+                                precio_txt = linea
+                                break
+                            else:
+                                nombre = linea
+
+                        if not nombre or not precio_txt:
+                            continue
+
+                        valor, moneda = limpiar_precio(precio_txt, nombre_tienda)
+                        if valor is None or valor < 1:
+                            continue
+
+                        link_el = c.select_one("a")
+                        link = link_el["href"] if link_el else url
+                        if link and not link.startswith("http"):
+                            link = "https://juegosdigitalesuruguay.com" + link
+
+                        productos.append({
+                            "nombre":          nombre,
+                            "precio_original": precio_txt,
+                            "precio":          valor,
+                            "moneda":          moneda,
+                            "precio_uyu":      convertir_uyu(valor, moneda),
+                            "link":            link
+                        })
+                    except:
+                        continue
+            except Exception as e:
+                print(f"   ERROR UruguayDigital p{num}: {e}")
+                break
+        await browser.close()
+    return productos
+
+
+# =========================================================
+# SCRAPER JDP4P5 (juegosdigitalesps4ps5.com)
+# Es Tiendanube. Card: div.js-item-product
+# Nombre: a.item-link (primer texto)
+# Precio: span.js-price-display (precio con descuento)
+# =========================================================
+
+async def scrape_jdp4p5(url, nombre_tienda, paginas=PAGINAS):
+    productos = []
+    async with async_playwright() as pw:
+        browser = await pw.chromium.launch(
+            headless=True,
+            args=["--no-sandbox", "--disable-dev-shm-usage"]
+        )
+        page = await browser.new_page(
+            user_agent=HEADERS["User-Agent"],
+            locale="es-419"
+        )
+        for num in range(1, paginas + 1):
+            # Tiendanube usa ?page=N
+            page_url = url if num == 1 else f"{url}?page={num}"
+            try:
+                await page.goto(page_url, wait_until="domcontentloaded", timeout=40000)
+                await page.wait_for_timeout(3000)
+                html = await page.content()
+                soup = BeautifulSoup(html, "html.parser")
+
+                cards = soup.select("div.js-item-product")
+                if not cards:
+                    break
+
+                for c in cards:
+                    try:
+                        # Nombre desde el link del producto
+                        link_el = c.select_one("a.item-link")
+                        nombre_el = c.select_one(".js-item-name, h2, h3")
+                        if link_el and not nombre_el:
+                            # Extraer solo el texto del nombre, sin precio
+                            nombre = link_el.get_text("\n", strip=True).split("\n")[0].strip()
+                        elif nombre_el:
+                            nombre = nombre_el.get_text(strip=True)
+                        else:
+                            continue
+
+                        # Precio con descuento (el más bajo mostrado)
+                        precio_el = c.select_one("span.js-price-display")
+                        if not precio_el:
+                            continue
+                        precio_txt = precio_el.get_text(strip=True)
+
+                        # Limpiar puntos de miles de ARS: $34.510 → 34510
+                        precio_limpio = re.sub(r"[^\d,]", "", precio_txt).replace(",", ".")
+                        try:
+                            valor = float(precio_limpio)
+                        except:
+                            continue
+
+                        moneda = MONEDA_TIENDA.get(nombre_tienda, "ARS")
+                        if valor < 1:
+                            continue
+
+                        link = link_el["href"] if link_el else url
+                        if link and not link.startswith("http"):
+                            link = "https://juegosdigitalesps4ps5.com" + link
+
+                        productos.append({
+                            "nombre":          nombre,
+                            "precio_original": precio_txt,
+                            "precio":          valor,
+                            "moneda":          moneda,
+                            "precio_uyu":      convertir_uyu(valor, moneda),
+                            "link":            link
+                        })
+                    except:
+                        continue
+            except Exception as e:
+                print(f"   ERROR JDP4P5 p{num}: {e}")
+                break
+        await browser.close()
+    return productos
+
+
+# =========================================================
+# SCRAPER ZONADIGITAL (zonadigitalmd.com)
+# Es Angular — solo funciona con Playwright.
+# Card: div.item-gift__content
+# Nombre: primer texto del div
+# Precio: span sin clase (primer valor numérico)
+# =========================================================
+
+async def scrape_zonadigital(url, nombre_tienda, paginas=PAGINAS):
+    productos = []
+    if not url.startswith("http"):
+        url = "https://" + url
+    async with async_playwright() as pw:
+        browser = await pw.chromium.launch(
+            headless=True,
+            args=["--no-sandbox", "--disable-dev-shm-usage"]
+        )
+        page = await browser.new_page(
+            user_agent=HEADERS["User-Agent"],
+            locale="es-419"
+        )
+        for num in range(1, paginas + 1):
+            page_url = url if num == 1 else f"{url}?pagina={num}"
+            try:
+                await page.goto(page_url, wait_until="networkidle", timeout=50000)
+                await page.wait_for_timeout(4000)
+
+                # Scroll para cargar el lazy content de Angular
+                for _ in range(4):
+                    await page.mouse.wheel(0, 4000)
+                    await page.wait_for_timeout(1500)
+
+                html = await page.content()
+                soup = BeautifulSoup(html, "html.parser")
+
+                cards = soup.select("div.item-gift__content")
+                if not cards:
+                    break
+
+                for c in cards:
+                    try:
+                        # Nombre: primer texto directo del div
+                        nombre = ""
+                        for child in c.children:
+                            txt = child.get_text(strip=True) if hasattr(child, "get_text") else str(child).strip()
+                            if txt and not txt.startswith("De") and "$" not in txt:
+                                nombre = txt
+                                break
+
+                        if not nombre:
+                            continue
+
+                        # Precio: primer SPAN sin clase (el número sin centavos separados)
+                        precio_el = c.select_one("span:not([class])")
+                        if not precio_el:
+                            # Fallback: cualquier span con "$"
+                            for sp in c.select("span"):
+                                if "$" in sp.get_text():
+                                    precio_el = sp
+                                    break
+
+                        if not precio_el:
+                            continue
+
+                        precio_txt = precio_el.get_text(strip=True)
+
+                        # Limpiar: "$69.832" → 69832
+                        precio_limpio = re.sub(r"[^\d]", "", precio_txt)
+                        try:
+                            valor = float(precio_limpio)
+                        except:
+                            continue
+
+                        moneda = MONEDA_TIENDA.get(nombre_tienda, "UYU")
+                        if valor < 1:
+                            continue
+
+                        link_el = c.select_one("a")
+                        link = link_el["href"] if link_el else url
+                        if link and not link.startswith("http"):
+                            link = "https://zonadigitalmd.com" + link
+
+                        productos.append({
+                            "nombre":          nombre,
+                            "precio_original": precio_txt,
+                            "precio":          valor,
+                            "moneda":          moneda,
+                            "precio_uyu":      convertir_uyu(valor, moneda),
+                            "link":            link
+                        })
+                    except:
+                        continue
+            except Exception as e:
+                print(f"   ERROR ZonaDigital p{num}: {e}")
+                break
+        await browser.close()
     return productos
 
 # =========================================================
@@ -522,25 +784,25 @@ CATALOGOS = {
     "GamerLab PSN":             {"tipo": "shopify",       "url": "https://juegosdigitalesgamerlab.com/collections/play-station-plus"},
     "GamerLab All":             {"tipo": "shopify",       "url": "https://juegosdigitalesgamerlab.com/collections/all"},
 
-    # ---- JUEGOSDIGITALESPS4PS5 (WooCommerce) — argentina → ARS ----
-    "JDP4P5 PS4":               {"tipo": "woocommerce",   "url": "https://juegosdigitalesps4ps5.com/juegos-ps4/"},
-    "JDP4P5 PS5":               {"tipo": "woocommerce",   "url": "https://juegosdigitalesps4ps5.com/juegos-ps5/"},
-    "JDP4P5 Switch":            {"tipo": "woocommerce",   "url": "https://juegosdigitalesps4ps5.com/juegos-nintendo/"},
-    "JDP4P5 PS Plus":           {"tipo": "woocommerce",   "url": "https://juegosdigitalesps4ps5.com/membresias-ps-plus/"},
-    "JDP4P5 GamePass":          {"tipo": "woocommerce",   "url": "https://juegosdigitalesps4ps5.com/membresias-game-pass/"},
-    "JDP4P5 Nintendo Online":   {"tipo": "woocommerce",   "url": "https://juegosdigitalesps4ps5.com/suscripcion-nintendo-online/"},
+    # ---- JUEGOSDIGITALESPS4PS5 (Tiendanube con Playwright) — argentina → ARS ----
+    "JDP4P5 PS4":               {"tipo": "jdp4p5",        "url": "https://juegosdigitalesps4ps5.com/juegos-ps4/"},
+    "JDP4P5 PS5":               {"tipo": "jdp4p5",        "url": "https://juegosdigitalesps4ps5.com/juegos-ps5/"},
+    "JDP4P5 Switch":            {"tipo": "jdp4p5",        "url": "https://juegosdigitalesps4ps5.com/juegos-nintendo/"},
+    "JDP4P5 PS Plus":           {"tipo": "jdp4p5",        "url": "https://juegosdigitalesps4ps5.com/membresias-ps-plus/"},
+    "JDP4P5 GamePass":          {"tipo": "jdp4p5",        "url": "https://juegosdigitalesps4ps5.com/membresias-game-pass/"},
+    "JDP4P5 Nintendo Online":   {"tipo": "jdp4p5",        "url": "https://juegosdigitalesps4ps5.com/suscripcion-nintendo-online/"},
 
-    # ---- JUEGOSDIGITALESURUGUAY (WooCommerce) ----
-    "UruguayDigital PS3":       {"tipo": "woocommerce",   "url": "https://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps3"},
-    "UruguayDigital PS4":       {"tipo": "woocommerce",   "url": "https://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps4"},
-    "UruguayDigital PS5":       {"tipo": "woocommerce",   "url": "http://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps5"},
-    "UruguayDigital Switch1":   {"tipo": "woocommerce",   "url": "https://juegosdigitalesuruguay.com/categorias/nintendo-switch/juegos-nintendo-switch"},
-    "UruguayDigital Switch2":   {"tipo": "woocommerce",   "url": "https://www.juegosdigitalesuruguay.com/categorias/nintendo-switch-2"},
-    "UruguayDigital Xbox One":  {"tipo": "woocommerce",   "url": "https://juegosdigitalesuruguay.com/categorias/xbox/juegos-xbox-one"},
-    "UruguayDigital Xbox XS":   {"tipo": "woocommerce",   "url": "https://juegosdigitalesuruguay.com/categorias/xbox/juegos-xbox-series-xs"},
-    "UruguayDigital PSN Plus":  {"tipo": "woocommerce",   "url": "https://juegosdigitalesuruguay.com/categorias/cuenta-psn-plus-global"},
-    "UruguayDigital Nintendo":  {"tipo": "woocommerce",   "url": "https://juegosdigitalesuruguay.com/categorias/nintendo-membresia"},
-    "UruguayDigital GamePass":  {"tipo": "woocommerce",   "url": "https://juegosdigitalesuruguay.com/categorias/membresias-xbox"},
+    # ---- JUEGOSDIGITALESURUGUAY (sistema custom con Playwright) ----
+    "UruguayDigital PS3":       {"tipo": "uruguaydigital", "url": "https://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps3"},
+    "UruguayDigital PS4":       {"tipo": "uruguaydigital", "url": "https://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps4"},
+    "UruguayDigital PS5":       {"tipo": "uruguaydigital", "url": "https://juegosdigitalesuruguay.com/categorias/juegos-digitales-ps5"},
+    "UruguayDigital Switch1":   {"tipo": "uruguaydigital", "url": "https://juegosdigitalesuruguay.com/categorias/nintendo-switch/juegos-nintendo-switch"},
+    "UruguayDigital Switch2":   {"tipo": "uruguaydigital", "url": "https://www.juegosdigitalesuruguay.com/categorias/nintendo-switch-2"},
+    "UruguayDigital Xbox One":  {"tipo": "uruguaydigital", "url": "https://juegosdigitalesuruguay.com/categorias/xbox/juegos-xbox-one"},
+    "UruguayDigital Xbox XS":   {"tipo": "uruguaydigital", "url": "https://juegosdigitalesuruguay.com/categorias/xbox/juegos-xbox-series-xs"},
+    "UruguayDigital PSN Plus":  {"tipo": "uruguaydigital", "url": "https://juegosdigitalesuruguay.com/categorias/cuenta-psn-plus-global"},
+    "UruguayDigital Nintendo":  {"tipo": "uruguaydigital", "url": "https://juegosdigitalesuruguay.com/categorias/nintendo-membresia"},
+    "UruguayDigital GamePass":  {"tipo": "uruguaydigital", "url": "https://juegosdigitalesuruguay.com/categorias/membresias-xbox"},
 
     # ---- MDQ STORE (WooCommerce) — argentina → ARS ----
     "MDQ PS5":                  {"tipo": "woocommerce",   "url": "https://mdqstore.com/categoria-producto/juegos-ps5/"},
@@ -590,28 +852,28 @@ CATALOGOS = {
     "WebGame PS5":              {"tipo": "woocommerce",   "url": "https://web-game.net/categoria/juegos-ps5/"},
     "WebGame GiftCards":        {"tipo": "woocommerce",   "url": "https://web-game.net/categoria/gift-card/"},
 
-    # ---- ZONADIGITALMD (TiendaNegocio) ----
-    "ZonaDigital PS4":          {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/juegosps4"},
-    "ZonaDigital PS5":          {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/juegosps5"},
-    "ZonaDigital PC Codigo":    {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/juegospccodigo"},
-    "ZonaDigital PC Cuenta":    {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/juegospccuenta"},
-    "ZonaDigital Xbox":         {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/juegosxbox"},
-    "ZonaDigital Apex":         {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/monedasapexlegends"},
-    "ZonaDigital Fortnite VB":  {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/fortnitevbucks"},
-    "ZonaDigital Fortnite":     {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/cargafortnite"},
-    "ZonaDigital GiftCard PSN": {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardps3ps4ps5"},
-    "ZonaDigital GiftCard Steam": {"tipo": "tiendanegocio","url": "zonadigitalmd.com/productos/giftcardsteam"},
-    "ZonaDigital Roblox":       {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardroblox"},
-    "ZonaDigital GiftCard Xbox":{"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardxbox"},
-    "ZonaDigital BattleNet":    {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardbattlenet"},
-    "ZonaDigital Riot":         {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardriotlatam"},
-    "ZonaDigital FreeFire":     {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardfreefire"},
-    "ZonaDigital Google Play":  {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardgoogleplayusa"},
-    "ZonaDigital Apple":        {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardappleusa"},
-    "ZonaDigital Switch":       {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/nintendoswitch"},
-    "ZonaDigital Switch USA":   {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/giftcardusa"},
-    "ZonaDigital GamePass":     {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/suscripcioncodigo"},
-    "ZonaDigital EA Play":      {"tipo": "tiendanegocio", "url": "zonadigitalmd.com/productos/eaplaycodigo"},
+    # ---- ZONADIGITALMD (Angular — requiere Playwright) ----
+    "ZonaDigital PS4":          {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/juegosps4"},
+    "ZonaDigital PS5":          {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/juegosps5"},
+    "ZonaDigital PC Codigo":    {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/juegospccodigo"},
+    "ZonaDigital PC Cuenta":    {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/juegospccuenta"},
+    "ZonaDigital Xbox":         {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/juegosxbox"},
+    "ZonaDigital Apex":         {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/monedasapexlegends"},
+    "ZonaDigital Fortnite VB":  {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/fortnitevbucks"},
+    "ZonaDigital Fortnite":     {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/cargafortnite"},
+    "ZonaDigital GiftCard PSN": {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/giftcardps3ps4ps5"},
+    "ZonaDigital GiftCard Steam": {"tipo": "zonadigital", "url": "zonadigitalmd.com/productos/giftcardsteam"},
+    "ZonaDigital Roblox":       {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/giftcardroblox"},
+    "ZonaDigital GiftCard Xbox":{"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/giftcardxbox"},
+    "ZonaDigital BattleNet":    {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/giftcardbattlenet"},
+    "ZonaDigital Riot":         {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/giftcardriotlatam"},
+    "ZonaDigital FreeFire":     {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/giftcardfreefire"},
+    "ZonaDigital Google Play":  {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/giftcardgoogleplayusa"},
+    "ZonaDigital Apple":        {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/giftcardappleusa"},
+    "ZonaDigital Switch":       {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/nintendoswitch"},
+    "ZonaDigital Switch USA":   {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/giftcardusa"},
+    "ZonaDigital GamePass":     {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/suscripcioncodigo"},
+    "ZonaDigital EA Play":      {"tipo": "zonadigital",   "url": "zonadigitalmd.com/productos/eaplaycodigo"},
 }
 
 # =========================================================
@@ -745,6 +1007,12 @@ async def main():
                 productos = scrape_tiendanegocio(url, nombre_tienda)
             elif tipo == "playwright":
                 productos = await scrape_playwright(url, nombre_tienda)
+            elif tipo == "uruguaydigital":
+                productos = await scrape_uruguaydigital(url, nombre_tienda)
+            elif tipo == "jdp4p5":
+                productos = await scrape_jdp4p5(url, nombre_tienda)
+            elif tipo == "zonadigital":
+                productos = await scrape_zonadigital(url, nombre_tienda)
             else:
                 # woocommerce: requests primero, playwright como fallback
                 productos = scrape_woocommerce(url, nombre_tienda)
