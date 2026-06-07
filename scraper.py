@@ -72,8 +72,9 @@ PAGINAS     = 2
 
 USD_TO_UYU  = 40
 ARS_TO_UYU  = 0.035
-COP_TO_UYU  = 40 / 4100   # 1 USD ≈ 4100 COP
-CLP_TO_UYU  = 40 / 960    # 1 USD ≈ 960 CLP
+COP_TO_UYU  = 40 / 4100   # 1 USD ≈ 4100 COP (pesos colombianos)
+CLP_TO_UYU  = 40 / 960    # 1 USD ≈ 960 CLP (pesos chilenos)
+MXN_TO_UYU  = 40 / 17     # 1 USD ≈ 17 MXN (pesos mexicanos)
 
 # =========================================================
 
@@ -247,9 +248,9 @@ MONEDA_TIENDA = {
 
     "Dix Razer":                "UYU",
 
-    "Dix Steam":                "UYU",
+    "Dix Steam":                "MXN",
 
-    "Dix Xbox":                 "UYU",
+    "Dix Xbox":                 "MXN",
 
     # EstacionPlay — precios en ARS (tienda argentina)
 
@@ -259,49 +260,49 @@ MONEDA_TIENDA = {
 
     "EstacionPlay Memb":        "ARS",
 
-    # ZonaDigital — precios en UYU
+    # ZonaDigital — precios en CLP (pesos chilenos, sin etiqueta en el texto)
 
-    "ZonaDigital PS4":          "UYU",
+    "ZonaDigital PS4":          "CLP",
 
-    "ZonaDigital PS5":          "UYU",
+    "ZonaDigital PS5":          "CLP",
 
-    "ZonaDigital PC Codigo":    "UYU",
+    "ZonaDigital PC Codigo":    "CLP",
 
-    "ZonaDigital PC Cuenta":    "UYU",
+    "ZonaDigital PC Cuenta":    "CLP",
 
-    "ZonaDigital Xbox":         "UYU",
+    "ZonaDigital Xbox":         "CLP",
 
-    "ZonaDigital Apex":         "UYU",
+    "ZonaDigital Apex":         "CLP",
 
-    "ZonaDigital Fortnite VB":  "UYU",
+    "ZonaDigital Fortnite VB":  "CLP",
 
-    "ZonaDigital Fortnite":     "UYU",
+    "ZonaDigital Fortnite":     "CLP",
 
-    "ZonaDigital GiftCard PSN": "UYU",
+    "ZonaDigital GiftCard PSN": "CLP",
 
-    "ZonaDigital GiftCard Steam": "UYU",
+    "ZonaDigital GiftCard Steam": "CLP",
 
-    "ZonaDigital Roblox":       "UYU",
+    "ZonaDigital Roblox":       "CLP",
 
-    "ZonaDigital GiftCard Xbox": "UYU",
+    "ZonaDigital GiftCard Xbox": "CLP",
 
-    "ZonaDigital BattleNet":    "UYU",
+    "ZonaDigital BattleNet":    "CLP",
 
-    "ZonaDigital Riot":         "UYU",
+    "ZonaDigital Riot":         "CLP",
 
-    "ZonaDigital FreeFire":     "UYU",
+    "ZonaDigital FreeFire":     "CLP",
 
-    "ZonaDigital Google Play":  "UYU",
+    "ZonaDigital Google Play":  "CLP",
 
-    "ZonaDigital Apple":        "UYU",
+    "ZonaDigital Apple":        "CLP",
 
-    "ZonaDigital Switch":       "UYU",
+    "ZonaDigital Switch":       "CLP",
 
-    "ZonaDigital Switch USA":   "UYU",
+    "ZonaDigital Switch USA":   "CLP",
 
-    "ZonaDigital GamePass":     "UYU",
+    "ZonaDigital GamePass":     "CLP",
 
-    "ZonaDigital EA Play":      "UYU",
+    "ZonaDigital EA Play":      "CLP",
 
     # Eneba — USD
 
@@ -389,6 +390,10 @@ def detectar_moneda_texto(precio_txt):
 
         return "CLP"
 
+    if "MXN" in txt:
+
+        return "MXN"
+
     return None  # No detectado — se usará moneda_tienda como fallback
 
 def resolver_moneda(precio_txt, nombre_tienda):
@@ -429,6 +434,21 @@ def limpiar_precio(precio_txt, nombre_tienda=None):
 
     txt = str(precio_txt)
 
+    # Caso especial: WooCommerce con precio complejo tipo
+    # "$ 261 El precio original era: $261. $ 209 El precio actual es: $209. ( MXN )"
+    # → extraer el último número antes de (MXN)
+    if "MXN" in txt.upper():
+        match_mxn = re.search(r'\$\s*(\d+(?:[.,]\d+)?)\s*(?:[^$]*?)\(\s*MXN\s*\)', txt, re.IGNORECASE)
+        if not match_mxn:
+            # Formato simple "164 MXN"
+            match_mxn = re.search(r'(\d+(?:[.,]\d+)?)\s*MXN', txt, re.IGNORECASE)
+        if match_mxn:
+            try:
+                val = float(match_mxn.group(1).replace(",", "."))
+                return val, "MXN"
+            except:
+                pass
+
     moneda = resolver_moneda(txt, nombre_tienda or "")
 
     numero = re.search(r"[\d.,]+", txt)
@@ -441,19 +461,11 @@ def limpiar_precio(precio_txt, nombre_tienda=None):
 
     # =====================================================
 
-    # USD
-
-    # Mantener decimales:
-
-    # 59.99
-
-    # 12.49
-
-    # 1,299.99
+    # USD / MXN — mantener decimales
 
     # =====================================================
 
-    if moneda == "USD":
+    if moneda in ("USD", "MXN"):
 
         # Caso: 59,99
 
@@ -477,11 +489,9 @@ def limpiar_precio(precio_txt, nombre_tienda=None):
 
     # =====================================================
 
-    # ARS / UYU
+    # ARS / UYU / COP / CLP — sacar separadores de miles
 
-    # Sacar separadores de miles:
-
-    # 34.510 -> 34510
+    # 34.510 → 34510 / 69.832 → 69832
 
     # =====================================================
 
@@ -520,6 +530,10 @@ def convertir_uyu(valor, moneda):
     if moneda == "CLP":
 
         return round(valor * CLP_TO_UYU, 2)
+
+    if moneda == "MXN":
+
+        return round(valor * MXN_TO_UYU, 2)
 
     return round(valor, 2)
 
