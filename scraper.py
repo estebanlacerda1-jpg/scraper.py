@@ -68,7 +68,7 @@ HEADERS = {
 
 }
 
-PAGINAS     = 2
+MAX_PAGINAS = 999  # Límite de seguridad — en la práctica para antes por falta de productos
 
 USD_TO_UYU  = 40
 ARS_TO_UYU  = 0.035
@@ -689,7 +689,7 @@ def detectar_plataforma(nombre, tienda):
 
 # =========================================================
 
-def scrape_shopify(url, nombre_tienda, paginas=PAGINAS):
+def scrape_shopify(url, nombre_tienda, paginas=MAX_PAGINAS):
 
     productos = []
 
@@ -709,7 +709,7 @@ def scrape_shopify(url, nombre_tienda, paginas=PAGINAS):
 
             if not items:
 
-                break
+                break  # Sin más productos → terminar
 
             for p in items:
 
@@ -745,9 +745,11 @@ def scrape_shopify(url, nombre_tienda, paginas=PAGINAS):
 
     return productos
 
-def scrape_woocommerce(url, nombre_tienda, paginas=PAGINAS):
+def scrape_woocommerce(url, nombre_tienda, paginas=MAX_PAGINAS):
 
     productos = []
+
+    vistos = set()  # Deduplicar por nombre+precio entre páginas
 
     selectors = [
 
@@ -765,6 +767,10 @@ def scrape_woocommerce(url, nombre_tienda, paginas=PAGINAS):
 
             r = requests.get(page_url, headers=HEADERS, timeout=30)
 
+            # Si redirige a otra página (WooCommerce sin paginación devuelve 200 con la página 1)
+            if r.url != page_url and page > 1:
+                break
+
             soup = BeautifulSoup(r.text, "html.parser")
 
             cards = []
@@ -775,7 +781,9 @@ def scrape_woocommerce(url, nombre_tienda, paginas=PAGINAS):
 
             if not cards:
 
-                break
+                break  # Sin productos → terminar
+
+            nuevos = 0
 
             for c in cards:
 
@@ -805,6 +813,16 @@ def scrape_woocommerce(url, nombre_tienda, paginas=PAGINAS):
 
                         continue
 
+                    clave = (nombre, precio_txt)
+
+                    if clave in vistos:
+
+                        continue
+
+                    vistos.add(clave)
+
+                    nuevos += 1
+
                     link_el = c.select_one("a")
 
                     link = link_el["href"] if link_el else url
@@ -829,6 +847,10 @@ def scrape_woocommerce(url, nombre_tienda, paginas=PAGINAS):
 
                     continue
 
+            if nuevos == 0:
+
+                break  # Página sin productos nuevos → WooCommerce repitió la última página
+
         except Exception as e:
 
             print(f"   ERROR: {e}")
@@ -837,9 +859,11 @@ def scrape_woocommerce(url, nombre_tienda, paginas=PAGINAS):
 
     return productos
 
-def scrape_tiendanube(url, nombre_tienda, paginas=PAGINAS):
+def scrape_tiendanube(url, nombre_tienda, paginas=MAX_PAGINAS):
 
     productos = []
+
+    vistos = set()
 
     for page in range(1, paginas + 1):
 
@@ -857,6 +881,8 @@ def scrape_tiendanube(url, nombre_tienda, paginas=PAGINAS):
 
                 break
 
+            nuevos = 0
+
             for c in cards:
 
                 try:
@@ -864,6 +890,16 @@ def scrape_tiendanube(url, nombre_tienda, paginas=PAGINAS):
                     nombre    = c.select_one(".js-item-name").get_text(strip=True)
 
                     precio_txt = c.select_one(".js-price-display").get_text(strip=True)
+
+                    clave = (nombre, precio_txt)
+
+                    if clave in vistos:
+
+                        continue
+
+                    vistos.add(clave)
+
+                    nuevos += 1
 
                     valor, moneda = limpiar_precio(precio_txt, nombre_tienda)
 
@@ -893,19 +929,25 @@ def scrape_tiendanube(url, nombre_tienda, paginas=PAGINAS):
 
                     continue
 
+            if nuevos == 0:
+
+                break
+
         except:
 
             break
 
     return productos
 
-def scrape_tiendanegocio(url, nombre_tienda, paginas=PAGINAS):
+def scrape_tiendanegocio(url, nombre_tienda, paginas=MAX_PAGINAS):
 
     # ZonaDigital es Angular — necesita Playwright, no requests.
 
     # Esta función queda como fallback para otros TiendaNegocio si los hubiera.
 
     productos = []
+
+    vistos = set()
 
     if not url.startswith("http"):
 
@@ -920,6 +962,8 @@ def scrape_tiendanegocio(url, nombre_tienda, paginas=PAGINAS):
             r = requests.get(page_url, headers=HEADERS, timeout=30)
 
             soup = BeautifulSoup(r.text, "html.parser")
+
+            nuevos = 0
 
             for c in soup.select(".product-item, .item-producto, article.producto, .card"):
 
@@ -936,6 +980,16 @@ def scrape_tiendanegocio(url, nombre_tienda, paginas=PAGINAS):
                     nombre     = nombre_el.get_text(strip=True)
 
                     precio_txt = precio_el.get_text(strip=True)
+
+                    clave = (nombre, precio_txt)
+
+                    if clave in vistos:
+
+                        continue
+
+                    vistos.add(clave)
+
+                    nuevos += 1
 
                     valor, moneda = limpiar_precio(precio_txt, nombre_tienda)
 
@@ -967,6 +1021,10 @@ def scrape_tiendanegocio(url, nombre_tienda, paginas=PAGINAS):
 
                     continue
 
+            if nuevos == 0:
+
+                break
+
         except Exception as e:
 
             print(f"   ERROR TiendaNegocio: {e}")
@@ -987,9 +1045,11 @@ def scrape_tiendanegocio(url, nombre_tienda, paginas=PAGINAS):
 
 # =========================================================
 
-async def scrape_uruguaydigital(url, nombre_tienda, paginas=PAGINAS):
+async def scrape_uruguaydigital(url, nombre_tienda, paginas=MAX_PAGINAS):
 
     productos = []
+
+    vistos = set()
 
     async with async_playwright() as pw:
 
@@ -1033,6 +1093,8 @@ async def scrape_uruguaydigital(url, nombre_tienda, paginas=PAGINAS):
 
                     break
 
+                nuevos = 0
+
                 for c in cards:
 
                     try:
@@ -1066,6 +1128,16 @@ async def scrape_uruguaydigital(url, nombre_tienda, paginas=PAGINAS):
                         if not nombre or not precio_txt:
 
                             continue
+
+                        clave = (nombre, precio_txt)
+
+                        if clave in vistos:
+
+                            continue
+
+                        vistos.add(clave)
+
+                        nuevos += 1
 
                         valor, moneda = limpiar_precio(precio_txt, nombre_tienda)
 
@@ -1101,6 +1173,10 @@ async def scrape_uruguaydigital(url, nombre_tienda, paginas=PAGINAS):
 
                         continue
 
+                if nuevos == 0:
+
+                    break  # Página sin productos nuevos → fin
+
             except Exception as e:
 
                 print(f"   ERROR UruguayDigital p{num}: {e}")
@@ -1123,9 +1199,11 @@ async def scrape_uruguaydigital(url, nombre_tienda, paginas=PAGINAS):
 
 # =========================================================
 
-async def scrape_jdp4p5(url, nombre_tienda, paginas=PAGINAS):
+async def scrape_jdp4p5(url, nombre_tienda, paginas=MAX_PAGINAS):
 
     productos = []
+
+    vistos = set()
 
     async with async_playwright() as pw:
 
@@ -1166,6 +1244,8 @@ async def scrape_jdp4p5(url, nombre_tienda, paginas=PAGINAS):
                 if not cards:
 
                     break
+
+                nuevos = 0
 
                 for c in cards:
 
@@ -1213,6 +1293,16 @@ async def scrape_jdp4p5(url, nombre_tienda, paginas=PAGINAS):
 
                             continue
 
+                        clave = (nombre, precio_txt)
+
+                        if clave in vistos:
+
+                            continue
+
+                        vistos.add(clave)
+
+                        nuevos += 1
+
                         moneda = MONEDA_TIENDA.get(nombre_tienda, "ARS")
 
                         if valor < 1:
@@ -1245,6 +1335,10 @@ async def scrape_jdp4p5(url, nombre_tienda, paginas=PAGINAS):
 
                         continue
 
+                if nuevos == 0:
+
+                    break  # Página sin productos nuevos → fin
+
             except Exception as e:
 
                 print(f"   ERROR JDP4P5 p{num}: {e}")
@@ -1269,9 +1363,11 @@ async def scrape_jdp4p5(url, nombre_tienda, paginas=PAGINAS):
 
 # =========================================================
 
-async def scrape_zonadigital(url, nombre_tienda, paginas=PAGINAS):
+async def scrape_zonadigital(url, nombre_tienda, paginas=MAX_PAGINAS):
 
     productos = []
+
+    vistos = set()
 
     if not url.startswith("http"):
 
@@ -1323,6 +1419,8 @@ async def scrape_zonadigital(url, nombre_tienda, paginas=PAGINAS):
 
                     break
 
+                nuevos = 0
+
                 for c in cards:
 
                     try:
@@ -1367,6 +1465,16 @@ async def scrape_zonadigital(url, nombre_tienda, paginas=PAGINAS):
 
                         precio_txt = precio_el.get_text(strip=True)
 
+                        clave = (nombre, precio_txt)
+
+                        if clave in vistos:
+
+                            continue
+
+                        vistos.add(clave)
+
+                        nuevos += 1
+
                         # Limpiar: "$69.832" → 69832
 
                         precio_limpio = re.sub(r"[^\d]", "", precio_txt)
@@ -1379,7 +1487,7 @@ async def scrape_zonadigital(url, nombre_tienda, paginas=PAGINAS):
 
                             continue
 
-                        moneda = MONEDA_TIENDA.get(nombre_tienda, "UYU")
+                        moneda = MONEDA_TIENDA.get(nombre_tienda, "CLP")
 
                         if valor < 1:
 
@@ -1412,6 +1520,10 @@ async def scrape_zonadigital(url, nombre_tienda, paginas=PAGINAS):
                     except:
 
                         continue
+
+                if nuevos == 0:
+
+                    break  # Página sin productos nuevos → fin
 
             except Exception as e:
 
@@ -1757,9 +1869,11 @@ async def main():
 
     # --------------------------------------------------
 
-    async def scrape_playwright(url, nombre_tienda, paginas=PAGINAS):
+    async def scrape_playwright(url, nombre_tienda, paginas=MAX_PAGINAS):
 
         prods = []
+
+        vistos = set()
 
         selectors = [
 
@@ -1807,6 +1921,12 @@ async def main():
 
                         cards.extend(soup.select(sel))
 
+                    if not cards:
+
+                        break
+
+                    nuevos = 0
+
                     for c in cards:
 
                         try:
@@ -1828,6 +1948,16 @@ async def main():
                             nombre     = nombre_el.get_text(strip=True)
 
                             precio_txt = precio_el.get_text(" ", strip=True)
+
+                            clave = (nombre, precio_txt)
+
+                            if clave in vistos:
+
+                                continue
+
+                            vistos.add(clave)
+
+                            nuevos += 1
 
                             valor, moneda = limpiar_precio(precio_txt, nombre_tienda)
 
@@ -1859,9 +1989,15 @@ async def main():
 
                             continue
 
+                    if nuevos == 0:
+
+                        break  # Página sin productos nuevos → fin
+
                 except Exception as e:
 
                     print(f"   ERROR Playwright p{num}: {e}")
+
+                    break
 
             await browser.close()
 
