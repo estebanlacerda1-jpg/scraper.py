@@ -1,51 +1,55 @@
-name: ABC Gaming Scraper
+name: ABC Gaming - Catálogo diario
 
 on:
   schedule:
-    # Corre todos los dias a las 06:00 UTC (03:00 Uruguay)
-    - cron: "0 6 * * *"
-  workflow_dispatch:
-    # Permite correrlo manualmente desde la pestaña Actions
+    - cron: "0 9 * * *"   # todos los días a las 09:00 UTC (06:00 en Uruguay). Ajustá si querés otro horario.
+  workflow_dispatch: {}    # te deja correrlo a mano desde la pestaña "Actions" de GitHub
 
 jobs:
-  scrape:
+  actualizar-catalogo:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
 
     steps:
-      - name: Checkout repo
+      - name: Descargar el repo
         uses: actions/checkout@v4
 
-      - name: Setup Python 3.11
+      - name: Instalar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Instalar dependencias Python
+      - name: Instalar dependencias
         run: |
-          pip install --upgrade pip
-          pip install pandas openpyxl beautifulsoup4 lxml requests playwright
+          python -m pip install --upgrade pip
+          pip install pandas openpyxl requests playwright rapidfuzz
 
-      - name: Instalar Playwright + Chromium
-        run: playwright install chromium --with-deps
+      - name: Instalar navegador para Playwright
+        run: playwright install --with-deps chromium
 
-      - name: Correr scraper
-        run: python ${{ github.workspace }}/scraper.py 
-      - name: Subir Excel como artefacto de GitHub
+      # --- 1. Scraping: recorre las ~20 tiendas y genera el catálogo bruto ---
+      - name: Correr el scraper
+        run: python scraper.py   # <-- cambiá "scraper.py" si tu archivo se llama distinto
+
+      # --- 2. Clasificar + filtro comercial: separa monedas/suscripciones/giftcards
+      #        de los juegos, calcula demanda/score, genera los catálogos de redes y web ---
+      - name: Clasificar catálogo y calcular score comercial
+        run: python filtrar_catalogo_abc_gaming_CORREGIDO.py
+
+      # --- 3. Cruza el catálogo de juegos con las tendencias de Steam/consolas ---
+      - name: Filtrar lo más vendible (tendencias)
+        run: python filtro_vendibles.py --catalogo catalogo_completo_abc_gaming.xlsx
+        env:
+          RAWG_API_KEY: ${{ secrets.RAWG_API_KEY }}   # opcional — ver nota abajo
+
+      # --- 4. Deja todos los resultados descargables desde la corrida de Actions ---
+      - name: Subir catálogos generados
         uses: actions/upload-artifact@v4
         with:
-          name: catalogo-abc-gaming
-          path: catalogo_completo_abc_gaming.xlsx
-          retention-days: 30
-
-      # Opcional: hace commit del Excel al repo para tenerlo siempre actualizado
-      - name: Commit del catalogo actualizado
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add catalogo_completo_abc_gaming.xlsx || true
-          git diff --staged --quiet || git commit -m "chore: catalogo actualizado $(date -u '+%Y-%m-%d')"
-          git push || true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          name: catalogos-${{ github.run_number }}
+          path: |
+            catalogo_completo_abc_gaming.xlsx
+            catalogo_clasificado.xlsx
+            ABC_Gaming_filtrado/
+            vendibles.xlsx
+            posts_redes.txt
+          retention-days: 14
