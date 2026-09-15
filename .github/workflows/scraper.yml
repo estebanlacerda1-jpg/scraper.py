@@ -21,7 +21,7 @@ jobs:
       - name: Instalar dependencias
         run: |
           python -m pip install --upgrade pip
-          pip install pandas openpyxl requests playwright rapidfuzz
+          pip install pandas openpyxl requests playwright rapidfuzz beautifulsoup4
 
       - name: Instalar navegador para Playwright
         run: playwright install --with-deps chromium
