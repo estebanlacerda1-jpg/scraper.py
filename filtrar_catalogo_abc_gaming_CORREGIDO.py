@@ -18,7 +18,6 @@ import os
 import pandas as pd
 
 from clasificar_categorias import clasificar_catalogo
-
 MARGEN = 0.25
 INPUT_FILE = "catalogo_completo_abc_gaming.xlsx"
 DEMANDA_FILE = "demanda_abc_gaming.csv"
@@ -26,10 +25,16 @@ OUTPUT_DIR = "ABC_Gaming_filtrado"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # --- demanda por franquicia ---
-dem = pd.read_csv(DEMANDA_FILE)
-dem["Franquicia"] = dem["Franquicia"].astype(str).str.upper()
-dd = dict(zip(dem["Franquicia"], dem["Demanda_0_100"]))
+import os
 
+if os.path.exists(DEMANDA_FILE):
+    dem = pd.read_csv(DEMANDA_FILE)
+    dem["Franquicia"] = dem["Franquicia"].astype(str).str.upper()
+    dd = dict(zip(dem["Franquicia"], dem["Demanda_0_100"]))
+else:
+    print(f"[AVISO] No se encontró {DEMANDA_FILE}; se sigue sin datos de demanda (score de demanda = 0 para todo).")
+    dd = {}
+    
 # --- cargar catálogo y separar categorías ---
 df_completo = pd.read_excel(INPUT_FILE, sheet_name="TODO")
 for c in ["Nombre", "Nombre Limpio", "Plataforma", "Tienda", "Link"]:
