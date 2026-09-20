@@ -30,17 +30,18 @@ jobs:
       - name: Correr el scraper
         run: python scraper.py   # <-- cambiá "scraper.py" si tu archivo se llama distinto
 
-      # --- 2. Clasificar + filtro comercial: separa monedas/suscripciones/giftcards
-      #        de los juegos, calcula demanda/score, genera los catálogos de redes y web ---
-      - name: Clasificar catálogo y calcular score comercial
-        run: python filtrar_catalogo_abc_gaming_CORREGIDO.py
-
-      # --- 3. Cruza el catálogo de juegos con las tendencias de Steam/consolas ---
+      # --- 2. Cruza el catálogo bruto con las tendencias de Steam/consolas
+      #        y de paso genera demanda_abc_gaming.csv por franquicia ---
       - name: Filtrar lo más vendible (tendencias)
         run: python filtro_vendibles.py --catalogo catalogo_completo_abc_gaming.xlsx
         env:
           RAWG_API_KEY: ${{ secrets.RAWG_API_KEY }}   # opcional — ver nota abajo
 
+      # --- 3. Clasificar + filtro comercial: separa monedas/suscripciones/giftcards
+      #        de los juegos, calcula demanda/score, genera los catálogos de redes y web ---
+      - name: Clasificar catálogo y calcular score comercial
+        run: python filtrar_catalogo_abc_gaming_CORREGIDO.py
+        
       # --- 4. Deja todos los resultados descargables desde la corrida de Actions ---
       - name: Subir catálogos generados
         uses: actions/upload-artifact@v4
