@@ -282,9 +282,9 @@ def main():
     ap.add_argument("--umbral", type=int, default=78, help="Umbral de similitud 0-100 (default 78)")
     ap.add_argument("--salida-excel", default="vendibles.xlsx")
     ap.add_argument("--salida-posts", default="posts_redes.txt")
-    args = ap.parse_args()
     ap.add_argument("--salida-demanda", default="demanda_abc_gaming.csv")
-
+    args = ap.parse_args()
+    
     print("Leyendo catálogo...")
     df_catalogo = pd.read_excel(args.catalogo, sheet_name=args.hoja)
 
