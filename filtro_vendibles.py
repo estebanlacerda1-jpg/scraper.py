@@ -246,6 +246,26 @@ def generar_posts(df_resultado, ruta_salida):
         )
         bloques.append(bloque)
 
+def generar_demanda_csv(df_resultado, ruta_salida):
+    d = (
+        df_resultado
+        .sort_values("rank_tendencia")
+        .drop_duplicates(subset=["juego_buscado"], keep="first")
+        .copy()
+    )
+    max_rank = d["rank_tendencia"].max()
+    min_rank = d["rank_tendencia"].min()
+    if max_rank == min_rank:
+        d["Demanda_0_100"] = 100.0
+    else:
+        d["Demanda_0_100"] = (
+            100 - (d["rank_tendencia"] - min_rank) * (70 / (max_rank - min_rank))
+        ).round(1)
+
+    d["Franquicia"] = d["juego_buscado"].str.upper()
+    d[["Franquicia", "Demanda_0_100"]].to_csv(ruta_salida, index=False)
+    print(f"[OK] Demanda por franquicia generada: {ruta_salida} ({len(d)} franquicias)")
+    
     with open(ruta_salida, "w", encoding="utf-8") as f:
         f.write(f"\n{'='*60}\n\n".join(bloques))
     print(f"[OK] Posteos generados: {ruta_salida} ({len(bloques)} textos)")
