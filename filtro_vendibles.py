@@ -266,10 +266,6 @@ def generar_demanda_csv(df_resultado, ruta_salida):
     d[["Franquicia", "Demanda_0_100"]].to_csv(ruta_salida, index=False)
     print(f"[OK] Demanda por franquicia generada: {ruta_salida} ({len(d)} franquicias)")
     
-    with open(ruta_salida, "w", encoding="utf-8") as f:
-        f.write(f"\n{'='*60}\n\n".join(bloques))
-    print(f"[OK] Posteos generados: {ruta_salida} ({len(bloques)} textos)")
-
 
 # ----------------------------------------------------------------------------
 # MAIN
