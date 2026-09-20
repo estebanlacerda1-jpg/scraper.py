@@ -305,6 +305,9 @@ def main():
 
     generar_excel(df_resultado, args.salida_excel)
     generar_posts(df_resultado, args.salida_posts)
+    generar_excel(df_resultado, args.salida_excel)
+    generar_posts(df_resultado, args.salida_posts)
+    generar_demanda_csv(df_resultado, args.salida_demanda)
 
 
 if __name__ == "__main__":
