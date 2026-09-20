@@ -283,6 +283,7 @@ def main():
     ap.add_argument("--salida-excel", default="vendibles.xlsx")
     ap.add_argument("--salida-posts", default="posts_redes.txt")
     args = ap.parse_args()
+    ap.add_argument("--salida-demanda", default="demanda_abc_gaming.csv")
 
     print("Leyendo catálogo...")
     df_catalogo = pd.read_excel(args.catalogo, sheet_name=args.hoja)
