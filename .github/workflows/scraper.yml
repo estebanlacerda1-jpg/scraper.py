@@ -58,8 +58,8 @@ jobs:
             ABC_Gaming_filtrado/
           retention-days: 14
 
-      # --- 5. Copia los CSV finales a data/ y los sube al repo, para que
-      #        Lovable/Supabase los lean directo por URL raw de GitHub ---
+      # --- 5. Copia los CSV finales a data/ y los sube al repo, para tener
+      #        respaldo / historial y poder leerlos por URL raw si hace falta ---
       - name: Publicar CSV en el repo (carpeta data/)
         run: |
           mkdir -p data
@@ -75,3 +75,12 @@ jobs:
             git commit -m "Actualizar catálogos $(date -u +'%Y-%m-%d %H:%M UTC')"
             git push
           fi
+
+      # --- 6. Sube el catálogo de juegos_para_web.csv directo a la tabla
+      #        juegos_web de Supabase, para que la web (Lovable) siempre
+      #        muestre el catálogo actualizado sin importar nada a mano ---
+      - name: Subir catálogo a Supabase
+        run: python subir_a_supabase.py --csv ABC_Gaming_filtrado/juegos_para_web.csv --tabla juegos_web
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
