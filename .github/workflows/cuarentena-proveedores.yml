@@ -1,0 +1,60 @@
+name: ABC Gaming - Cuarentena de proveedores
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cuarentena-proveedores:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el repo
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas openpyxl requests playwright rapidfuzz beautifulsoup4
+
+      - name: Instalar navegador para Playwright
+        run: |
+          playwright install --with-deps chromium
+
+      - name: Ejecutar scraper de cuarentena
+        run: |
+          python scraper_cuarentena.py
+
+      - name: Subir HTML y reporte de cuarentena
+        uses: actions/upload-artifact@v4
+        with:
+          name: cuarentena-${{ github.run_number }}
+          path: |
+            reporte_cuarentena.csv
+            cuarentena_raw/
+          retention-days: 30
+
+      - name: Publicar reporte en el repo
+        run: |
+          mkdir -p data
+
+          cp reporte_cuarentena.csv data/ 2>/dev/null || true
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add data/reporte_cuarentena.csv
+
+          if git diff --cached --quiet; then
+            echo "Sin cambios en el reporte de cuarentena."
+          else
+            git commit -m "Actualizar reporte de cuarentena $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
