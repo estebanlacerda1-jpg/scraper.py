@@ -2,11 +2,11 @@ name: ABC Gaming - Catálogo diario
 
 on:
   schedule:
-    - cron: "0 9 * * *"   # todos los días a las 09:00 UTC (06:00 en Uruguay). Ajustá si querés otro horario.
-  workflow_dispatch: {}    # te deja correrlo a mano desde la pestaña "Actions" de GitHub
+    - cron: "0 9 * * *"
+  workflow_dispatch:
 
 permissions:
-  contents: write   # necesario para que el job pueda hacer commit/push al repo
+  contents: write
 
 jobs:
   actualizar-catalogo:
@@ -22,40 +22,60 @@ jobs:
           python-version: "3.11"
 
       - name: Instalar dependencias
-        run: | python -m pip install --upgrade pip pip install pandas openpyxl requests playwright rapidfuzz beautifulsoup4 
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas openpyxl requests playwright rapidfuzz beautifulsoup4
+
       - name: Instalar navegador para Playwright
-        run: playwright install --with-deps chromium
+        run: |
+          playwright install --with-deps chromium
 
-      # --- 1. Scraping: recorre las ~20 tiendas y genera el catálogo bruto ---
+      # --- 1. Scraping ---
       - name: Correr el scraper
-        run: python scraper.py   # <-- cambiá "scraper.py" si tu archivo se llama distinto
+        run: |
+          python scraper.py
 
-      # --- 2. Cruza el catálogo bruto con las tendencias de Steam/consolas
-      # y de paso genera demanda_abc_gaming.csv por franquicia ---
+      # --- 2. Filtrar tendencias ---
       - name: Filtrar lo más vendible (tendencias)
-        run: python filtro_vendibles.py --catalogo catalogo_completo_abc_gaming.xlsx
+        run: |
+          python filtro_vendibles.py --catalogo catalogo_completo_abc_gaming.xlsx
         env:
-          RAWG_API_KEY: ${{ secrets.RAWG_API_KEY }}   # opcional — ver nota abajo
+          RAWG_API_KEY: ${{ secrets.RAWG_API_KEY }}
 
-      # --- 3. Clasificar + filtro comercial: separa monedas/suscripciones/giftcards
-      # de los juegos, calcula demanda/score, genera los catálogos de redes y web ---
+      # --- 3. Clasificación comercial ---
       - name: Clasificar catálogo y calcular score comercial
-        run: python filtrar_catalogo_abc_gaming_CORREGIDO.py
+        run: |
+          python filtrar_catalogo_abc_gaming_CORREGIDO.py
 
-      # --- 4. Deja todos los resultados descargables desde la corrida de Actions ---
+      # --- 4. Subir resultados como artifact ---
       - name: Subir catálogos generados
         uses: actions/upload-artifact@v4
         with:
           name: catalogos-${{ github.run_number }}
-          path: | catalogo_completo_abc_gaming.xlsx catalogo_completo_abc_gaming.csv reporte_corrida.csv vendibles.csv posts_redes.txt demanda_abc_gaming.csv ABC_Gaming_filtrado/           retention-days: 14
+          path: |
+            catalogo_completo_abc_gaming.xlsx
+            catalogo_completo_abc_gaming.csv
+            reporte_corrida.csv
+            vendibles.csv
+            posts_redes.txt
+            demanda_abc_gaming.csv
+            ABC_Gaming_filtrado/
+          retention-days: 14
 
-      # --- 5. Copia los CSV finales a data/ y los sube al repo, para que
-      # Lovable/Supabase los lean directo por URL raw de GitHub ---
+      # --- 5. Publicar CSV en data/ ---
       - name: Publicar CSV en el repo (carpeta data/)
-        run: | mkdir -p data cp vendibles.csv demanda_abc_gaming.csv data/ 2>/dev/null || true cp ABC_Gaming_filtrado/*.csv data/ 2>/dev/null || true 
+        run: |
+          mkdir -p data
+
+          cp vendibles.csv data/ 2>/dev/null || true
+          cp demanda_abc_gaming.csv data/ 2>/dev/null || true
+          cp ABC_Gaming_filtrado/*.csv data/ 2>/dev/null || true
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
           git add data/
+
           if git diff --cached --quiet; then
             echo "Sin cambios en los catálogos, no hay nada para commitear."
           else
