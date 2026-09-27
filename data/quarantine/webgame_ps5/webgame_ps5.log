@@ -1,0 +1,205 @@
+2026-09-27 18:30:52,346 | INFO | [PAGE 1] GET https://web-game.net/categoria/juegos-ps5/
+2026-09-27 18:30:52,474 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:30:53,293 | INFO | curl_cffi HTTP 200 | 287777 bytes
+2026-09-27 18:30:53,325 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:30:53,327 | INFO | [PAGE 1] 12 productos
+2026-09-27 18:30:53,352 | INFO | [PAGE 1] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/2/
+2026-09-27 18:30:55,353 | INFO | [PAGE 2] GET https://web-game.net/categoria/juegos-ps5/page/2/
+2026-09-27 18:30:55,353 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:30:55,787 | INFO | curl_cffi HTTP 200 | 288052 bytes
+2026-09-27 18:30:55,804 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:30:55,805 | INFO | [PAGE 2] 12 productos
+2026-09-27 18:30:55,821 | INFO | [PAGE 2] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/3/
+2026-09-27 18:30:57,821 | INFO | [PAGE 3] GET https://web-game.net/categoria/juegos-ps5/page/3/
+2026-09-27 18:30:57,821 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:30:58,266 | INFO | curl_cffi HTTP 200 | 286211 bytes
+2026-09-27 18:30:58,283 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:30:58,285 | INFO | [PAGE 3] 12 productos
+2026-09-27 18:30:58,310 | INFO | [PAGE 3] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/4/
+2026-09-27 18:31:00,310 | INFO | [PAGE 4] GET https://web-game.net/categoria/juegos-ps5/page/4/
+2026-09-27 18:31:00,310 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:00,565 | INFO | curl_cffi HTTP 200 | 286448 bytes
+2026-09-27 18:31:00,582 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:00,584 | INFO | [PAGE 4] 12 productos
+2026-09-27 18:31:00,600 | INFO | [PAGE 4] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/5/
+2026-09-27 18:31:02,600 | INFO | [PAGE 5] GET https://web-game.net/categoria/juegos-ps5/page/5/
+2026-09-27 18:31:02,600 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:02,999 | INFO | curl_cffi HTTP 200 | 284030 bytes
+2026-09-27 18:31:03,017 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:03,018 | INFO | [PAGE 5] 12 productos
+2026-09-27 18:31:03,034 | INFO | [PAGE 5] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/6/
+2026-09-27 18:31:05,034 | INFO | [PAGE 6] GET https://web-game.net/categoria/juegos-ps5/page/6/
+2026-09-27 18:31:05,034 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:05,291 | INFO | curl_cffi HTTP 200 | 283916 bytes
+2026-09-27 18:31:05,309 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:05,310 | INFO | [PAGE 6] 12 productos
+2026-09-27 18:31:05,326 | INFO | [PAGE 6] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/7/
+2026-09-27 18:31:07,326 | INFO | [PAGE 7] GET https://web-game.net/categoria/juegos-ps5/page/7/
+2026-09-27 18:31:07,327 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:07,786 | INFO | curl_cffi HTTP 200 | 284321 bytes
+2026-09-27 18:31:07,803 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:07,804 | INFO | [PAGE 7] 12 productos
+2026-09-27 18:31:07,820 | INFO | [PAGE 7] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/8/
+2026-09-27 18:31:09,821 | INFO | [PAGE 8] GET https://web-game.net/categoria/juegos-ps5/page/8/
+2026-09-27 18:31:09,821 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:10,089 | INFO | curl_cffi HTTP 200 | 283722 bytes
+2026-09-27 18:31:10,106 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:10,107 | INFO | [PAGE 8] 12 productos
+2026-09-27 18:31:10,124 | INFO | [PAGE 8] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/9/
+2026-09-27 18:31:12,124 | INFO | [PAGE 9] GET https://web-game.net/categoria/juegos-ps5/page/9/
+2026-09-27 18:31:12,124 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:12,385 | INFO | curl_cffi HTTP 200 | 283917 bytes
+2026-09-27 18:31:12,402 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:12,404 | INFO | [PAGE 9] 12 productos
+2026-09-27 18:31:12,419 | INFO | [PAGE 9] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/10/
+2026-09-27 18:31:14,420 | INFO | [PAGE 10] GET https://web-game.net/categoria/juegos-ps5/page/10/
+2026-09-27 18:31:14,420 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:14,674 | INFO | curl_cffi HTTP 200 | 283674 bytes
+2026-09-27 18:31:14,692 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:14,693 | INFO | [PAGE 10] 12 productos
+2026-09-27 18:31:14,728 | INFO | [PAGE 10] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/11/
+2026-09-27 18:31:16,728 | INFO | [PAGE 11] GET https://web-game.net/categoria/juegos-ps5/page/11/
+2026-09-27 18:31:16,729 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:16,991 | INFO | curl_cffi HTTP 200 | 283023 bytes
+2026-09-27 18:31:17,009 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:17,010 | INFO | [PAGE 11] 12 productos
+2026-09-27 18:31:17,026 | INFO | [PAGE 11] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/12/
+2026-09-27 18:31:19,026 | INFO | [PAGE 12] GET https://web-game.net/categoria/juegos-ps5/page/12/
+2026-09-27 18:31:19,026 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:19,472 | INFO | curl_cffi HTTP 200 | 282881 bytes
+2026-09-27 18:31:19,489 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:19,491 | INFO | [PAGE 12] 12 productos
+2026-09-27 18:31:19,507 | INFO | [PAGE 12] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/13/
+2026-09-27 18:31:21,507 | INFO | [PAGE 13] GET https://web-game.net/categoria/juegos-ps5/page/13/
+2026-09-27 18:31:21,507 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:21,767 | INFO | curl_cffi HTTP 200 | 283851 bytes
+2026-09-27 18:31:21,784 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:21,785 | INFO | [PAGE 13] 12 productos
+2026-09-27 18:31:21,801 | INFO | [PAGE 13] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/14/
+2026-09-27 18:31:23,802 | INFO | [PAGE 14] GET https://web-game.net/categoria/juegos-ps5/page/14/
+2026-09-27 18:31:23,802 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:24,268 | INFO | curl_cffi HTTP 200 | 284645 bytes
+2026-09-27 18:31:24,286 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:24,287 | INFO | [PAGE 14] 12 productos
+2026-09-27 18:31:24,303 | INFO | [PAGE 14] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/15/
+2026-09-27 18:31:26,303 | INFO | [PAGE 15] GET https://web-game.net/categoria/juegos-ps5/page/15/
+2026-09-27 18:31:26,303 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:26,561 | INFO | curl_cffi HTTP 200 | 289656 bytes
+2026-09-27 18:31:26,578 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:26,579 | INFO | [PAGE 15] 12 productos
+2026-09-27 18:31:26,596 | INFO | [PAGE 15] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/16/
+2026-09-27 18:31:28,596 | INFO | [PAGE 16] GET https://web-game.net/categoria/juegos-ps5/page/16/
+2026-09-27 18:31:28,596 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:29,039 | INFO | curl_cffi HTTP 200 | 289905 bytes
+2026-09-27 18:31:29,056 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:29,058 | INFO | [PAGE 16] 12 productos
+2026-09-27 18:31:29,074 | INFO | [PAGE 16] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/17/
+2026-09-27 18:31:31,074 | INFO | [PAGE 17] GET https://web-game.net/categoria/juegos-ps5/page/17/
+2026-09-27 18:31:31,074 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:31,333 | INFO | curl_cffi HTTP 200 | 290799 bytes
+2026-09-27 18:31:31,358 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:31,361 | INFO | [PAGE 17] 12 productos
+2026-09-27 18:31:31,418 | INFO | [PAGE 17] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/18/
+2026-09-27 18:31:33,418 | INFO | [PAGE 18] GET https://web-game.net/categoria/juegos-ps5/page/18/
+2026-09-27 18:31:33,418 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:33,660 | INFO | curl_cffi HTTP 200 | 287480 bytes
+2026-09-27 18:31:33,678 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:33,679 | INFO | [PAGE 18] 12 productos
+2026-09-27 18:31:33,695 | INFO | [PAGE 18] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/19/
+2026-09-27 18:31:35,695 | INFO | [PAGE 19] GET https://web-game.net/categoria/juegos-ps5/page/19/
+2026-09-27 18:31:35,695 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:35,945 | INFO | curl_cffi HTTP 200 | 291845 bytes
+2026-09-27 18:31:35,963 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:35,964 | INFO | [PAGE 19] 12 productos
+2026-09-27 18:31:35,981 | INFO | [PAGE 19] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/20/
+2026-09-27 18:31:37,981 | INFO | [PAGE 20] GET https://web-game.net/categoria/juegos-ps5/page/20/
+2026-09-27 18:31:37,981 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:38,252 | INFO | curl_cffi HTTP 200 | 288641 bytes
+2026-09-27 18:31:38,270 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:38,271 | INFO | [PAGE 20] 12 productos
+2026-09-27 18:31:38,287 | INFO | [PAGE 20] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/21/
+2026-09-27 18:31:40,287 | INFO | [PAGE 21] GET https://web-game.net/categoria/juegos-ps5/page/21/
+2026-09-27 18:31:40,287 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:40,543 | INFO | curl_cffi HTTP 200 | 289444 bytes
+2026-09-27 18:31:40,561 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:40,562 | INFO | [PAGE 21] 12 productos
+2026-09-27 18:31:40,578 | INFO | [PAGE 21] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/22/
+2026-09-27 18:31:42,578 | INFO | [PAGE 22] GET https://web-game.net/categoria/juegos-ps5/page/22/
+2026-09-27 18:31:42,578 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:42,841 | INFO | curl_cffi HTTP 200 | 290270 bytes
+2026-09-27 18:31:42,858 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:42,859 | INFO | [PAGE 22] 12 productos
+2026-09-27 18:31:42,876 | INFO | [PAGE 22] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/23/
+2026-09-27 18:31:44,876 | INFO | [PAGE 23] GET https://web-game.net/categoria/juegos-ps5/page/23/
+2026-09-27 18:31:44,876 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:45,122 | INFO | curl_cffi HTTP 200 | 289678 bytes
+2026-09-27 18:31:45,139 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:45,140 | INFO | [PAGE 23] 12 productos
+2026-09-27 18:31:45,156 | INFO | [PAGE 23] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/24/
+2026-09-27 18:31:47,156 | INFO | [PAGE 24] GET https://web-game.net/categoria/juegos-ps5/page/24/
+2026-09-27 18:31:47,156 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:47,653 | INFO | curl_cffi HTTP 200 | 290512 bytes
+2026-09-27 18:31:47,692 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:47,693 | INFO | [PAGE 24] 12 productos
+2026-09-27 18:31:47,708 | INFO | [PAGE 24] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/25/
+2026-09-27 18:31:49,709 | INFO | [PAGE 25] GET https://web-game.net/categoria/juegos-ps5/page/25/
+2026-09-27 18:31:49,709 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:49,966 | INFO | curl_cffi HTTP 200 | 285804 bytes
+2026-09-27 18:31:49,984 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:49,985 | INFO | [PAGE 25] 12 productos
+2026-09-27 18:31:50,001 | INFO | [PAGE 25] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/26/
+2026-09-27 18:31:52,001 | INFO | [PAGE 26] GET https://web-game.net/categoria/juegos-ps5/page/26/
+2026-09-27 18:31:52,001 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:52,239 | INFO | curl_cffi HTTP 200 | 284051 bytes
+2026-09-27 18:31:52,257 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:52,258 | INFO | [PAGE 26] 12 productos
+2026-09-27 18:31:52,275 | INFO | [PAGE 26] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/27/
+2026-09-27 18:31:54,275 | INFO | [PAGE 27] GET https://web-game.net/categoria/juegos-ps5/page/27/
+2026-09-27 18:31:54,275 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:54,521 | INFO | curl_cffi HTTP 200 | 285670 bytes
+2026-09-27 18:31:54,539 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:54,540 | INFO | [PAGE 27] 12 productos
+2026-09-27 18:31:54,557 | INFO | [PAGE 27] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/28/
+2026-09-27 18:31:56,557 | INFO | [PAGE 28] GET https://web-game.net/categoria/juegos-ps5/page/28/
+2026-09-27 18:31:56,557 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:56,814 | INFO | curl_cffi HTTP 200 | 285557 bytes
+2026-09-27 18:31:56,832 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:56,833 | INFO | [PAGE 28] 12 productos
+2026-09-27 18:31:56,849 | INFO | [PAGE 28] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/29/
+2026-09-27 18:31:58,849 | INFO | [PAGE 29] GET https://web-game.net/categoria/juegos-ps5/page/29/
+2026-09-27 18:31:58,849 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:31:59,107 | INFO | curl_cffi HTTP 200 | 286469 bytes
+2026-09-27 18:31:59,125 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:31:59,126 | INFO | [PAGE 29] 12 productos
+2026-09-27 18:31:59,142 | INFO | [PAGE 29] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/30/
+2026-09-27 18:32:01,142 | INFO | [PAGE 30] GET https://web-game.net/categoria/juegos-ps5/page/30/
+2026-09-27 18:32:01,142 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:32:01,410 | INFO | curl_cffi HTTP 200 | 285169 bytes
+2026-09-27 18:32:01,427 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:32:01,428 | INFO | [PAGE 30] 12 productos
+2026-09-27 18:32:01,444 | INFO | [PAGE 30] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/31/
+2026-09-27 18:32:03,444 | INFO | [PAGE 31] GET https://web-game.net/categoria/juegos-ps5/page/31/
+2026-09-27 18:32:03,444 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:32:03,708 | INFO | curl_cffi HTTP 200 | 284867 bytes
+2026-09-27 18:32:03,747 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:32:03,749 | INFO | [PAGE 31] 12 productos
+2026-09-27 18:32:03,765 | INFO | [PAGE 31] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/32/
+2026-09-27 18:32:05,765 | INFO | [PAGE 32] GET https://web-game.net/categoria/juegos-ps5/page/32/
+2026-09-27 18:32:05,765 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:32:06,039 | INFO | curl_cffi HTTP 200 | 286138 bytes
+2026-09-27 18:32:06,056 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:32:06,058 | INFO | [PAGE 32] 12 productos
+2026-09-27 18:32:06,074 | INFO | [PAGE 32] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/33/
+2026-09-27 18:32:08,074 | INFO | [PAGE 33] GET https://web-game.net/categoria/juegos-ps5/page/33/
+2026-09-27 18:32:08,074 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:32:08,321 | INFO | curl_cffi HTTP 200 | 284892 bytes
+2026-09-27 18:32:08,339 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:32:08,340 | INFO | [PAGE 33] 12 productos
+2026-09-27 18:32:08,356 | INFO | [PAGE 33] Siguiente página: https://web-game.net/categoria/juegos-ps5/page/34/
+2026-09-27 18:32:10,356 | INFO | [PAGE 34] GET https://web-game.net/categoria/juegos-ps5/page/34/
+2026-09-27 18:32:10,357 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:32:10,623 | INFO | curl_cffi HTTP 200 | 286268 bytes
+2026-09-27 18:32:10,641 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:32:10,642 | INFO | [PAGE 34] 12 productos
+2026-09-27 18:32:10,662 | INFO | [PAGE 34] Fin de paginación.
+2026-09-27 18:32:10,664 | INFO | TOTAL PRODUCTOS: 408

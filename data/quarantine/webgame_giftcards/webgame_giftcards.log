@@ -1,0 +1,13 @@
+2026-09-27 18:32:10,812 | INFO | [PAGE 1] GET https://web-game.net/categoria/gift-card/
+2026-09-27 18:32:10,855 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:32:12,577 | INFO | curl_cffi HTTP 200 | 283554 bytes
+2026-09-27 18:32:12,609 | INFO | Productos encontrados en HTML: 12
+2026-09-27 18:32:12,610 | INFO | [PAGE 1] 12 productos
+2026-09-27 18:32:12,626 | INFO | [PAGE 1] Siguiente página: https://web-game.net/categoria/gift-card/page/2/
+2026-09-27 18:32:14,627 | INFO | [PAGE 2] GET https://web-game.net/categoria/gift-card/page/2/
+2026-09-27 18:32:14,627 | INFO | Intentando con curl_cffi / Chrome...
+2026-09-27 18:32:15,660 | INFO | curl_cffi HTTP 200 | 257746 bytes
+2026-09-27 18:32:15,673 | INFO | Productos encontrados en HTML: 3
+2026-09-27 18:32:15,673 | INFO | [PAGE 2] 3 productos
+2026-09-27 18:32:15,689 | INFO | [PAGE 2] Fin de paginación.
+2026-09-27 18:32:15,689 | INFO | TOTAL PRODUCTOS: 15
