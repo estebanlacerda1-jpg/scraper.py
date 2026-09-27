@@ -28,7 +28,7 @@ jobs:
 
       - name: Ejecutar scraper Web Game PS4
         run: |
-          python scraper/quarantine/webgame_ps4.py
+          python webgame_ps4.py
 
       - name: Mostrar log
         if: always()
