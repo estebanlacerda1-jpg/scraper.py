@@ -3,7 +3,7 @@ from pathlib import Path
 from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 
-BASE_https://web-game.net/categoria/gift-card/ = "https://web-game.net/categoria/gift-card/"
+BASE_URL = "https://web-game.net/categoria/gift-card/"
 GiftCardsEGORY = "GiftCards"
 data/quarantine/webgame_giftcards = Path("data/quarantine/webgame_giftcards")
 data/quarantine/webgame_giftcards.mkdir(parents=True, exist_ok=True)
