@@ -1,168 +1,490 @@
-#!/usr/bin/env python3
-import json, re, sys, time
+import json
+import logging
+import re
+import sys
+import time
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
-import requests
+
 from bs4 import BeautifulSoup
 
+
 BASE_URL = "https://web-game.net/categoria/juegos-ps4/"
-OUT = Path("data/quarantine/webgame_ps4")
-JSON_OUT = OUT / "webgame_ps4.json"
-LOG_OUT = OUT / "webgame_ps4.log"
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 "
-                  "(KHTML, like Gecko) Chrome/140.0 Mobile Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "es-UY,es;q=0.9,en;q=0.7",
-    "Referer": "https://web-game.net/",
-}
+OUTPUT_DIR = Path("data/quarantine/webgame_ps4")
+OUTPUT_JSON = OUTPUT_DIR / "webgame_ps4.json"
+OUTPUT_LOG = OUTPUT_DIR / "webgame_ps4.log"
 
-def log(msg):
-    print(msg, flush=True)
-    OUT.mkdir(parents=True, exist_ok=True)
-    with LOG_OUT.open("a", encoding="utf-8") as f:
-        f.write(msg + "\n")
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-def clean(s):
-    return re.sub(r"\s+", " ", s or "").strip()
+logging.basicConfig(
+    filename=OUTPUT_LOG,
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+)
 
-def price_uyu(s):
-    m = re.search(r"\$\s*([\d\.\,]+)", clean(s))
-    if not m:
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+logging.getLogger().addHandler(console)
+
+
+def log(message):
+    logging.info(message)
+
+
+def parse_price(text):
+    if not text:
         return None
+
+    # Ejemplo:
+    # Desde: $ 1.490 UYU
+    match = re.search(r"\$\s*([\d\.\,]+)", text)
+
+    if not match:
+        return None
+
+    value = match.group(1).replace(".", "").replace(",", ".")
+
     try:
-        return int(m.group(1).replace(".", "").replace(",", ""))
+        return float(value)
     except ValueError:
         return None
 
-def fetch(session, url):
-    r = session.get(url, timeout=30, allow_redirects=True)
-    if r.status_code == 404:
-        return 404, ""
-    r.raise_for_status()
-    return r.status_code, r.text
 
-def parse_products(html, page_url):
+def parse_products(html):
     soup = BeautifulSoup(html, "html.parser")
-    result = []
 
-    for item in soup.select("ul.products li.product"):
-        title = item.select_one("h2")
-        link = item.select_one("a[href]")
-        price = item.select_one("span.price")
-        image = item.select_one("img")
+    products = []
 
-        if not title or not link:
+    # WooCommerce de Web Game
+    items = soup.select("ul.products li.product")
+
+    log(f"Productos encontrados en HTML: {len(items)}")
+
+    for item in items:
+        title_el = item.select_one("h2")
+
+        if not title_el:
             continue
 
-        name = clean(title.get_text(" ", strip=True))
-        url = urljoin(page_url, link.get("href", "").strip())
-        if not name or not url:
+        title = title_el.get_text(" ", strip=True)
+
+        link_el = item.select_one("a[href]")
+
+        if not link_el:
             continue
 
-        raw_price = clean(price.get_text(" ", strip=True)) if price else ""
-        image_url = ""
-        if image:
-            image_url = (image.get("src") or image.get("data-src")
-                         or image.get("data-lazy-src") or "")
-            image_url = urljoin(page_url, image_url)
+        product_url = urljoin(BASE_URL, link_el.get("href"))
 
-        result.append({
-            "supplier": "Web Game",
-            "platform": "PS4",
-            "category": "juegos-ps4",
-            "name": name,
-            "url": url,
-            "price_uyu": price_uyu(raw_price),
-            "price_raw": raw_price,
-            "image": image_url,
-            "source_page": page_url,
-        })
-    return result
+        price_el = item.select_one("span.price")
+        price_text = (
+            price_el.get_text(" ", strip=True)
+            if price_el
+            else ""
+        )
 
-def next_url(html, current):
+        image_url = None
+
+        img = item.select_one("img")
+
+        if img:
+            image_url = (
+                img.get("src")
+                or img.get("data-src")
+                or img.get("data-lazy-src")
+            )
+
+            if image_url:
+                image_url = urljoin(BASE_URL, image_url)
+
+        products.append(
+            {
+                "title": title,
+                "url": product_url,
+                "price": parse_price(price_text),
+                "price_text": price_text,
+                "image": image_url,
+                "source": "Web Game",
+                "category": "PS4",
+            }
+        )
+
+    return products
+
+
+def get_next_page(html):
     soup = BeautifulSoup(html, "html.parser")
-    node = soup.select_one('link[rel="next"][href]')
-    if node:
-        return urljoin(current, node["href"])
-    node = soup.select_one('a.next.page-numbers[href], a.next[href], a[rel="next"][href]')
-    return urljoin(current, node["href"]) if node else None
 
-def same_catalog(url):
-    p = urlparse(url)
-    return p.netloc == "web-game.net" and "/categoria/juegos-ps4" in p.path
+    # Primero usamos rel="next", que Web Game ya tiene
+    next_link = soup.select_one('link[rel="next"]')
+
+    if next_link and next_link.get("href"):
+        return urljoin(BASE_URL, next_link["href"])
+
+    # Fallbacks
+    selectors = [
+        'a[rel="next"]',
+        "a.next.page-numbers",
+        "a.next",
+    ]
+
+    for selector in selectors:
+        element = soup.select_one(selector)
+
+        if element and element.get("href"):
+            return urljoin(BASE_URL, element["href"])
+
+    return None
+
+
+def valid_catalog_url(url):
+    parsed = urlparse(url)
+
+    return (
+        parsed.netloc == "web-game.net"
+        and parsed.path.startswith("/categoria/juegos-ps4")
+    )
+
+
+def fetch_with_curl_cffi(url):
+    """
+    Primer intento:
+    curl_cffi imita el TLS/browser fingerprint de Chrome.
+    Esto puede evitar algunos 403 que reciben requests normales.
+    """
+
+    try:
+        from curl_cffi import requests
+    except ImportError:
+        log("curl_cffi no está instalado.")
+        return None
+
+    log("Intentando con curl_cffi / Chrome...")
+
+    try:
+        session = requests.Session(
+            impersonate="chrome"
+        )
+
+        headers = {
+            "accept": (
+                "text/html,application/xhtml+xml,"
+                "application/xml;q=0.9,image/avif,image/webp,"
+                "image/apng,*/*;q=0.8"
+            ),
+            "accept-language": "es-UY,es;q=0.9,en-US;q=0.8,en;q=0.7",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "referer": "https://web-game.net/",
+            "upgrade-insecure-requests": "1",
+        }
+
+        response = session.get(
+            url,
+            headers=headers,
+            timeout=30,
+            allow_redirects=True,
+        )
+
+        log(
+            f"curl_cffi HTTP {response.status_code} "
+            f"| {len(response.text)} bytes"
+        )
+
+        if response.status_code == 200:
+            return response.text
+
+        log(f"curl_cffi rechazado: HTTP {response.status_code}")
+
+    except Exception as e:
+        log(f"Error curl_cffi: {e}")
+
+    return None
+
+
+def fetch_with_requests(url):
+    """
+    Segundo intento: requests normal con una sesión
+    y headers de navegador.
+    """
+
+    try:
+        import requests
+    except ImportError:
+        return None
+
+    log("Intentando con requests...")
+
+    try:
+        session = requests.Session()
+
+        headers = {
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/140.0.0.0 Safari/537.36"
+            ),
+            "Accept": (
+                "text/html,application/xhtml+xml,"
+                "application/xml;q=0.9,image/avif,image/webp,"
+                "*/*;q=0.8"
+            ),
+            "Accept-Language": "es-UY,es;q=0.9,en;q=0.8",
+            "Referer": "https://web-game.net/",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1",
+        }
+
+        response = session.get(
+            url,
+            headers=headers,
+            timeout=30,
+            allow_redirects=True,
+        )
+
+        log(
+            f"requests HTTP {response.status_code} "
+            f"| {len(response.text)} bytes"
+        )
+
+        if response.status_code == 200:
+            return response.text
+
+        log(f"requests rechazado: HTTP {response.status_code}")
+
+    except Exception as e:
+        log(f"Error requests: {e}")
+
+    return None
+
+
+def fetch_with_playwright(url):
+    """
+    Tercer intento:
+    navegador Chromium real mediante Playwright.
+    """
+
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        log("Playwright no está instalado.")
+        return None
+
+    log("Intentando con Playwright / Chromium...")
+
+    try:
+        with sync_playwright() as p:
+
+            browser = p.chromium.launch(
+                headless=True,
+                args=[
+                    "--disable-blink-features=AutomationControlled",
+                    "--no-sandbox",
+                    "--disable-dev-shm-usage",
+                ],
+            )
+
+            context = browser.new_context(
+                user_agent=(
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/140.0.0.0 Safari/537.36"
+                ),
+                locale="es-UY",
+                viewport={
+                    "width": 1366,
+                    "height": 768,
+                },
+            )
+
+            page = context.new_page()
+
+            page.set_extra_http_headers(
+                {
+                    "Accept-Language": "es-UY,es;q=0.9,en;q=0.8"
+                }
+            )
+
+            response = page.goto(
+                url,
+                wait_until="domcontentloaded",
+                timeout=60000,
+            )
+
+            if response:
+                log(
+                    f"Playwright HTTP {response.status} "
+                    f"| URL final: {page.url}"
+                )
+
+            page.wait_for_timeout(5000)
+
+            html = page.content()
+
+            log(
+                f"Playwright HTML recibido: "
+                f"{len(html)} bytes"
+            )
+
+            browser.close()
+
+            if html and len(html) > 1000:
+                return html
+
+    except Exception as e:
+        log(f"Error Playwright: {e}")
+
+    return None
+
+
+def fetch_page(url):
+    # 1. curl_cffi
+    html = fetch_with_curl_cffi(url)
+
+    if html:
+        return html
+
+    time.sleep(2)
+
+    # 2. requests
+    html = fetch_with_requests(url)
+
+    if html:
+        return html
+
+    time.sleep(2)
+
+    # 3. Playwright
+    html = fetch_with_playwright(url)
+
+    if html:
+        return html
+
+    return None
+
 
 def main():
-    OUT.mkdir(parents=True, exist_ok=True)
-    LOG_OUT.write_text("", encoding="utf-8")
 
-    session = requests.Session()
-    session.headers.update(HEADERS)
-
-    products, visited = [], set()
-    current = BASE_URL
-    page = 1
+    print("=== Web Game PS4 - QUARANTINE ===")
 
     log("=== Web Game PS4 - QUARANTINE ===")
 
-    while current and current not in visited:
-        visited.add(current)
-        log(f"[PAGE {page}] GET {current}")
+    all_products = []
 
-        try:
-            status, html = fetch(session, current)
-        except requests.HTTPError as e:
-            status = e.response.status_code if e.response is not None else 0
-            if status == 404 and products:
-                log(f"[PAGE {page}] 404 -> fin de paginación")
-                break
-            log(f"[PAGE {page}] HTTP ERROR {status}: {e}")
-            return 1
-        except requests.RequestException as e:
-            log(f"[PAGE {page}] NETWORK ERROR: {e}")
-            return 1
+    current_url = BASE_URL
+    page_number = 1
 
-        if status == 404:
-            if products:
-                log(f"[PAGE {page}] 404 -> fin de paginación")
-                break
-            log("[PAGE 1] 404 -> fuente no disponible")
-            return 1
+    visited = set()
 
-        found = parse_products(html, current)
-        log(f"[PAGE {page}] productos: {len(found)}")
-        products.extend(found)
+    while current_url:
 
-        nxt = next_url(html, current)
-        if nxt and same_catalog(nxt):
-            log(f"[PAGE {page}] next -> {nxt}")
-            current = nxt
-            page += 1
-            time.sleep(1)
-        else:
-            log(f"[PAGE {page}] sin next -> fin")
+        if current_url in visited:
+            log(f"URL repetida, deteniendo: {current_url}")
             break
 
-    unique = {p["url"]: p for p in products}
-    products = list(unique.values())
+        visited.add(current_url)
 
-    data = {
-        "source": "webgame_ps4_quarantine",
-        "supplier": "Web Game",
-        "platform": "PS4",
-        "category": "juegos-ps4",
-        "source_url": BASE_URL,
-        "pages_scanned": page,
-        "products_count": len(products),
-        "products": products,
+        log(f"[PAGE {page_number}] GET {current_url}")
+
+        html = fetch_page(current_url)
+
+        if not html:
+
+            log(
+                f"[PAGE {page_number}] "
+                "No se pudo obtener HTML."
+            )
+
+            if page_number == 1:
+                print("ERROR: Web Game sigue devolviendo 403.")
+                sys.exit(1)
+
+            break
+
+        products = parse_products(html)
+
+        if not products:
+
+            log(
+                f"[PAGE {page_number}] "
+                "HTML recibido pero 0 productos."
+            )
+
+        else:
+
+            log(
+                f"[PAGE {page_number}] "
+                f"{len(products)} productos"
+            )
+
+            all_products.extend(products)
+
+        next_url = get_next_page(html)
+
+        if next_url and valid_catalog_url(next_url):
+
+            log(
+                f"[PAGE {page_number}] "
+                f"Siguiente página: {next_url}"
+            )
+
+            current_url = next_url
+            page_number += 1
+
+            time.sleep(2)
+
+        else:
+
+            log(
+                f"[PAGE {page_number}] "
+                "Fin de paginación."
+            )
+
+            break
+
+    # Deduplicar
+    unique = {}
+
+    for product in all_products:
+        unique[product["url"]] = product
+
+    all_products = list(unique.values())
+
+    result = {
+        "source": "Web Game",
+        "category": "PS4",
+        "url": BASE_URL,
+        "pages_scraped": page_number,
+        "products_count": len(all_products),
+        "products": all_products,
     }
 
-    JSON_OUT.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-    log(f"TOTAL productos únicos: {len(products)}")
-    log(f"JSON: {JSON_OUT}")
+    with open(
+        OUTPUT_JSON,
+        "w",
+        encoding="utf-8",
+    ) as f:
+        json.dump(
+            result,
+            f,
+            ensure_ascii=False,
+            indent=2,
+        )
 
-    return 0 if products else 2
+    log(
+        f"TOTAL PRODUCTOS: {len(all_products)}"
+    )
+
+    print(
+        f"TOTAL PRODUCTOS: {len(all_products)}"
+    )
+
+    if not all_products:
+        print("ERROR: 0 productos encontrados.")
+        sys.exit(2)
+
+    print("OK")
+
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
