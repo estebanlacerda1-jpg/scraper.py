@@ -3,7 +3,7 @@ from pathlib import Path
 from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 
-BASE_https://web-game.net/categoria/juegos-ps5/ = "https://web-game.net/categoria/juegos-ps5/"
+BASE_URL = "https://web-game.net/categoria/juegos-ps5/"
 PS5EGORY = "PS5"
 data/quarantine/webgame_ps5 = Path("data/quarantine/webgame_ps5")
 data/quarantine/webgame_ps5.mkdir(parents=True, exist_ok=True)
