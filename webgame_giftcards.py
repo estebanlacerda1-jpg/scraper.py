@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 BASE_URL = "https://web-game.net/categoria/gift-card/"
 GiftCardsEGORY = "GiftCards"
-data/quarantine/webgame_giftcards = Path("data/quarantine/webgame_giftcards")
+OUTPUT_DIR = Path("data/quarantine/webgame_giftcards")
 data/quarantine/webgame_giftcards.mkdir(parents=True, exist_ok=True)
 webgame_giftcards.json_data/quarantine/webgame_giftcards = data/quarantine/webgame_giftcards / "webgame_giftcards.json"
 webgame_giftcards.log_data/quarantine/webgame_giftcards = data/quarantine/webgame_giftcards / "webgame_giftcards.log"
