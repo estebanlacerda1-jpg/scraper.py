@@ -25,7 +25,7 @@ jobs:
 
       - name: Ejecutar scraper
         run: |
-          python digitalworld.py
+          python digitalworld_ps5.py
 
       - name: Guardar resultados
         run: |
