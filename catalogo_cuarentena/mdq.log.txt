@@ -1,0 +1,5 @@
+=== MDQ STORE - PSN CARD ===
+URL: https://mdqstore.com/categoria-producto/psn-card/
+HTTP página 1: 200
+Contenedores encontrados: 10
+Productos únicos encontrados: 5
