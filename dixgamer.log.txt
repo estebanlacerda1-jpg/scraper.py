@@ -1,0 +1,319 @@
+============================================================
+DIXGAMER - SCRAPER COMPLETO
+============================================================
+Inicio: 2026-09-28 13:48:31.767094
+Categorías a procesar: 10
+
+============================================================
+Dix FC Points
+============================================================
+
+Página 1: https://dixgamer.com/categoria-producto/tarjetas/fc-points/
+HTTP: 200
+Elementos encontrados: 14
+Productos nuevos: 7
+Total acumulado: 7
+
+Página 2: https://dixgamer.com/categoria-producto/tarjetas/fc-points/page/2/
+HTTP: 404
+HTTP 404 en página 2. Fin de paginación.
+
+Dix FC Points: 7 productos
+
+============================================================
+Dix Fortnite
+============================================================
+
+Página 1: https://dixgamer.com/categoria-producto/tarjetas/fortnite/
+HTTP: 200
+Elementos encontrados: 14
+Productos nuevos: 7
+Total acumulado: 7
+
+Página 2: https://dixgamer.com/categoria-producto/tarjetas/fortnite/page/2/
+HTTP: 404
+HTTP 404 en página 2. Fin de paginación.
+
+Dix Fortnite: 7 productos
+
+============================================================
+Dix Nintendo
+============================================================
+
+Página 1: https://dixgamer.com/categoria-producto/tarjetas/nintendo/
+HTTP: 200
+Elementos encontrados: 16
+Productos nuevos: 8
+Total acumulado: 8
+
+Página 2: https://dixgamer.com/categoria-producto/tarjetas/nintendo/page/2/
+HTTP: 404
+HTTP 404 en página 2. Fin de paginación.
+
+Dix Nintendo: 8 productos
+
+============================================================
+Dix Playstation
+============================================================
+
+Página 1: https://dixgamer.com/categoria-producto/tarjetas/ps/
+HTTP: 200
+Elementos encontrados: 42
+Productos nuevos: 21
+Total acumulado: 21
+
+Página 2: https://dixgamer.com/categoria-producto/tarjetas/ps/page/2/
+HTTP: 404
+HTTP 404 en página 2. Fin de paginación.
+
+Dix Playstation: 21 productos
+
+============================================================
+Dix Razer
+============================================================
+
+Página 1: https://dixgamer.com/categoria-producto/tarjetas/razer-gold/
+HTTP: 200
+Elementos encontrados: 10
+Productos nuevos: 5
+Total acumulado: 5
+
+Página 2: https://dixgamer.com/categoria-producto/tarjetas/razer-gold/page/2/
+HTTP: 404
+HTTP 404 en página 2. Fin de paginación.
+
+Dix Razer: 5 productos
+
+============================================================
+Dix Steam
+============================================================
+
+Página 1: https://dixgamer.com/categoria-producto/tarjetas/steam/
+HTTP: 200
+Elementos encontrados: 12
+Productos nuevos: 6
+Total acumulado: 6
+
+Página 2: https://dixgamer.com/categoria-producto/tarjetas/steam/page/2/
+HTTP: 404
+HTTP 404 en página 2. Fin de paginación.
+
+Dix Steam: 6 productos
+
+============================================================
+Dix Xbox
+============================================================
+
+Página 1: https://dixgamer.com/categoria-producto/tarjetas/xbox/
+HTTP: 200
+Elementos encontrados: 40
+Productos nuevos: 20
+Total acumulado: 20
+
+Página 2: https://dixgamer.com/categoria-producto/tarjetas/xbox/page/2/
+HTTP: 404
+HTTP 404 en página 2. Fin de paginación.
+
+Dix Xbox: 20 productos
+
+============================================================
+Dix PS3
+============================================================
+
+Página 1: https://dixgamer.com/categoria-producto/juegos/ps3/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 36
+
+Página 2: https://dixgamer.com/categoria-producto/juegos/ps3/page/2/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 72
+
+Página 3: https://dixgamer.com/categoria-producto/juegos/ps3/page/3/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 108
+
+Página 4: https://dixgamer.com/categoria-producto/juegos/ps3/page/4/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 144
+
+Página 5: https://dixgamer.com/categoria-producto/juegos/ps3/page/5/
+HTTP: 200
+Elementos encontrados: 60
+Productos nuevos: 30
+Total acumulado: 174
+
+Página 6: https://dixgamer.com/categoria-producto/juegos/ps3/page/6/
+HTTP: 404
+HTTP 404 en página 6. Fin de paginación.
+
+Dix PS3: 174 productos
+
+============================================================
+Dix PS4
+============================================================
+
+Página 1: https://dixgamer.com/categoria-producto/juegos/ps4/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 36
+
+Página 2: https://dixgamer.com/categoria-producto/juegos/ps4/page/2/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 72
+
+Página 3: https://dixgamer.com/categoria-producto/juegos/ps4/page/3/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 108
+
+Página 4: https://dixgamer.com/categoria-producto/juegos/ps4/page/4/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 144
+
+Página 5: https://dixgamer.com/categoria-producto/juegos/ps4/page/5/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 180
+
+Página 6: https://dixgamer.com/categoria-producto/juegos/ps4/page/6/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 216
+
+Página 7: https://dixgamer.com/categoria-producto/juegos/ps4/page/7/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 252
+
+Página 8: https://dixgamer.com/categoria-producto/juegos/ps4/page/8/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 288
+
+Página 9: https://dixgamer.com/categoria-producto/juegos/ps4/page/9/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 324
+
+Página 10: https://dixgamer.com/categoria-producto/juegos/ps4/page/10/
+HTTP: 200
+Elementos encontrados: 60
+Productos nuevos: 30
+Total acumulado: 354
+
+Página 11: https://dixgamer.com/categoria-producto/juegos/ps4/page/11/
+HTTP: 404
+HTTP 404 en página 11. Fin de paginación.
+
+Dix PS4: 354 productos
+
+============================================================
+Dix PS5
+============================================================
+
+Página 1: https://dixgamer.com/categoria-producto/juegos/ps5/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 36
+
+Página 2: https://dixgamer.com/categoria-producto/juegos/ps5/page/2/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 72
+
+Página 3: https://dixgamer.com/categoria-producto/juegos/ps5/page/3/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 108
+
+Página 4: https://dixgamer.com/categoria-producto/juegos/ps5/page/4/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 144
+
+Página 5: https://dixgamer.com/categoria-producto/juegos/ps5/page/5/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 180
+
+Página 6: https://dixgamer.com/categoria-producto/juegos/ps5/page/6/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 216
+
+Página 7: https://dixgamer.com/categoria-producto/juegos/ps5/page/7/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 252
+
+Página 8: https://dixgamer.com/categoria-producto/juegos/ps5/page/8/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 288
+
+Página 9: https://dixgamer.com/categoria-producto/juegos/ps5/page/9/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 324
+
+Página 10: https://dixgamer.com/categoria-producto/juegos/ps5/page/10/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 360
+
+Página 11: https://dixgamer.com/categoria-producto/juegos/ps5/page/11/
+HTTP: 200
+Elementos encontrados: 72
+Productos nuevos: 36
+Total acumulado: 396
+
+Página 12: https://dixgamer.com/categoria-producto/juegos/ps5/page/12/
+HTTP: 200
+Elementos encontrados: 70
+Productos nuevos: 35
+Total acumulado: 431
+
+Página 13: https://dixgamer.com/categoria-producto/juegos/ps5/page/13/
+HTTP: 404
+HTTP 404 en página 13. Fin de paginación.
+
+Dix PS5: 431 productos
+
+============================================================
+DIXGAMER - FINALIZADO
+============================================================
+Productos totales: 1033
+Categorías correctas: 10
+Categorías con error: 0
+
+CSV generado: dixgamer.csv
+Fin: 2026-09-28 13:49:49.120043
