@@ -3,19 +3,30 @@ import re
 import time
 from pathlib import Path
 
-import requests
 from bs4 import BeautifulSoup
+import requests
 from curl_cffi import requests as curl_requests
 
 
-BASE_URL = "https://digitalworldpsn.com/es/juegos-digitales-ps5/"
+# ============================================================
+# DIGITALWORLD - SCRAPER GENERAL DE CUARENTENA
+# ============================================================
+
+CATEGORIAS = {
+    "DigitalWorld PS4": "https://digitalworldpsn.com/es/juegos-digitales-ps4/",
+    "DigitalWorld PS5": "https://digitalworldpsn.com/es/juegos-digitales-ps5/",
+    "DigitalWorld Switch": "https://digitalworldpsn.com/es/juegos-digitales-switch/",
+    "DigitalWorld VR": "https://digitalworldpsn.com/es/juegos-ps-vr-vr2/",
+    "DigitalWorld Xbox": "https://digitalworldpsn.com/es/juegos-digitales-xbox/",
+}
+
 PARAM = "?v=1b23f8a4c97c"
 
 OUTPUT_DIR = Path("catalogo_cuarentena")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-JSON_PATH = OUTPUT_DIR / "digitalworld_ps5.json"
-LOG_PATH = OUTPUT_DIR / "digitalworld_ps5.log.txt"
+JSON_PATH = OUTPUT_DIR / "digitalworld.json"
+LOG_PATH = OUTPUT_DIR / "digitalworld.log.txt"
 
 HEADERS = {
     "User-Agent": (
@@ -27,13 +38,23 @@ HEADERS = {
 }
 
 
+# ============================================================
+# LOG
+# ============================================================
+
 def log(text):
     print(text)
+
     with open(LOG_PATH, "a", encoding="utf-8") as f:
         f.write(text + "\n")
 
 
+# ============================================================
+# OBTENER HTML
+# ============================================================
+
 def obtener_html(url):
+
     # Primer intento: curl_cffi simulando Chrome
     try:
         r = curl_requests.get(
@@ -66,7 +87,87 @@ def obtener_html(url):
         return "", 0
 
 
-def extraer_productos(html, pagina):
+# ============================================================
+# CONVERTIR PRECIO
+# ============================================================
+
+def limpiar_precio(texto):
+
+    if not texto:
+        return None
+
+    texto = texto.replace("\xa0", " ")
+    texto = texto.strip()
+
+    # Buscar número
+    match = re.search(r"[\d.,]+", texto)
+
+    if not match:
+        return None
+
+    numero = match.group(0)
+
+    # --------------------------------------------------------
+    # Detectar formato:
+    #
+    # 278,00  -> 278.00
+    # 1.278,00 -> 1278.00
+    # 14.01 -> 14.01
+    # 1.278 -> 1278
+    # --------------------------------------------------------
+
+    if "," in numero and "." in numero:
+
+        # Ej: 1.278,00
+        if numero.rfind(",") > numero.rfind("."):
+            numero = numero.replace(".", "")
+            numero = numero.replace(",", ".")
+
+        # Ej: 1,278.00
+        else:
+            numero = numero.replace(",", "")
+
+    elif "," in numero:
+
+        parte_final = numero.split(",")[-1]
+
+        if len(parte_final) == 2:
+            # Decimal: 278,00
+            numero = numero.replace(".", "")
+            numero = numero.replace(",", ".")
+        else:
+            # Miles: 1,278
+            numero = numero.replace(",", "")
+
+    elif "." in numero:
+
+        partes = numero.split(".")
+
+        # 14.01 -> decimal
+        if len(partes[-1]) == 2:
+            numero = numero.replace(",", "")
+
+        # 1.278 -> miles
+        else:
+            numero = numero.replace(".", "")
+
+    try:
+        valor = float(numero)
+    except ValueError:
+        return None
+
+    if valor < 1:
+        return None
+
+    return valor
+
+
+# ============================================================
+# EXTRAER PRODUCTOS
+# ============================================================
+
+def extraer_productos(html, categoria, pagina):
+
     soup = BeautifulSoup(html, "html.parser")
 
     cards = soup.select("li.product")
@@ -77,7 +178,9 @@ def extraer_productos(html, pagina):
     productos = []
 
     for card in cards:
+
         try:
+
             nombre_el = card.select_one(
                 ".woocommerce-loop-product__title"
             )
@@ -93,48 +196,51 @@ def extraer_productos(html, pagina):
             if not nombre_el or not precio_el:
                 continue
 
-            nombre = nombre_el.get_text(" ", strip=True)
-            precio_txt = precio_el.get_text(" ", strip=True)
+            nombre = nombre_el.get_text(
+                " ",
+                strip=True
+            )
 
-            numero = re.search(r"[\d.,]+", precio_txt)
+            precio_original = precio_el.get_text(
+                " ",
+                strip=True
+            )
 
-            if not numero:
+            precio = limpiar_precio(
+                precio_original
+            )
+
+            if precio is None:
                 continue
 
-            numero_txt = numero.group(0)
+            link = ""
 
-            # UYU: 319,00 -> 319
-            numero_txt = numero_txt.replace(".", "").replace(",", ".")
+            if link_el:
+                link = link_el.get("href", "")
 
-            try:
-                valor = float(numero_txt)
-            except ValueError:
-                continue
-
-            if valor < 1:
-                continue
-
-            link = link_el.get("href") if link_el else BASE_URL
+            # Imagen
+            imagen = ""
 
             imagen_el = card.select_one("img")
 
-            imagen = ""
-
             if imagen_el:
+
                 imagen = (
                     imagen_el.get("data-src")
+                    or imagen_el.get("data-lazy-src")
                     or imagen_el.get("src")
                     or ""
                 )
 
             productos.append({
                 "nombre": nombre,
-                "precio_original": precio_txt,
-                "precio": valor,
+                "precio_original": precio_original,
+                "precio": precio,
                 "moneda": "UYU",
-                "precio_uyu": valor,
+                "precio_uyu": precio,
                 "link": link,
                 "imagen": imagen,
+                "categoria": categoria,
                 "pagina": pagina,
             })
 
@@ -144,32 +250,35 @@ def extraer_productos(html, pagina):
     return productos
 
 
-def main():
+# ============================================================
+# SCRAPEAR UNA CATEGORÍA
+# ============================================================
 
-    # Limpiar log anterior
-    LOG_PATH.write_text("", encoding="utf-8")
+def scrapear_categoria(categoria, base_url):
+
+    log("")
+    log("================================================")
+    log(f"{categoria}")
+    log("================================================")
 
     todos = []
     vistos = set()
 
-    # El HTML confirma 56 páginas
-    MAX_PAGINAS = 56
+    pagina = 1
 
-    log("==============================================")
-    log("DigitalWorld PS5 - SCRAPER CUARENTENA")
-    log("==============================================")
-
-    for pagina in range(1, MAX_PAGINAS + 1):
+    while True:
 
         if pagina == 1:
-            url = BASE_URL + PARAM
+            url = base_url + PARAM
+
         else:
             url = (
-                f"{BASE_URL.rstrip('/')}/page/"
-                f"{pagina}/{PARAM}"
+                f"{base_url.rstrip('/')}"
+                f"/page/{pagina}/{PARAM}"
             )
 
-        log(f"\n[Página {pagina}/{MAX_PAGINAS}]")
+        log("")
+        log(f"[{categoria}] Página {pagina}")
         log(url)
 
         html, status = obtener_html(url)
@@ -177,13 +286,77 @@ def main():
         log(f"HTTP: {status}")
         log(f"HTML: {len(html)} bytes")
 
-        if status != 200:
-            log(f"ERROR HTTP {status}")
-            continue
+        # ----------------------------------------------------
+        # PRIMERA PÁGINA
+        # ----------------------------------------------------
 
-        productos = extraer_productos(html, pagina)
+        if pagina == 1:
 
-        log(f"Productos encontrados: {len(productos)}")
+            if status in (403, 404):
+
+                log(
+                    f"ERROR CRÍTICO: página inicial HTTP {status}"
+                )
+
+                return todos, False
+
+            if status != 200:
+
+                log(
+                    f"ERROR CRÍTICO: página inicial HTTP {status}"
+                )
+
+                return todos, False
+
+        # ----------------------------------------------------
+        # PÁGINAS SIGUIENTES
+        # ----------------------------------------------------
+
+        else:
+
+            if status in (403, 404):
+
+                log(
+                    f"HTTP {status} en página {pagina}: "
+                    "fin de paginación."
+                )
+
+                break
+
+            if status != 200:
+
+                log(
+                    f"ERROR HTTP {status} "
+                    f"en página {pagina}"
+                )
+
+                break
+
+        # ----------------------------------------------------
+        # EXTRAER
+        # ----------------------------------------------------
+
+        productos = extraer_productos(
+            html,
+            categoria,
+            pagina
+        )
+
+        log(
+            f"Productos encontrados: "
+            f"{len(productos)}"
+        )
+
+        # Si una página válida no tiene productos,
+        # asumimos que terminó la categoría.
+        if not productos:
+
+            log(
+                "Página sin productos: "
+                "fin de paginación."
+            )
+
+            break
 
         nuevos = 0
 
@@ -191,31 +364,148 @@ def main():
 
             clave = (
                 producto["nombre"],
-                producto["link"],
+                producto["link"]
             )
 
             if clave in vistos:
                 continue
 
             vistos.add(clave)
+
             todos.append(producto)
+
             nuevos += 1
 
-        log(f"Productos nuevos: {nuevos}")
-
-        time.sleep(1)
-
-    with open(JSON_PATH, "w", encoding="utf-8") as f:
-        json.dump(
-            todos,
-            f,
-            ensure_ascii=False,
-            indent=2,
+        log(
+            f"Productos nuevos: {nuevos}"
         )
 
-    log("\n==============================================")
-    log(f"TOTAL PRODUCTOS: {len(todos)}")
-    log("==============================================")
+        # Evita quedar atrapado si el sitio devuelve
+        # exactamente la misma página repetidamente.
+        if nuevos == 0:
+
+            log(
+                "No aparecieron productos nuevos: "
+                "fin de paginación."
+            )
+
+            break
+
+        pagina += 1
+
+        # Pausa pequeña para no bombardear el servidor
+        time.sleep(1)
+
+    log("")
+    log(
+        f"{categoria} FINALIZADA"
+    )
+
+    log(
+        f"TOTAL: {len(todos)} productos"
+    )
+
+    return todos, True
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+def main():
+
+    # Limpiar log anterior
+    LOG_PATH.write_text(
+        "",
+        encoding="utf-8"
+    )
+
+    log("================================================")
+    log("DIGITALWORLD - SCRAPER GENERAL")
+    log("CUARENTENA")
+    log("================================================")
+
+    todos_los_productos = []
+
+    resultados = {}
+
+    errores = []
+
+    # --------------------------------------------------------
+    # RECORRER TODAS LAS CATEGORÍAS
+    # --------------------------------------------------------
+
+    for categoria, url in CATEGORIAS.items():
+
+        productos, correcta = scrapear_categoria(
+            categoria,
+            url
+        )
+
+        resultados[categoria] = len(productos)
+
+        todos_los_productos.extend(productos)
+
+        if not correcta:
+            errores.append(categoria)
+
+    # --------------------------------------------------------
+    # GUARDAR JSON
+    # --------------------------------------------------------
+
+    with open(
+        JSON_PATH,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        json.dump(
+            todos_los_productos,
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
+
+    # --------------------------------------------------------
+    # RESUMEN
+    # --------------------------------------------------------
+
+    log("")
+    log("================================================")
+    log("RESUMEN DIGITALWORLD")
+    log("================================================")
+
+    for categoria, cantidad in resultados.items():
+
+        log(
+            f"{categoria}: "
+            f"{cantidad} productos"
+        )
+
+    log("")
+    log(
+        f"TOTAL GENERAL: "
+        f"{len(todos_los_productos)} productos"
+    )
+
+    if errores:
+
+        log("")
+        log("CATEGORÍAS CON ERROR:")
+
+        for categoria in errores:
+            log(f" - {categoria}")
+
+    else:
+
+        log("")
+        log(
+            "TODAS LAS CATEGORÍAS "
+            "FINALIZARON CORRECTAMENTE."
+        )
+
+    log("")
+    log("================================================")
 
 
 if __name__ == "__main__":
