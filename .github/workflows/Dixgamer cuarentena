@@ -1,0 +1,39 @@
+name: DixGamer - Cuarentena
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          pip install requests beautifulsoup4 curl_cffi
+
+      - name: Ejecutar scraper
+        run: |
+          python dixgamer.py
+
+      - name: Guardar resultados
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add catalogo_cuarentena/dixgamer.json
+          git add catalogo_cuarentena/dixgamer.log.txt
+
+          git diff --cached --quiet || git commit -m "Cuarentena: scraper general DixGamer"
+          git push
