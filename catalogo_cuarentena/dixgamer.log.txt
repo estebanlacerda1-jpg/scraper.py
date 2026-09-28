@@ -1,0 +1,164 @@
+============================================================
+DIXGAMER - SCRAPER GENERAL
+CUARENTENA
+============================================================
+
+============================================================
+Dix FC Points
+============================================================
+
+[Dix FC Points] Página 1
+https://dixgamer.com/categoria-producto/tarjetas/fc-points/
+HTTP: 200
+HTML: 212405 bytes
+Productos encontrados: 0
+Página sin productos: fin de paginación.
+
+Dix FC Points FINALIZADA
+TOTAL: 0 productos
+
+============================================================
+Dix Fortnite
+============================================================
+
+[Dix Fortnite] Página 1
+https://dixgamer.com/categoria-producto/tarjetas/fortnite/
+HTTP: 200
+HTML: 213905 bytes
+Productos encontrados: 0
+Página sin productos: fin de paginación.
+
+Dix Fortnite FINALIZADA
+TOTAL: 0 productos
+
+============================================================
+Dix Nintendo
+============================================================
+
+[Dix Nintendo] Página 1
+https://dixgamer.com/categoria-producto/tarjetas/nintendo/
+HTTP: 200
+HTML: 216425 bytes
+Productos encontrados: 0
+Página sin productos: fin de paginación.
+
+Dix Nintendo FINALIZADA
+TOTAL: 0 productos
+
+============================================================
+Dix PS3
+============================================================
+
+[Dix PS3] Página 1
+https://dixgamer.com/categoria-producto/juegos/ps3/
+HTTP: 200
+HTML: 360908 bytes
+Productos encontrados: 0
+Página sin productos: fin de paginación.
+
+Dix PS3 FINALIZADA
+TOTAL: 0 productos
+
+============================================================
+Dix PS4
+============================================================
+
+[Dix PS4] Página 1
+https://dixgamer.com/categoria-producto/juegos/ps4/
+HTTP: 200
+HTML: 347807 bytes
+Productos encontrados: 0
+Página sin productos: fin de paginación.
+
+Dix PS4 FINALIZADA
+TOTAL: 0 productos
+
+============================================================
+Dix PS5
+============================================================
+
+[Dix PS5] Página 1
+https://dixgamer.com/categoria-producto/juegos/ps5/
+HTTP: 200
+HTML: 346999 bytes
+Productos encontrados: 0
+Página sin productos: fin de paginación.
+
+Dix PS5 FINALIZADA
+TOTAL: 0 productos
+
+============================================================
+Dix Playstation
+============================================================
+
+[Dix Playstation] Página 1
+https://dixgamer.com/categoria-producto/tarjetas/ps/
+HTTP: 200
+HTML: 273158 bytes
+Productos encontrados: 0
+Página sin productos: fin de paginación.
+
+Dix Playstation FINALIZADA
+TOTAL: 0 productos
+
+============================================================
+Dix Razer
+============================================================
+
+[Dix Razer] Página 1
+https://dixgamer.com/categoria-producto/tarjetas/razer-gold/
+HTTP: 200
+HTML: 203299 bytes
+Productos encontrados: 0
+Página sin productos: fin de paginación.
+
+Dix Razer FINALIZADA
+TOTAL: 0 productos
+
+============================================================
+Dix Steam
+============================================================
+
+[Dix Steam] Página 1
+https://dixgamer.com/categoria-producto/tarjetas/steam/
+HTTP: 200
+HTML: 206949 bytes
+Productos encontrados: 0
+Página sin productos: fin de paginación.
+
+Dix Steam FINALIZADA
+TOTAL: 0 productos
+
+============================================================
+Dix Xbox
+============================================================
+
+[Dix Xbox] Página 1
+https://dixgamer.com/categoria-producto/tarjetas/xbox/
+HTTP: 200
+HTML: 263308 bytes
+Productos encontrados: 0
+Página sin productos: fin de paginación.
+
+Dix Xbox FINALIZADA
+TOTAL: 0 productos
+
+============================================================
+RESUMEN DIXGAMER
+============================================================
+Dix FC Points: 0 productos
+Dix Fortnite: 0 productos
+Dix Nintendo: 0 productos
+Dix PS3: 0 productos
+Dix PS4: 0 productos
+Dix PS5: 0 productos
+Dix Playstation: 0 productos
+Dix Razer: 0 productos
+Dix Steam: 0 productos
+Dix Xbox: 0 productos
+
+TOTAL GENERAL: 0 productos
+
+TODAS LAS CATEGORÍAS FINALIZARON CORRECTAMENTE.
+
+============================================================
