@@ -1,4 +1,4 @@
-name: DixGamer - Cuarentena
+name: DixGamer PS4 - Cuarentena
 
 on:
   workflow_dispatch:
@@ -11,29 +11,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Descargar repositorio
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Instalar dependencias
         run: |
-          pip install requests beautifulsoup4 curl_cffi
+          pip install requests beautifulsoup4
 
-      - name: Ejecutar scraper
+      - name: Ejecutar scraper DixGamer PS4
         run: |
-          python dixgamer.py
+          python dixgamer_ps4.py
 
       - name: Guardar resultados
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add catalogo_cuarentena/dixgamer.json
-          git add catalogo_cuarentena/dixgamer.log.txt
+          git add dixgamer_ps4.json
 
-          git diff --cached --quiet || git commit -m "Cuarentena: scraper general DixGamer"
+          git diff --cached --quiet || git commit -m "Cuarentena: DixGamer PS4"
+
           git push
