@@ -1,0 +1,999 @@
+================================================
+DIGITALWORLD - SCRAPER GENERAL
+CUARENTENA
+================================================
+
+================================================
+DigitalWorld PS4
+================================================
+
+[DigitalWorld PS4] Página 1
+https://digitalworldpsn.com/es/juegos-digitales-ps4/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 309979 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 2
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/2/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 310518 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 3
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/3/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307989 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 4
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/4/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307571 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 5
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/5/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 309614 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 6
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/6/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308188 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 7
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/7/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 306531 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 8
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/8/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307284 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 9
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/9/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 306638 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 10
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/10/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308066 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 11
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/11/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308045 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 12
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/12/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308730 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 13
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/13/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 309628 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 14
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/14/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 306830 bytes
+Productos encontrados: 11
+Productos nuevos: 11
+
+[DigitalWorld PS4] Página 15
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/15/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308116 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 16
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/16/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 306334 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 17
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/17/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308525 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 18
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/18/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307908 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 19
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/19/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308204 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 20
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/20/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308252 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 21
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/21/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307760 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 22
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/22/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308414 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 23
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/23/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308839 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 24
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/24/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308873 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 25
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/25/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308644 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 26
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/26/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307647 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 27
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/27/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308455 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 28
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/28/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 309685 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 29
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/29/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307678 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 30
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/30/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308369 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 31
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/31/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308222 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 32
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/32/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 306080 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 33
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/33/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308006 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 34
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/34/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308617 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 35
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/35/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307709 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 36
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/36/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307916 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 37
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/37/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308534 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 38
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/38/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308654 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 39
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/39/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 309381 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 40
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/40/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 309354 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 41
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/41/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307759 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 42
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/42/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 309312 bytes
+Productos encontrados: 11
+Productos nuevos: 11
+
+[DigitalWorld PS4] Página 43
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/43/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 306562 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 44
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/44/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 309183 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 45
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/45/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307733 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 46
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/46/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308826 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 47
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/47/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308275 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 48
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/48/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308327 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 49
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/49/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307987 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 50
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/50/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307726 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 51
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/51/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308161 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 52
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/52/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 308208 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 53
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/53/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 306406 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 54
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/54/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 307559 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 55
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/55/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 306419 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 56
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/56/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 306552 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 57
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/57/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 306830 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS4] Página 58
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/58/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 286080 bytes
+Productos encontrados: 5
+Productos nuevos: 5
+
+[DigitalWorld PS4] Página 59
+https://digitalworldpsn.com/es/juegos-digitales-ps4/page/59/?v=1b23f8a4c97c
+   curl_cffi HTTP 404
+HTTP: 403
+HTML: 5822 bytes
+HTTP 403 en página 59: fin de paginación.
+
+DigitalWorld PS4 FINALIZADA
+TOTAL: 687 productos
+
+================================================
+DigitalWorld PS5
+================================================
+
+[DigitalWorld PS5] Página 1
+https://digitalworldpsn.com/es/juegos-digitales-ps5/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299756 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 2
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/2/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 298560 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 3
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/3/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 302965 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 4
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/4/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299652 bytes
+Productos encontrados: 11
+Productos nuevos: 11
+
+[DigitalWorld PS5] Página 5
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/5/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 298944 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 6
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/6/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 302372 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 7
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/7/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299818 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 8
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/8/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299604 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 9
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/9/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299723 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 10
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/10/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301308 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 11
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/11/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301785 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 12
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/12/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300880 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 13
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/13/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 303545 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 14
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/14/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300535 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 15
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/15/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300657 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 16
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/16/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301635 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 17
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/17/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300905 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 18
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/18/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300440 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 19
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/19/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301323 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 20
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/20/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300540 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 21
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/21/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300862 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 22
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/22/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300278 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 23
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/23/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301197 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 24
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/24/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 302131 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 25
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/25/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301874 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 26
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/26/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300393 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 27
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/27/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301884 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 28
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/28/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301226 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 29
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/29/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299764 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 30
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/30/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301310 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 31
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/31/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301326 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 32
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/32/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300514 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 33
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/33/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299171 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 34
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/34/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300336 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 35
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/35/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300169 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 36
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/36/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300225 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 37
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/37/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301720 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 38
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/38/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300521 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 39
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/39/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 303209 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 40
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/40/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299678 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 41
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/41/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299618 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 42
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/42/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299216 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 43
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/43/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300757 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 44
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/44/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299728 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 45
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/45/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300262 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 46
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/46/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300703 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 47
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/47/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300861 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 48
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/48/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301043 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 49
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/49/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300947 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 50
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/50/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299614 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 51
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/51/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300330 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 52
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/52/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299456 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 53
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/53/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300317 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 54
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/54/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 298617 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 55
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/55/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301792 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 56
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/56/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 299635 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld PS5] Página 57
+https://digitalworldpsn.com/es/juegos-digitales-ps5/page/57/?v=1b23f8a4c97c
+   curl_cffi HTTP 404
+HTTP: 403
+HTML: 5822 bytes
+HTTP 403 en página 57: fin de paginación.
+
+DigitalWorld PS5 FINALIZADA
+TOTAL: 671 productos
+
+================================================
+DigitalWorld Switch
+================================================
+
+[DigitalWorld Switch] Página 1
+https://digitalworldpsn.com/es/juegos-digitales-switch/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300534 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Switch] Página 2
+https://digitalworldpsn.com/es/juegos-digitales-switch/page/2/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 302418 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Switch] Página 3
+https://digitalworldpsn.com/es/juegos-digitales-switch/page/3/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300479 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Switch] Página 4
+https://digitalworldpsn.com/es/juegos-digitales-switch/page/4/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300677 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Switch] Página 5
+https://digitalworldpsn.com/es/juegos-digitales-switch/page/5/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300430 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Switch] Página 6
+https://digitalworldpsn.com/es/juegos-digitales-switch/page/6/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300562 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Switch] Página 7
+https://digitalworldpsn.com/es/juegos-digitales-switch/page/7/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301287 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Switch] Página 8
+https://digitalworldpsn.com/es/juegos-digitales-switch/page/8/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 300282 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Switch] Página 9
+https://digitalworldpsn.com/es/juegos-digitales-switch/page/9/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 285842 bytes
+Productos encontrados: 7
+Productos nuevos: 7
+
+[DigitalWorld Switch] Página 10
+https://digitalworldpsn.com/es/juegos-digitales-switch/page/10/?v=1b23f8a4c97c
+   curl_cffi HTTP 404
+HTTP: 403
+HTML: 5831 bytes
+HTTP 403 en página 10: fin de paginación.
+
+DigitalWorld Switch FINALIZADA
+TOTAL: 103 productos
+
+================================================
+DigitalWorld VR
+================================================
+
+[DigitalWorld VR] Página 1
+https://digitalworldpsn.com/es/juegos-ps-vr-vr2/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 295463 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld VR] Página 2
+https://digitalworldpsn.com/es/juegos-ps-vr-vr2/page/2/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 295489 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld VR] Página 3
+https://digitalworldpsn.com/es/juegos-ps-vr-vr2/page/3/?v=1b23f8a4c97c
+   curl_cffi HTTP 404
+HTTP: 403
+HTML: 5807 bytes
+HTTP 403 en página 3: fin de paginación.
+
+DigitalWorld VR FINALIZADA
+TOTAL: 24 productos
+
+================================================
+DigitalWorld Xbox
+================================================
+
+[DigitalWorld Xbox] Página 1
+https://digitalworldpsn.com/es/juegos-digitales-xbox/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 306044 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Xbox] Página 2
+https://digitalworldpsn.com/es/juegos-digitales-xbox/page/2/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 305038 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Xbox] Página 3
+https://digitalworldpsn.com/es/juegos-digitales-xbox/page/3/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 303327 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Xbox] Página 4
+https://digitalworldpsn.com/es/juegos-digitales-xbox/page/4/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 303337 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Xbox] Página 5
+https://digitalworldpsn.com/es/juegos-digitales-xbox/page/5/?v=1b23f8a4c97c
+HTTP: 200
+HTML: 301859 bytes
+Productos encontrados: 12
+Productos nuevos: 12
+
+[DigitalWorld Xbox] Página 6
+https://digitalworldpsn.com/es/juegos-digitales-xbox/page/6/?v=1b23f8a4c97c
+   curl_cffi HTTP 404
+HTTP: 403
+HTML: 5822 bytes
+HTTP 403 en página 6: fin de paginación.
+
+DigitalWorld Xbox FINALIZADA
+TOTAL: 60 productos
+
+================================================
+RESUMEN DIGITALWORLD
+================================================
+DigitalWorld PS4: 687 productos
+DigitalWorld PS5: 671 productos
+DigitalWorld Switch: 103 productos
+DigitalWorld VR: 24 productos
+DigitalWorld Xbox: 60 productos
+
+TOTAL GENERAL: 1545 productos
+
+TODAS LAS CATEGORÍAS FINALIZARON CORRECTAMENTE.
+
+================================================
