@@ -1,0 +1,238 @@
+2026-09-28 15:02:44,268 | INFO | ======================================================================
+2026-09-28 15:02:44,268 | INFO | JDP4P5 | INICIO DEL SCRAPER
+2026-09-28 15:02:44,268 | INFO | ======================================================================
+2026-09-28 15:02:44,268 | INFO | INICIANDO | Juegos PS4 | https://juegosdigitalesps4ps5.com/juegos-ps4/
+2026-09-28 15:02:44,268 | INFO | PAGINA 1 | https://juegosdigitalesps4ps5.com/juegos-ps4/
+2026-09-28 15:02:45,073 | INFO | HTTP 200 | pagina 1
+2026-09-28 15:02:45,183 | INFO | PAGINA 1 | productos HTML: 12 | nuevos: 12 | total acumulado: 12
+2026-09-28 15:02:46,184 | INFO | PAGINA 2 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=2
+2026-09-28 15:02:46,808 | INFO | HTTP 200 | pagina 2
+2026-09-28 15:02:46,927 | INFO | PAGINA 2 | productos HTML: 12 | nuevos: 12 | total acumulado: 24
+2026-09-28 15:02:47,927 | INFO | PAGINA 3 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=3
+2026-09-28 15:02:48,361 | INFO | HTTP 200 | pagina 3
+2026-09-28 15:02:48,461 | INFO | PAGINA 3 | productos HTML: 12 | nuevos: 12 | total acumulado: 36
+2026-09-28 15:02:49,461 | INFO | PAGINA 4 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=4
+2026-09-28 15:02:50,006 | INFO | HTTP 200 | pagina 4
+2026-09-28 15:02:50,105 | INFO | PAGINA 4 | productos HTML: 12 | nuevos: 12 | total acumulado: 48
+2026-09-28 15:02:51,106 | INFO | PAGINA 5 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=5
+2026-09-28 15:02:51,698 | INFO | HTTP 200 | pagina 5
+2026-09-28 15:02:51,798 | INFO | PAGINA 5 | productos HTML: 12 | nuevos: 12 | total acumulado: 60
+2026-09-28 15:02:52,799 | INFO | PAGINA 6 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=6
+2026-09-28 15:02:53,292 | INFO | HTTP 200 | pagina 6
+2026-09-28 15:02:53,476 | INFO | PAGINA 6 | productos HTML: 12 | nuevos: 12 | total acumulado: 72
+2026-09-28 15:02:54,476 | INFO | PAGINA 7 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=7
+2026-09-28 15:02:55,077 | INFO | HTTP 200 | pagina 7
+2026-09-28 15:02:55,174 | INFO | PAGINA 7 | productos HTML: 12 | nuevos: 12 | total acumulado: 84
+2026-09-28 15:02:56,174 | INFO | PAGINA 8 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=8
+2026-09-28 15:02:56,733 | INFO | HTTP 200 | pagina 8
+2026-09-28 15:02:56,830 | INFO | PAGINA 8 | productos HTML: 12 | nuevos: 12 | total acumulado: 96
+2026-09-28 15:02:57,830 | INFO | PAGINA 9 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=9
+2026-09-28 15:02:58,364 | INFO | HTTP 200 | pagina 9
+2026-09-28 15:02:58,462 | INFO | PAGINA 9 | productos HTML: 12 | nuevos: 12 | total acumulado: 108
+2026-09-28 15:02:59,462 | INFO | PAGINA 10 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=10
+2026-09-28 15:03:00,028 | INFO | HTTP 200 | pagina 10
+2026-09-28 15:03:00,179 | INFO | PAGINA 10 | productos HTML: 12 | nuevos: 12 | total acumulado: 120
+2026-09-28 15:03:01,180 | INFO | PAGINA 11 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=11
+2026-09-28 15:03:01,974 | INFO | HTTP 200 | pagina 11
+2026-09-28 15:03:02,069 | INFO | PAGINA 11 | productos HTML: 12 | nuevos: 12 | total acumulado: 132
+2026-09-28 15:03:03,069 | INFO | PAGINA 12 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=12
+2026-09-28 15:03:03,536 | INFO | HTTP 200 | pagina 12
+2026-09-28 15:03:03,632 | INFO | PAGINA 12 | productos HTML: 12 | nuevos: 12 | total acumulado: 144
+2026-09-28 15:03:04,633 | INFO | PAGINA 13 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=13
+2026-09-28 15:03:05,181 | INFO | HTTP 200 | pagina 13
+2026-09-28 15:03:05,276 | INFO | PAGINA 13 | productos HTML: 12 | nuevos: 12 | total acumulado: 156
+2026-09-28 15:03:06,276 | INFO | PAGINA 14 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=14
+2026-09-28 15:03:06,940 | INFO | HTTP 200 | pagina 14
+2026-09-28 15:03:07,087 | INFO | PAGINA 14 | productos HTML: 12 | nuevos: 12 | total acumulado: 168
+2026-09-28 15:03:08,087 | INFO | PAGINA 15 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=15
+2026-09-28 15:03:08,566 | INFO | HTTP 200 | pagina 15
+2026-09-28 15:03:08,669 | INFO | PAGINA 15 | productos HTML: 12 | nuevos: 12 | total acumulado: 180
+2026-09-28 15:03:09,669 | INFO | PAGINA 16 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=16
+2026-09-28 15:03:10,151 | INFO | HTTP 200 | pagina 16
+2026-09-28 15:03:10,246 | INFO | PAGINA 16 | productos HTML: 12 | nuevos: 12 | total acumulado: 192
+2026-09-28 15:03:11,247 | INFO | PAGINA 17 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=17
+2026-09-28 15:03:11,823 | INFO | HTTP 200 | pagina 17
+2026-09-28 15:03:11,916 | INFO | PAGINA 17 | productos HTML: 12 | nuevos: 12 | total acumulado: 204
+2026-09-28 15:03:12,917 | INFO | PAGINA 18 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=18
+2026-09-28 15:03:13,341 | INFO | HTTP 200 | pagina 18
+2026-09-28 15:03:13,493 | INFO | PAGINA 18 | productos HTML: 12 | nuevos: 12 | total acumulado: 216
+2026-09-28 15:03:14,493 | INFO | PAGINA 19 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=19
+2026-09-28 15:03:15,214 | INFO | HTTP 200 | pagina 19
+2026-09-28 15:03:15,311 | INFO | PAGINA 19 | productos HTML: 12 | nuevos: 12 | total acumulado: 228
+2026-09-28 15:03:16,311 | INFO | PAGINA 20 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=20
+2026-09-28 15:03:16,844 | INFO | HTTP 200 | pagina 20
+2026-09-28 15:03:16,935 | INFO | PAGINA 20 | productos HTML: 12 | nuevos: 12 | total acumulado: 240
+2026-09-28 15:03:17,936 | INFO | PAGINA 21 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=21
+2026-09-28 15:03:18,479 | INFO | HTTP 200 | pagina 21
+2026-09-28 15:03:18,577 | INFO | PAGINA 21 | productos HTML: 12 | nuevos: 12 | total acumulado: 252
+2026-09-28 15:03:19,577 | INFO | PAGINA 22 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=22
+2026-09-28 15:03:19,998 | INFO | HTTP 200 | pagina 22
+2026-09-28 15:03:20,166 | INFO | PAGINA 22 | productos HTML: 12 | nuevos: 12 | total acumulado: 264
+2026-09-28 15:03:21,166 | INFO | PAGINA 23 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=23
+2026-09-28 15:03:21,711 | INFO | HTTP 200 | pagina 23
+2026-09-28 15:03:21,804 | INFO | PAGINA 23 | productos HTML: 12 | nuevos: 12 | total acumulado: 276
+2026-09-28 15:03:22,804 | INFO | PAGINA 24 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=24
+2026-09-28 15:03:23,328 | INFO | HTTP 200 | pagina 24
+2026-09-28 15:03:23,421 | INFO | PAGINA 24 | productos HTML: 12 | nuevos: 12 | total acumulado: 288
+2026-09-28 15:03:24,421 | INFO | PAGINA 25 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=25
+2026-09-28 15:03:24,847 | INFO | HTTP 200 | pagina 25
+2026-09-28 15:03:24,941 | INFO | PAGINA 25 | productos HTML: 12 | nuevos: 12 | total acumulado: 300
+2026-09-28 15:03:25,941 | INFO | PAGINA 26 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=26
+2026-09-28 15:03:26,484 | INFO | HTTP 200 | pagina 26
+2026-09-28 15:03:26,630 | INFO | PAGINA 26 | productos HTML: 12 | nuevos: 12 | total acumulado: 312
+2026-09-28 15:03:27,631 | INFO | PAGINA 27 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=27
+2026-09-28 15:03:28,057 | INFO | HTTP 200 | pagina 27
+2026-09-28 15:03:28,154 | INFO | PAGINA 27 | productos HTML: 12 | nuevos: 12 | total acumulado: 324
+2026-09-28 15:03:29,154 | INFO | PAGINA 28 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=28
+2026-09-28 15:03:29,684 | INFO | HTTP 200 | pagina 28
+2026-09-28 15:03:29,780 | INFO | PAGINA 28 | productos HTML: 12 | nuevos: 12 | total acumulado: 336
+2026-09-28 15:03:30,780 | INFO | PAGINA 29 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=29
+2026-09-28 15:03:31,293 | INFO | HTTP 200 | pagina 29
+2026-09-28 15:03:31,380 | INFO | PAGINA 29 | productos HTML: 9 | nuevos: 9 | total acumulado: 345
+2026-09-28 15:03:32,381 | INFO | PAGINA 30 | https://juegosdigitalesps4ps5.com/juegos-ps4/?page=30
+2026-09-28 15:03:32,778 | INFO | HTTP 200 | pagina 30
+2026-09-28 15:03:32,857 | INFO | FIN PAGINACION | 0 productos en pagina 30
+2026-09-28 15:03:32,857 | INFO | FINALIZADA | Juegos PS4 | 345 productos
+2026-09-28 15:03:32,857 | INFO | ======================================================================
+2026-09-28 15:03:32,857 | INFO | INICIANDO | Juegos PS5 | https://juegosdigitalesps4ps5.com/juegos-ps5/
+2026-09-28 15:03:32,857 | INFO | PAGINA 1 | https://juegosdigitalesps4ps5.com/juegos-ps5/
+2026-09-28 15:03:33,015 | INFO | HTTP 200 | pagina 1
+2026-09-28 15:03:33,127 | INFO | PAGINA 1 | productos HTML: 12 | nuevos: 12 | total acumulado: 12
+2026-09-28 15:03:34,127 | INFO | PAGINA 2 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=2
+2026-09-28 15:03:34,662 | INFO | HTTP 200 | pagina 2
+2026-09-28 15:03:34,769 | INFO | PAGINA 2 | productos HTML: 12 | nuevos: 12 | total acumulado: 24
+2026-09-28 15:03:35,769 | INFO | PAGINA 3 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=3
+2026-09-28 15:03:36,234 | INFO | HTTP 200 | pagina 3
+2026-09-28 15:03:36,339 | INFO | PAGINA 3 | productos HTML: 12 | nuevos: 12 | total acumulado: 36
+2026-09-28 15:03:37,339 | INFO | PAGINA 4 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=4
+2026-09-28 15:03:37,908 | INFO | HTTP 200 | pagina 4
+2026-09-28 15:03:38,071 | INFO | PAGINA 4 | productos HTML: 12 | nuevos: 12 | total acumulado: 48
+2026-09-28 15:03:39,071 | INFO | PAGINA 5 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=5
+2026-09-28 15:03:39,599 | INFO | HTTP 200 | pagina 5
+2026-09-28 15:03:39,706 | INFO | PAGINA 5 | productos HTML: 12 | nuevos: 12 | total acumulado: 60
+2026-09-28 15:03:40,706 | INFO | PAGINA 6 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=6
+2026-09-28 15:03:41,194 | INFO | HTTP 200 | pagina 6
+2026-09-28 15:03:41,296 | INFO | PAGINA 6 | productos HTML: 12 | nuevos: 12 | total acumulado: 72
+2026-09-28 15:03:42,296 | INFO | PAGINA 7 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=7
+2026-09-28 15:03:42,842 | INFO | HTTP 200 | pagina 7
+2026-09-28 15:03:42,998 | INFO | PAGINA 7 | productos HTML: 12 | nuevos: 12 | total acumulado: 84
+2026-09-28 15:03:43,998 | INFO | PAGINA 8 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=8
+2026-09-28 15:03:44,635 | INFO | HTTP 200 | pagina 8
+2026-09-28 15:03:44,744 | INFO | PAGINA 8 | productos HTML: 12 | nuevos: 12 | total acumulado: 96
+2026-09-28 15:03:45,744 | INFO | PAGINA 9 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=9
+2026-09-28 15:03:46,343 | INFO | HTTP 200 | pagina 9
+2026-09-28 15:03:46,448 | INFO | PAGINA 9 | productos HTML: 12 | nuevos: 12 | total acumulado: 108
+2026-09-28 15:03:47,448 | INFO | PAGINA 10 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=10
+2026-09-28 15:03:48,019 | INFO | HTTP 200 | pagina 10
+2026-09-28 15:03:48,123 | INFO | PAGINA 10 | productos HTML: 12 | nuevos: 12 | total acumulado: 120
+2026-09-28 15:03:49,123 | INFO | PAGINA 11 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=11
+2026-09-28 15:03:49,655 | INFO | HTTP 200 | pagina 11
+2026-09-28 15:03:49,840 | INFO | PAGINA 11 | productos HTML: 12 | nuevos: 12 | total acumulado: 132
+2026-09-28 15:03:50,840 | INFO | PAGINA 12 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=12
+2026-09-28 15:03:51,293 | INFO | HTTP 200 | pagina 12
+2026-09-28 15:03:51,398 | INFO | PAGINA 12 | productos HTML: 12 | nuevos: 12 | total acumulado: 144
+2026-09-28 15:03:52,398 | INFO | PAGINA 13 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=13
+2026-09-28 15:03:52,898 | INFO | HTTP 200 | pagina 13
+2026-09-28 15:03:53,000 | INFO | PAGINA 13 | productos HTML: 12 | nuevos: 12 | total acumulado: 156
+2026-09-28 15:03:54,001 | INFO | PAGINA 14 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=14
+2026-09-28 15:03:54,468 | INFO | HTTP 200 | pagina 14
+2026-09-28 15:03:54,569 | INFO | PAGINA 14 | productos HTML: 12 | nuevos: 12 | total acumulado: 168
+2026-09-28 15:03:55,569 | INFO | PAGINA 15 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=15
+2026-09-28 15:03:56,246 | INFO | HTTP 200 | pagina 15
+2026-09-28 15:03:56,408 | INFO | PAGINA 15 | productos HTML: 12 | nuevos: 12 | total acumulado: 180
+2026-09-28 15:03:57,408 | INFO | PAGINA 16 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=16
+2026-09-28 15:03:57,922 | INFO | HTTP 200 | pagina 16
+2026-09-28 15:03:58,028 | INFO | PAGINA 16 | productos HTML: 12 | nuevos: 12 | total acumulado: 192
+2026-09-28 15:03:59,029 | INFO | PAGINA 17 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=17
+2026-09-28 15:03:59,482 | INFO | HTTP 200 | pagina 17
+2026-09-28 15:03:59,587 | INFO | PAGINA 17 | productos HTML: 12 | nuevos: 12 | total acumulado: 204
+2026-09-28 15:04:00,587 | INFO | PAGINA 18 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=18
+2026-09-28 15:04:01,176 | INFO | HTTP 200 | pagina 18
+2026-09-28 15:04:01,330 | INFO | PAGINA 18 | productos HTML: 12 | nuevos: 12 | total acumulado: 216
+2026-09-28 15:04:02,330 | INFO | PAGINA 19 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=19
+2026-09-28 15:04:02,884 | INFO | HTTP 200 | pagina 19
+2026-09-28 15:04:02,991 | INFO | PAGINA 19 | productos HTML: 12 | nuevos: 12 | total acumulado: 228
+2026-09-28 15:04:03,991 | INFO | PAGINA 20 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=20
+2026-09-28 15:04:04,491 | INFO | HTTP 200 | pagina 20
+2026-09-28 15:04:04,597 | INFO | PAGINA 20 | productos HTML: 12 | nuevos: 12 | total acumulado: 240
+2026-09-28 15:04:05,597 | INFO | PAGINA 21 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=21
+2026-09-28 15:04:06,112 | INFO | HTTP 200 | pagina 21
+2026-09-28 15:04:06,219 | INFO | PAGINA 21 | productos HTML: 12 | nuevos: 12 | total acumulado: 252
+2026-09-28 15:04:07,219 | INFO | PAGINA 22 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=22
+2026-09-28 15:04:07,750 | INFO | HTTP 200 | pagina 22
+2026-09-28 15:04:07,931 | INFO | PAGINA 22 | productos HTML: 12 | nuevos: 12 | total acumulado: 264
+2026-09-28 15:04:08,931 | INFO | PAGINA 23 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=23
+2026-09-28 15:04:09,483 | INFO | HTTP 200 | pagina 23
+2026-09-28 15:04:09,586 | INFO | PAGINA 23 | productos HTML: 12 | nuevos: 12 | total acumulado: 276
+2026-09-28 15:04:10,587 | INFO | PAGINA 24 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=24
+2026-09-28 15:04:11,066 | INFO | HTTP 200 | pagina 24
+2026-09-28 15:04:11,168 | INFO | PAGINA 24 | productos HTML: 12 | nuevos: 12 | total acumulado: 288
+2026-09-28 15:04:12,168 | INFO | PAGINA 25 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=25
+2026-09-28 15:04:12,672 | INFO | HTTP 200 | pagina 25
+2026-09-28 15:04:12,831 | INFO | PAGINA 25 | productos HTML: 12 | nuevos: 12 | total acumulado: 300
+2026-09-28 15:04:13,832 | INFO | PAGINA 26 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=26
+2026-09-28 15:04:14,373 | INFO | HTTP 200 | pagina 26
+2026-09-28 15:04:14,477 | INFO | PAGINA 26 | productos HTML: 12 | nuevos: 12 | total acumulado: 312
+2026-09-28 15:04:15,477 | INFO | PAGINA 27 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=27
+2026-09-28 15:04:15,923 | INFO | HTTP 200 | pagina 27
+2026-09-28 15:04:16,028 | INFO | PAGINA 27 | productos HTML: 12 | nuevos: 12 | total acumulado: 324
+2026-09-28 15:04:17,029 | INFO | PAGINA 28 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=28
+2026-09-28 15:04:17,594 | INFO | HTTP 200 | pagina 28
+2026-09-28 15:04:17,698 | INFO | PAGINA 28 | productos HTML: 12 | nuevos: 12 | total acumulado: 336
+2026-09-28 15:04:18,698 | INFO | PAGINA 29 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=29
+2026-09-28 15:04:19,213 | INFO | HTTP 200 | pagina 29
+2026-09-28 15:04:19,387 | INFO | PAGINA 29 | productos HTML: 12 | nuevos: 12 | total acumulado: 348
+2026-09-28 15:04:20,387 | INFO | PAGINA 30 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=30
+2026-09-28 15:04:20,959 | INFO | HTTP 200 | pagina 30
+2026-09-28 15:04:21,064 | INFO | PAGINA 30 | productos HTML: 12 | nuevos: 12 | total acumulado: 360
+2026-09-28 15:04:22,064 | INFO | PAGINA 31 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=31
+2026-09-28 15:04:22,570 | INFO | HTTP 200 | pagina 31
+2026-09-28 15:04:22,671 | INFO | PAGINA 31 | productos HTML: 12 | nuevos: 12 | total acumulado: 372
+2026-09-28 15:04:23,671 | INFO | PAGINA 32 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=32
+2026-09-28 15:04:24,161 | INFO | HTTP 200 | pagina 32
+2026-09-28 15:04:24,259 | INFO | PAGINA 32 | productos HTML: 12 | nuevos: 12 | total acumulado: 384
+2026-09-28 15:04:25,260 | INFO | PAGINA 33 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=33
+2026-09-28 15:04:26,142 | INFO | HTTP 200 | pagina 33
+2026-09-28 15:04:26,342 | INFO | PAGINA 33 | productos HTML: 12 | nuevos: 12 | total acumulado: 396
+2026-09-28 15:04:27,343 | INFO | PAGINA 34 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=34
+2026-09-28 15:04:27,891 | INFO | HTTP 200 | pagina 34
+2026-09-28 15:04:27,996 | INFO | PAGINA 34 | productos HTML: 12 | nuevos: 12 | total acumulado: 408
+2026-09-28 15:04:28,996 | INFO | PAGINA 35 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=35
+2026-09-28 15:04:29,518 | INFO | HTTP 200 | pagina 35
+2026-09-28 15:04:29,622 | INFO | PAGINA 35 | productos HTML: 12 | nuevos: 12 | total acumulado: 420
+2026-09-28 15:04:30,623 | INFO | PAGINA 36 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=36
+2026-09-28 15:04:31,110 | INFO | HTTP 200 | pagina 36
+2026-09-28 15:04:31,290 | INFO | PAGINA 36 | productos HTML: 12 | nuevos: 12 | total acumulado: 432
+2026-09-28 15:04:32,290 | INFO | PAGINA 37 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=37
+2026-09-28 15:04:32,816 | INFO | HTTP 200 | pagina 37
+2026-09-28 15:04:32,911 | INFO | PAGINA 37 | productos HTML: 8 | nuevos: 8 | total acumulado: 440
+2026-09-28 15:04:33,911 | INFO | PAGINA 38 | https://juegosdigitalesps4ps5.com/juegos-ps5/?page=38
+2026-09-28 15:04:34,331 | INFO | HTTP 200 | pagina 38
+2026-09-28 15:04:34,351 | INFO | FIN PAGINACION | 0 productos en pagina 38
+2026-09-28 15:04:34,351 | INFO | FINALIZADA | Juegos PS5 | 440 productos
+2026-09-28 15:04:34,351 | INFO | ======================================================================
+2026-09-28 15:04:34,351 | INFO | INICIANDO | PS Plus | https://juegosdigitalesps4ps5.com/membresias-ps-plus/
+2026-09-28 15:04:34,351 | INFO | PAGINA 1 | https://juegosdigitalesps4ps5.com/membresias-ps-plus/
+2026-09-28 15:04:34,434 | INFO | HTTP 200 | pagina 1
+2026-09-28 15:04:34,499 | INFO | PAGINA 1 | productos HTML: 12 | nuevos: 12 | total acumulado: 12
+2026-09-28 15:04:35,499 | INFO | PAGINA 2 | https://juegosdigitalesps4ps5.com/membresias-ps-plus/?page=2
+2026-09-28 15:04:35,966 | INFO | HTTP 200 | pagina 2
+2026-09-28 15:04:36,022 | INFO | PAGINA 2 | productos HTML: 12 | nuevos: 12 | total acumulado: 24
+2026-09-28 15:04:37,022 | INFO | PAGINA 3 | https://juegosdigitalesps4ps5.com/membresias-ps-plus/?page=3
+2026-09-28 15:04:37,492 | INFO | HTTP 200 | pagina 3
+2026-09-28 15:04:37,529 | INFO | PAGINA 3 | productos HTML: 6 | nuevos: 6 | total acumulado: 30
+2026-09-28 15:04:38,529 | INFO | PAGINA 4 | https://juegosdigitalesps4ps5.com/membresias-ps-plus/?page=4
+2026-09-28 15:04:38,939 | INFO | HTTP 200 | pagina 4
+2026-09-28 15:04:38,959 | INFO | FIN PAGINACION | 0 productos en pagina 4
+2026-09-28 15:04:38,959 | INFO | FINALIZADA | PS Plus | 30 productos
+2026-09-28 15:04:38,959 | INFO | ======================================================================
+2026-09-28 15:04:38,959 | INFO | INICIANDO | Game Pass | https://juegosdigitalesps4ps5.com/membresias-game-pass/
+2026-09-28 15:04:38,959 | INFO | PAGINA 1 | https://juegosdigitalesps4ps5.com/membresias-game-pass/
+2026-09-28 15:04:39,193 | INFO | HTTP 200 | pagina 1
+2026-09-28 15:04:39,235 | INFO | PAGINA 1 | productos HTML: 6 | nuevos: 6 | total acumulado: 6
+2026-09-28 15:04:40,235 | INFO | PAGINA 2 | https://juegosdigitalesps4ps5.com/membresias-game-pass/?page=2
+2026-09-28 15:04:40,561 | INFO | HTTP 200 | pagina 2
+2026-09-28 15:04:40,669 | INFO | FIN PAGINACION | 0 productos en pagina 2
+2026-09-28 15:04:40,669 | INFO | FINALIZADA | Game Pass | 6 productos
+2026-09-28 15:04:40,679 | INFO | ======================================================================
+2026-09-28 15:04:40,679 | INFO | JDP4P5 | FINALIZADO | 479 productos únicos
