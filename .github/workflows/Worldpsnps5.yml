@@ -1,4 +1,4 @@
-name: DigitalWorld PS5 - Cuarentena
+name: DigitalWorld - Cuarentena
 
 on:
   workflow_dispatch:
@@ -25,15 +25,15 @@ jobs:
 
       - name: Ejecutar scraper
         run: |
-          python digitalworld_ps5.py
+          python digitalworld.py
 
       - name: Guardar resultados
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add catalogo_cuarentena/digitalworld_ps5.json
-          git add catalogo_cuarentena/digitalworld_ps5.log.txt
+          git add catalogo_cuarentena/digitalworld.json
+          git add catalogo_cuarentena/digitalworld.log.txt
 
-          git diff --cached --quiet || git commit -m "Cuarentena: recuperar DigitalWorld PS5"
+          git diff --cached --quiet || git commit -m "Cuarentena: scraper general DigitalWorld"
           git push
