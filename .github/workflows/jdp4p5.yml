@@ -1,0 +1,40 @@
+name: JDP4P5 - Catálogo
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scraper:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Ejecutar scraper JDP4P5
+        run: |
+          python jdp4p5.py
+
+      - name: Guardar catálogo y log
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add jdp4p5.csv
+          git add jdp4p5.log.txt
+
+          git diff --cached --quiet || git commit -m "Actualizar catálogo JDP4P5"
+
+          git push
