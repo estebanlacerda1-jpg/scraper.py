@@ -1,0 +1,48 @@
+name: PortalGames PS3 - Anime
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  portalgames-ps3:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: Ejecutar scraper PortalGames PS3
+        run: |
+          python portalps3.py
+
+      - name: Mostrar resultado
+        run: |
+          echo "===== LOG ====="
+          cat portalps3.log.txt || true
+          echo "===== CSV ====="
+          head -20 portalps3.csv || true
+
+      - name: Guardar archivos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add portalps3.csv
+          git add portalps3.log.txt
+          git add portalps3_anime.html
+
+          git diff --cached --quiet || git commit -m "PortalGames PS3 Anime - actualizar catálogo"
+          git push
