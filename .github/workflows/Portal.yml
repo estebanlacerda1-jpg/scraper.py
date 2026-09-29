@@ -22,7 +22,13 @@ jobs:
 
       - name: Instalar dependencias
         run: |
-          pip install requests beautifulsoup4 curl_cffi
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 curl_cffi playwright
+          python -m playwright install chromium --with-deps
+
+      - name: Verificar Playwright
+        run: |
+          python -c "from playwright.sync_api import sync_playwright; print('Playwright OK')"
 
       - name: Ejecutar scraper PortalGames PS3
         run: |
