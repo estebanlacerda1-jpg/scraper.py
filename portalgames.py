@@ -3,7 +3,7 @@ import os
 import re
 import time
 from urllib.parse import urljoin
-from playwright.sync_api import sync_playwright
+
 from bs4 import BeautifulSoup
 
 try:
@@ -12,6 +12,11 @@ except ImportError:
     curl_requests = None
 
 import requests
+
+try:
+    from playwright.sync_api import sync_playwright
+except ImportError:
+    sync_playwright = None
 
 
 # ============================================================
@@ -28,6 +33,16 @@ CSV_SALIDA = "catalogo_cuarentena/portalgames_ps3.csv"
 LOG_SALIDA = "catalogo_cuarentena/portalgames_ps3.log.txt"
 
 PAUSA = 1.0
+
+
+# ============================================================
+# VARIABLES PLAYWRIGHT
+# ============================================================
+
+_playwright = None
+_browser = None
+_context = None
+_page = None
 
 
 # ============================================================
@@ -48,11 +63,12 @@ def log(texto):
 
 def parsear_precio(texto):
     """
-    Convierte formatos argentinos:
+    Convierte precios argentinos:
 
     $ 12.999       -> 12999.0
     $ 12.999,50    -> 12999.50
     $ 9990         -> 9990.0
+    $ 999,50       -> 999.50
     """
 
     if not texto:
@@ -60,54 +76,82 @@ def parsear_precio(texto):
 
     texto = texto.strip()
 
-    # Dejar solamente números, punto y coma
+    # Dejamos solamente números, puntos y comas
     texto = re.sub(r"[^\d.,]", "", texto)
 
     if not texto:
         return None
 
-    # Formato argentino:
-    # 12.999,50
+    # Ejemplo: 12.999,50
     if "." in texto and "," in texto:
         texto = texto.replace(".", "")
         texto = texto.replace(",", ".")
 
-    # 12.999
+    # Ejemplo: 12.999
     elif "." in texto:
         partes = texto.split(".")
 
-        # Si son exactamente 3 dígitos después del punto,
-        # normalmente es separador de miles.
         if len(partes[-1]) == 3:
+            # Punto como separador de miles
             texto = texto.replace(".", "")
         else:
+            # Punto decimal
             texto = texto.replace(",", ".")
 
-    # 12,50
+    # Ejemplo: 999,50
     elif "," in texto:
         texto = texto.replace(",", ".")
 
     try:
         return float(texto)
+
     except ValueError:
         return None
 
 
 # ============================================================
-# PLAYWRIGHT
+# DETECTAR CLOUDFLARE
 # ============================================================
 
-_playwright = None
-_browser = None
-_context = None
-_page = None
+def es_cloudflare(html):
 
+    if not html:
+        return False
+
+    marcas = [
+        "Just a moment...",
+        "cf-chl-",
+        "challenge-platform",
+        "Enable JavaScript and cookies to continue",
+    ]
+
+    html_lower = html.lower()
+
+    for marca in marcas:
+        if marca.lower() in html_lower:
+            return True
+
+    return False
+
+
+# ============================================================
+# INICIAR PLAYWRIGHT
+# ============================================================
 
 def iniciar_navegador():
-    global _playwright, _browser, _context, _page
+
+    global _playwright
+    global _browser
+    global _context
+    global _page
 
     if _page is not None:
         return
+
+    if sync_playwright is None:
+        raise RuntimeError(
+            "Playwright no está instalado."
+        )
 
     log("🌐 Iniciando Chromium con Playwright...")
 
@@ -126,13 +170,13 @@ def iniciar_navegador():
     _context = _browser.new_context(
         viewport={
             "width": 1366,
-            "height": 768
+            "height": 768,
         },
         user_agent=(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/140.0.0.0 Safari/537.36"
-        },
+        ),
         locale="es-AR",
         timezone_id="America/Argentina/Buenos_Aires",
         java_script_enabled=True,
@@ -143,8 +187,28 @@ def iniciar_navegador():
     _page.set_default_timeout(60000)
 
 
+# ============================================================
+# CERRAR PLAYWRIGHT
+# ============================================================
+
 def cerrar_navegador():
-    global _playwright, _browser, _context, _page
+
+    global _playwright
+    global _browser
+    global _context
+    global _page
+
+    try:
+        if _page:
+            _page.close()
+    except Exception:
+        pass
+
+    try:
+        if _context:
+            _context.close()
+    except Exception:
+        pass
 
     try:
         if _browser:
@@ -165,14 +229,10 @@ def cerrar_navegador():
 
 
 # ============================================================
-# DESCARGA
+# DESCARGAR PÁGINA
 # ============================================================
 
 def descargar(url):
-
-    # --------------------------------------------------------
-    # PRIMERO: curl_cffi
-    # --------------------------------------------------------
 
     headers = {
         "User-Agent": (
@@ -189,6 +249,10 @@ def descargar(url):
         "Connection": "keep-alive",
     }
 
+    # ========================================================
+    # 1. INTENTAR CURL_CFFI
+    # ========================================================
+
     if curl_requests:
 
         try:
@@ -202,21 +266,25 @@ def descargar(url):
 
             html = r.text
 
-            # Si funciona, usamos directamente el HTML
             if (
                 r.status_code == 200
                 and (
                     "product-small" in html
                     or "woocommerce-loop-product__title" in html
+                    or "woocommerce-LoopProduct-link" in html
                 )
             ):
-                log("   ✅ curl_cffi obtuvo HTML real")
+
+                log(
+                    "   ✅ curl_cffi obtuvo HTML real"
+                )
+
                 return r.status_code, html
 
-            # Si da 403/Cloudflare, pasamos a Playwright
             log(
                 f"   ⚠️ curl_cffi respondió HTTP {r.status_code}"
             )
+
             log(
                 "   🔄 Intentando con Playwright..."
             )
@@ -226,19 +294,22 @@ def descargar(url):
             log(
                 f"   ⚠️ curl_cffi error: {e}"
             )
+
             log(
                 "   🔄 Intentando con Playwright..."
             )
 
-    # --------------------------------------------------------
-    # SEGUNDO: PLAYWRIGHT
-    # --------------------------------------------------------
+    # ========================================================
+    # 2. PLAYWRIGHT
+    # ========================================================
 
     try:
 
         iniciar_navegador()
 
-        log("   🌐 Abriendo página con Chromium...")
+        log(
+            "   🌐 Abriendo página con Chromium..."
+        )
 
         response = _page.goto(
             url,
@@ -246,29 +317,35 @@ def descargar(url):
             timeout=60000,
         )
 
-        status = response.status if response else 0
+        if response:
+            status = response.status
+        else:
+            status = 0
 
         log(
             f"   🌐 Playwright HTTP: {status}"
         )
 
-        # Esperamos a que Cloudflare termine la comprobación
+        # Esperar a que Cloudflare procese JavaScript
         time.sleep(5)
 
         html = _page.content()
 
-        # Si todavía estamos en Cloudflare
+        # Si todavía aparece Cloudflare
         if es_cloudflare(html):
 
             log(
-                "   ⏳ Cloudflare todavía presente, esperando..."
+                "   ⏳ Cloudflare todavía presente..."
             )
 
             time.sleep(8)
 
             html = _page.content()
 
-        # Verificar si finalmente obtuvimos productos
+        # ====================================================
+        # COMPROBAR SI OBTUVIMOS PRODUCTOS
+        # ====================================================
+
         if (
             "product-small" in html
             or "woocommerce-loop-product__title" in html
@@ -293,78 +370,7 @@ def descargar(url):
             f"   ❌ Error de Playwright: {e}"
         )
 
-        return 0, "" 
-
-    # --------------------------------------------------------
-    # 1) curl_cffi / Chrome impersonation
-    # --------------------------------------------------------
-
-    if curl_requests:
-        try:
-            r = curl_requests.get(
-                url,
-                headers=headers,
-                impersonate="chrome",
-                timeout=30,
-            )
-
-            html = r.text
-
-            # Si tenemos una página real de WooCommerce,
-            # la usamos.
-            if (
-                r.status_code == 200
-                and (
-                    "product-small" in html
-                    or "woocommerce-loop-product__title" in html
-                )
-            ):
-                return r.status_code, html
-
-            # Si devuelve Cloudflare, igualmente devolvemos
-            # la respuesta para que quede registrado.
-            return r.status_code, html
-
-        except Exception as e:
-            log(f"  ⚠️ curl_cffi error: {e}")
-
-    # --------------------------------------------------------
-    # 2) requests normal
-    # --------------------------------------------------------
-
-    try:
-        r = requests.get(
-            url,
-            headers=headers,
-            timeout=30,
-        )
-
-        return r.status_code, r.text
-
-    except Exception as e:
-        log(f"  ❌ requests error: {e}")
         return 0, ""
-
-
-# ============================================================
-# DETECTAR CLOUDFLARE
-# ============================================================
-
-def es_cloudflare(html):
-    if not html:
-        return False
-
-    marcas = [
-        "Just a moment...",
-        "cf-chl-",
-        "challenge-platform",
-        "Cloudflare",
-        "Enable JavaScript and cookies to continue",
-    ]
-
-    html_lower = html.lower()
-
-    return any(m.lower() in html_lower for m in marcas)
 
 
 # ============================================================
@@ -373,20 +379,36 @@ def es_cloudflare(html):
 
 def extraer_productos(html, categoria, pagina):
 
-    soup = BeautifulSoup(html, "html.parser")
+    soup = BeautifulSoup(
+        html,
+        "html.parser"
+    )
 
     productos = []
 
-    # PortalGames usa WooCommerce/Flatsome.
-    # Intentamos primero el contenedor típico de Flatsome.
-    containers = soup.select(".product-small")
+    # ========================================================
+    # CONTENEDORES DE PRODUCTOS
+    # ========================================================
 
-    # Fallback WooCommerce estándar.
-    if not containers:
-        containers = soup.select("li.product")
+    containers = soup.select(
+        ".product-small"
+    )
 
     if not containers:
-        containers = soup.select(".product.type-product")
+
+        containers = soup.select(
+            "li.product"
+        )
+
+    if not containers:
+
+        containers = soup.select(
+            ".product.type-product"
+        )
+
+    # ========================================================
+    # PRODUCTOS
+    # ========================================================
 
     for producto in containers:
 
@@ -399,11 +421,13 @@ def extraer_productos(html, categoria, pagina):
         )
 
         if not nombre_el:
+
             nombre_el = producto.select_one(
                 ".woocommerce-loop-product__title"
             )
 
         if not nombre_el:
+
             nombre_el = producto.select_one(
                 ".woocommerce-loop-product__title a"
             )
@@ -411,7 +435,10 @@ def extraer_productos(html, categoria, pagina):
         if not nombre_el:
             continue
 
-        nombre = nombre_el.get_text(" ", strip=True)
+        nombre = nombre_el.get_text(
+            " ",
+            strip=True
+        )
 
         if not nombre:
             continue
@@ -421,21 +448,27 @@ def extraer_productos(html, categoria, pagina):
         # ----------------------------------------------------
 
         enlace = producto.select_one(
-            'a.woocommerce-LoopProduct-link'
+            "a.woocommerce-LoopProduct-link"
         )
 
         if not enlace:
+
             enlace = producto.select_one(
                 'a[href*="/producto/"]'
             )
 
         if not enlace:
-            enlace = nombre_el if nombre_el.name == "a" else None
+
+            if nombre_el.name == "a":
+                enlace = nombre_el
 
         if not enlace:
             continue
 
-        url = enlace.get("href", "").strip()
+        url = enlace.get(
+            "href",
+            ""
+        ).strip()
 
         if not url:
             continue
@@ -454,6 +487,7 @@ def extraer_productos(html, categoria, pagina):
         )
 
         if not precio_el:
+
             precio_el = producto.select_one(
                 ".price"
             )
@@ -466,7 +500,9 @@ def extraer_productos(html, categoria, pagina):
             strip=True
         )
 
-        precio = parsear_precio(precio_mostrado)
+        precio = parsear_precio(
+            precio_mostrado
+        )
 
         if precio is None:
             continue
@@ -480,12 +516,19 @@ def extraer_productos(html, categoria, pagina):
         )
 
         if moneda_el:
+
             moneda = moneda_el.get_text(
+                " ",
                 strip=True
             )
+
         else:
-            # PortalGames muestra normalmente $
+
             moneda = "$"
+
+        # ----------------------------------------------------
+        # GUARDAR
+        # ----------------------------------------------------
 
         productos.append({
             "fuente": FUENTE,
@@ -502,78 +545,110 @@ def extraer_productos(html, categoria, pagina):
 
 
 # ============================================================
-# SCRAPER DE CATEGORÍA
+# SCRAPEAR CATEGORÍA
 # ============================================================
 
-def scrapear_categoria(categoria, url_base):
+def scrapear_categoria(
+    categoria,
+    url_base
+):
 
     todos = []
+
     urls_vistas = set()
 
     pagina = 1
 
     while True:
 
+        # ====================================================
+        # URL
+        # ====================================================
+
         if pagina == 1:
+
             url = url_base
+
         else:
-            url = url_base.rstrip("/") + f"/page/{pagina}/"
+
+            url = (
+                url_base.rstrip("/")
+                + f"/page/{pagina}/"
+            )
 
         log("")
-        log(f"📄 {categoria} - Página {pagina}")
-        log(f"   URL: {url}")
+        log(
+            f"📄 {categoria} - Página {pagina}"
+        )
 
-        status, html = descargar(url)
+        log(
+            f"   URL: {url}"
+        )
 
-        log(f"   HTTP: {status}")
+        # ====================================================
+        # DESCARGAR
+        # ====================================================
 
-        # ----------------------------------------------------
+        status, html = descargar(
+            url
+        )
+
+        log(
+            f"   HTTP: {status}"
+        )
+
+        # ====================================================
         # 403 / 404
-        # ----------------------------------------------------
+        # ====================================================
 
         if status in (403, 404):
 
             if pagina > 1:
+
                 log(
-                    f"   🛑 HTTP {status} en página {pagina}: "
-                    "fin de paginación."
+                    f"   🛑 HTTP {status} en página "
+                    f"{pagina}: fin de paginación."
                 )
+
                 break
 
             else:
+
                 log(
                     f"   ❌ HTTP {status} en página 1: "
                     "error real."
                 )
+
                 break
 
-        # ----------------------------------------------------
-        # Otros errores
-        # ----------------------------------------------------
+        # ====================================================
+        # OTROS ERRORES
+        # ====================================================
 
         if status != 200:
+
             log(
                 f"   ❌ HTTP inesperado: {status}"
             )
+
             break
 
-        # ----------------------------------------------------
-        # Cloudflare
-        # ----------------------------------------------------
+        # ====================================================
+        # CLOUDFLARE
+        # ====================================================
 
         if es_cloudflare(html):
 
             log(
-                "   ❌ Cloudflare detectado. "
-                "La descarga automática no obtuvo "
-                "el HTML de productos."
+                "   ❌ Cloudflare sigue bloqueando "
+                "la página."
             )
 
             break
 
-        # ----------------------------------------------------
-        # Productos
-        # ----------------------------------------------------
+        # ====================================================
+        # EXTRAER PRODUCTOS
+        # ====================================================
 
         productos = extraer_productos(
             html,
@@ -583,170 +658,4 @@ def scrapear_categoria(categoria, url_base):
 
         log(
             f"   🛒 Productos encontrados: "
-            f"{len(productos)}"
-        )
-
-        if not productos:
-            log(
-                "   🛑 Página sin productos. "
-                "Fin de paginación."
-            )
-            break
-
-        nuevos = 0
-
-        for producto in productos:
-
-            if producto["url"] in urls_vistas:
-                continue
-
-            urls_vistas.add(producto["url"])
-            todos.append(producto)
-            nuevos += 1
-
-        log(
-            f"   ➕ Productos nuevos: {nuevos}"
-        )
-
-        # Si la página existe pero todos los productos
-        # estaban repetidos, probablemente llegamos al final.
-        if nuevos == 0:
-            log(
-                "   🛑 No aparecieron productos nuevos."
-            )
-            break
-
-        # ----------------------------------------------------
-        # Verificar si existe siguiente página
-        # ----------------------------------------------------
-
-        soup = BeautifulSoup(html, "html.parser")
-
-        siguiente = soup.select_one(
-            "a.next.page-numbers"
-        )
-
-        if not siguiente:
-            siguiente = soup.select_one(
-                "a.page-numbers[aria-label*='Página']"
-            )
-
-        # El canonical/next de WooCommerce es más confiable
-        # cuando existe.
-        link_next = soup.find(
-            "link",
-            rel="next"
-        )
-
-        if not siguiente and not link_next:
-            log(
-                "   ✅ No se detectó siguiente página."
-            )
-            break
-
-        pagina += 1
-
-        time.sleep(PAUSA)
-
-    return todos
-
-
-# ============================================================
-# MAIN
-# ============================================================
-
-def main():
-
-    os.makedirs(
-        os.path.dirname(CSV_SALIDA),
-        exist_ok=True
-    )
-
-    log("==============================================")
-    log("PORTALGAMES - CUARENTENA PS3")
-    log("==============================================")
-
-    todos = []
-
-    for categoria, url in CATEGORIAS.items():
-
-        log("")
-        log("==============================================")
-        log(f"🎮 {categoria}")
-        log("==============================================")
-
-        productos = scrapear_categoria(
-            categoria,
-            url
-        )
-
-        todos.extend(productos)
-
-        log("")
-        log(
-            f"✅ {categoria}: "
-            f"{len(productos)} productos"
-        )
-
-    # ========================================================
-    # CSV
-    # ========================================================
-
-    campos = [
-        "fuente",
-        "nombre",
-        "categoria",
-        "precio",
-        "precio_mostrado",
-        "moneda",
-        "url",
-        "pagina",
-    ]
-
-    with open(
-        CSV_SALIDA,
-        "w",
-        newline="",
-        encoding="utf-8-sig"
-    ) as f:
-
-        writer = csv.DictWriter(
-            f,
-            fieldnames=campos
-        )
-
-        writer.writeheader()
-
-        for producto in todos:
-            writer.writerow(producto)
-
-    # ========================================================
-    # LOG
-    # ========================================================
-
-    log("")
-    log("==============================================")
-    log(f"TOTAL PRODUCTOS: {len(todos)}")
-    log("==============================================")
-
-    with open(
-        LOG_SALIDA,
-        "w",
-        encoding="utf-8"
-    ) as f:
-
-        f.write(
-            "\n".join(log_lines)
-        )
-
-    print("")
-    print("==============================================")
-    print("✅ SCRAPER FINALIZADO")
-    print(f"CSV: {CSV_SALIDA}")
-    print(f"LOG: {LOG_SALIDA}")
-    print(f"TOTAL: {len(todos)}")
-    print("==============================================")
-
-
-if __name__ == "__main__":
-    main()
+           
