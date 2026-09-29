@@ -1,0 +1,41 @@
+name: PortalGames - PS3 Cuarentena
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          pip install requests beautifulsoup4 curl_cffi
+
+      - name: Ejecutar scraper PortalGames PS3
+        run: |
+          python portalgames.py
+
+      - name: Guardar resultados
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add catalogo_cuarentena/portalgames_ps3.csv
+          git add catalogo_cuarentena/portalgames_ps3.log.txt
+
+          git diff --cached --quiet || git commit -m "PortalGames PS3 - actualizar catálogo"
+
+          git push
