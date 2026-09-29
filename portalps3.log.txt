@@ -1,0 +1,9 @@
+=== PortalGames PS3 - prueba Anime ===
+URL: https://portalgames.com.ar/product-category/juegos-ps3/anime/
+Descargando: https://portalgames.com.ar/product-category/juegos-ps3/anime/
+HTTP: 403
+Content-Type: text/html; charset=UTF-8
+HTML guardado: portalps3_anime.html
+Usando HTML local previamente guardado.
+PRODUCTOS ENCONTRADOS: 0
+CSV generado: portalps3.csv
