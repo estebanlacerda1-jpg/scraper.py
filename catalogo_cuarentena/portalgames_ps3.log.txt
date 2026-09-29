@@ -9,9 +9,13 @@ PORTALGAMES - CUARENTENA PS3
 📄 PortalGames PS3 - Página 1
    URL: https://portalgames.com.ar/product-category/juegos-ps3/
    ⚠️ curl_cffi HTTP 403
-   ❌ Error Playwright: Playwright no esta instalado.
-   HTTP: 0
-   ❌ HTTP inesperado: 0
+🌐 Iniciando Chromium...
+   🌐 Abriendo con Chromium...
+   🌐 Playwright HTTP: 403
+   ⏳ Cloudflare detectado, esperando...
+   ❌ Playwright no obtuvo los productos
+   HTTP: 403
+   ❌ HTTP 403 en página 1: error real.
 
 ✅ PortalGames PS3: 0 productos
 
