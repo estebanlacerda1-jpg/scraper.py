@@ -1,0 +1,62 @@
+name: ABC Gaming - TodoDigital PS4 TEST
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  tododigital-ps4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Ejecutar scraper TodoDigital PS4
+        run: |
+          python tododigital_ps4_test.py
+
+      - name: Mostrar log
+        if: always()
+        run: |
+          echo "===== LOG TODO DIGITAL PS4 ====="
+          cat tododigital_ps4_test.log.txt || true
+
+      - name: Mostrar CSV
+        if: always()
+        run: |
+          echo "===== PRIMERAS FILAS DEL CSV ====="
+          head -20 tododigital_ps4_test.csv || true
+
+      - name: Subir resultados como artefactos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tododigital-ps4-test
+          path: |
+            tododigital_ps4_test.csv
+            tododigital_ps4_test.log.txt
+
+      - name: Guardar resultados en GitHub
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add tododigital_ps4_test.csv tododigital_ps4_test.log.txt
+
+          git diff --cached --quiet || git commit -m "Test TodoDigital PS4"
+
+          git push
