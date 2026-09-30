@@ -1,0 +1,39 @@
+============================================================
+PORTALGAMES PS3 - ANIME
+Prueba Playwright basada en sistema antiguo de Colab
+============================================================
+URL: https://portalgames.com.ar/product-category/juegos-ps3/anime/
+Iniciando Chromium...
+Abriendo PortalGames...
+HTTP inicial: 200
+Esperando JavaScript...
+Scroll 1/5
+Scroll 2/5
+Scroll 3/5
+Scroll 4/5
+Scroll 5/5
+Obteniendo HTML mediante page.content()...
+HTML guardado: portalps3_anime_debug.html (210283 caracteres)
+Texto guardado: portalps3_anime_texto.txt (5005 caracteres)
+⚠️ CLOUDFLARE DETECTADO
+PRODUCTOS ENCONTRADOS: 10
+CSV generado: portalps3_anime.csv
+01. 3rd Super Robot Wars Z: Tengoku-Hen | $ 17.399,00 | https://portalgames.com.ar/product/3rd-super-robot-wars-z-tengoku-hen/
+02. Aegis of Earth: Protonovus Assault PS3 | $ 17.399,00 | https://portalgames.com.ar/product/aegis-of-earth-protonovus-assault-ps3/
+03. Ar nosurge: Ode to an Unborn Star PS3 | $ 18.499,00 | https://portalgames.com.ar/product/ar-nosurge-ode-to-an-unborn-star-ps3/
+04. Attack on Titan Wings of Freedom Ps3 | $ 12.299,00 | https://portalgames.com.ar/product/attack-on-titan-wings-of-freedom-ps3/
+05. Bayonetta Ps3 | $ 19.599,00 | https://portalgames.com.ar/product/bayonetta-ps3/
+06. Blazblue Centralfiction Ps3 | $ 19.599,00 | https://portalgames.com.ar/product/blazblue-centralfiction-ps3/
+07. CHAOS CODE PS3 | $ 14.299,00 | https://portalgames.com.ar/product/chaos-code-ps3/
+08. Deception IV Blood Ties | $ 19.099,00 | https://portalgames.com.ar/product/deception-iv-blood-ties/
+09. Dengeki Bunko Fighting Climax (Ingles) PS3 | $ 14.299,00 | https://portalgames.com.ar/product/dengeki-bunko-fighting-climax-ingles-ps3/
+10. Tales of symphonia | $ 9.099,00 | https://portalgames.com.ar/product/tales-of-symphonia/
+
+--- DIAGNÓSTICO DE CARDS ---
+div.product -> 10
+.product-small -> 20
+.type-product -> 10
+.woocommerce-loop-product__title -> 10
+
+--- PRIMEROS 1500 CARACTERES ---
+Saltar al contenido | Menú | Todo | Accion | Arcade | Arte | Automóviles | Aventura | Coleccion | Construcción | Contra | Cooperativo | Espacio | Fantasía | Gestión | Juegos PS3 | Juegos PS4 | Juegos Ps5 | Lucha | Multijugador | Nintendo Switch | Operaciones Especiales | Reparación | RPG | Shooter | Simulador | Buscar por: | Juegos Digitales | Mi cuenta | Acceder / Registrarse |  | No hay productos en el carrito. |  | Volver a la tienda |  | Carrito |  | No hay productos en el carrito. |  | Volver a la tienda |  | Juegos PS3 | Categorías | Anime | Aventura | Baile | Carreras | Combos | Deportes | Estrategia | Ideal para juntadas | Lucha | Multi Jugador Local | Para niños | Plataformas | Retro | Shooter | Terror | Zombies | Expansiones | DLC (Solo expansiones) | Season pass | Juegos PS4 | Categorías | Anime | Aventura | Baile | Carreras | Combos | Deportes | Estrategia | Ideal para juntadas | Lucha | MultiJugador Local | Para niños | Plataformas | PREVENTAS | Realidad virtual | Retro | Shooter | Simuladores | Terror | Zombies | Expansiones | Combos | DLC | Season pass | Juegos PS5 | Aventura | Baile | carreras | deportes | Lucha | Para niños | Plataformas | shooter | N Switch | Juegos | Suscripcion Online | 🎁 Beneficios | 📧 Contactanos | Ofertas | LUN-VIE 13:00 a 22:00 SAB 18:00-21:00 | 11-3505-7492 wapp | Todo | Accion | Arcade | Arte | Automóviles | Aventura | Coleccion | Construcción | Contra | Cooperativo | Espacio | Fantasía | Gestión | Juegos PS3 | Juegos PS4 | Juegos Ps5 | Lucha | Multijugador | Nintendo Switch | Operaciones Especiales | Reparación | RPG | Shooter | Simulador | Buscar por: | Anime | Inicio / Juegos PS3 / Anime | Filtrar |  | Mostrando los 10 resultados |  | Orden predeterminado | Ordenar por popularidad | Ordenar por los 
