@@ -1,0 +1,21 @@
+[2026-09-30 21:14:29] === TodoDigital - PRUEBA PS4 ===
+[2026-09-30 21:14:29] PS4 | página 1 | https://tododigitalshop.com/juegos-digitales-ps4/
+[2026-09-30 21:14:31] PS4 | página 1 | HTTP 200 | 188129 caracteres
+[2026-09-30 21:14:31] PS4 | página 1 | 15 encontrados | 15 nuevos | total 15
+[2026-09-30 21:14:34] PS4 | página 2 | https://tododigitalshop.com/juegos-digitales-ps4/page/2/
+[2026-09-30 21:14:35] PS4 | página 2 | HTTP 200 | 177248 caracteres
+[2026-09-30 21:14:35] PS4 | página 2 | 15 encontrados | 15 nuevos | total 30
+[2026-09-30 21:14:38] PS4 | página 3 | https://tododigitalshop.com/juegos-digitales-ps4/page/3/
+[2026-09-30 21:14:39] PS4 | página 3 | HTTP 200 | 155331 caracteres
+[2026-09-30 21:14:39] PS4 | página 3 | 8 encontrados | 8 nuevos | total 38
+[2026-09-30 21:14:39] No se encontró siguiente página. Fin.
+[2026-09-30 21:14:39] === RESUMEN ===
+[2026-09-30 21:14:39] Productos únicos: 38
+[2026-09-30 21:14:39] Estado: OK
+[2026-09-30 21:14:39] CSV: tododigital_ps4_test.csv
+[2026-09-30 21:14:39] Log: tododigital_ps4_test.log.txt
+[2026-09-30 21:14:39] - EA SPORTS FC 26 PS4 | PS5 | 8.0 EUR | https://tododigitalshop.com/ea-sports-fc-26-ps4-ps5/
+[2026-09-30 21:14:39] - EA SPORTS FC 27 PS4 | PS5 | 32.0 EUR | https://tododigitalshop.com/ea-sports-fc-27-ps4-ps5/
+[2026-09-30 21:14:39] - Call of Duty: Black Ops 6 | 8.0 EUR | https://tododigitalshop.com/call-of-duty-black-ops-6/
+[2026-09-30 21:14:39] - Assassin’s Creed Mirage | 14.0 EUR | https://tododigitalshop.com/assassins-creed-mirage/
+[2026-09-30 21:14:39] - Call of Duty: Black Ops 7 | 29.0 EUR | https://tododigitalshop.com/call-of-duty-black-ops-7/
