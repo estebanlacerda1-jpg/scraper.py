@@ -1,189 +1,643 @@
+import asyncio
 import csv
 import re
 from pathlib import Path
 
-import requests
 from bs4 import BeautifulSoup
-
-BASE_URL = "https://portalgames.com.ar"
-ANIME_URL = f"{BASE_URL}/product-category/juegos-ps3/anime/"
-
-HTML_FILE = Path("portalps3_anime.html")
-CSV_FILE = Path("portalps3.csv")
-LOG_FILE = Path("portalps3.log.txt")
-
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/140.0.0.0 Safari/537.36"
-    ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
-    "Referer": BASE_URL + "/",
-}
+from playwright.async_api import async_playwright
 
 
-def log(mensaje):
-    print(mensaje)
+# ============================================================
+# CONFIGURACIÓN
+# ============================================================
+
+URL = "https://portalgames.com.ar/product-category/juegos-ps3/anime/"
+
+HTML_FILE = Path("portalps3_anime_debug.html")
+TXT_FILE = Path("portalps3_anime_texto.txt")
+CSV_FILE = Path("portalps3_anime.csv")
+LOG_FILE = Path("portalps3_anime.log.txt")
+
+
+# ============================================================
+# LOG
+# ============================================================
+
+def log(text):
+    print(text)
+
     with LOG_FILE.open("a", encoding="utf-8") as f:
-        f.write(mensaje + "\n")
+        f.write(text + "\n")
 
 
-def precio_ars(texto):
-    if not texto:
+# ============================================================
+# PRECIO
+# ============================================================
+
+def parse_price(text):
+
+    if not text:
         return None
 
-    texto = texto.replace("\xa0", " ").strip()
-    texto = re.sub(r"[^\d,.]", "", texto)
+    text = text.replace("\xa0", " ")
+    text = re.sub(r"[^\d,.]", "", text)
 
-    if not texto:
+    if not text:
         return None
 
-    # PortalGames muestra ARS en formato argentino:
+    # Formato argentino:
     # 17.399,00 -> 17399
-    if "," in texto:
-        texto = texto.replace(".", "").replace(",", ".")
+    if "," in text:
+        text = text.replace(".", "")
+        text = text.replace(",", ".")
     else:
-        texto = texto.replace(".", "")
+        text = text.replace(".", "")
 
     try:
-        valor = float(texto)
-        return int(valor) if valor.is_integer() else valor
+        value = float(text)
+
+        if value.is_integer():
+            return int(value)
+
+        return value
+
     except ValueError:
         return None
 
 
-def extraer_productos(html):
+# ============================================================
+# EXTRAER PRODUCTOS DEL HTML
+# ============================================================
+
+def extract_products(html):
+
     soup = BeautifulSoup(html, "html.parser")
 
-    productos = []
-    vistos = set()
+    products = []
+    seen = set()
 
-    # Los productos reales están en estos enlaces.
-    enlaces = soup.select(
+    # Estructura real de PortalGames / Flatsome / WooCommerce
+    links = soup.select(
         "p.name.product-title.woocommerce-loop-product__title a"
     )
 
-    for enlace in enlaces:
-        nombre = enlace.get_text(" ", strip=True)
-        url = enlace.get("href", "").strip()
+    for link in links:
 
-        if not nombre or not url or url in vistos:
+        name = link.get_text(" ", strip=True)
+        url = link.get("href", "").strip()
+
+        if not name:
             continue
 
-        vistos.add(url)
-
-        contenedor = enlace.find_parent(class_="product-small")
-        if not contenedor:
+        if not url:
             continue
 
-        precio_tag = contenedor.select_one(".woocommerce-Price-amount")
-        categoria_tag = contenedor.select_one(".product-cat")
+        if url in seen:
+            continue
 
-        precio_mostrado = (
-            precio_tag.get_text(" ", strip=True)
-            if precio_tag else ""
+        seen.add(url)
+
+        container = link.find_parent(
+            class_="product-small"
         )
 
-        categoria = (
-            categoria_tag.get_text(" ", strip=True)
-            if categoria_tag else "Anime"
+        if not container:
+            continue
+
+        price_tag = container.select_one(
+            ".woocommerce-Price-amount"
         )
 
-        productos.append({
+        category_tag = container.select_one(
+            ".product-cat"
+        )
+
+        shown_price = ""
+
+        if price_tag:
+            shown_price = price_tag.get_text(
+                " ",
+                strip=True
+            )
+
+        category = "Anime"
+
+        if category_tag:
+            category = category_tag.get_text(
+                " ",
+                strip=True
+            )
+
+        products.append({
+
             "fuente": "PortalGames",
-            "nombre": nombre,
-            "categoria": categoria,
-            "precio": precio_ars(precio_mostrado),
+
+            "nombre": name,
+
+            "categoria": category,
+
+            "precio": parse_price(
+                shown_price
+            ),
+
             "moneda": "ARS",
-            "precio_mostrado": precio_mostrado,
-            "url": url,
+
+            "precio_mostrado": shown_price,
+
+            "url": url
+
         })
 
-    return productos
+    return products
 
 
-def descargar_html():
-    log(f"Descargando: {ANIME_URL}")
+# ============================================================
+# CERRAR POPUPS
+# ============================================================
+
+async def close_popups(page):
+
+    textos = [
+
+        "Aceptar todo",
+
+        "Accept all",
+
+        "Aceptar",
+
+        "Cerrar",
+
+        "No"
+
+    ]
+
+    for texto in textos:
+
+        try:
+
+            boton = page.get_by_text(
+                texto,
+                exact=True
+            ).first
+
+            if await boton.count():
+
+                await boton.click(
+                    timeout=1500
+                )
+
+                await page.wait_for_timeout(
+                    1000
+                )
+
+        except Exception:
+            pass
 
     try:
-        r = requests.get(
-            ANIME_URL,
-            headers=HEADERS,
-            timeout=30,
-            allow_redirects=True,
+
+        await page.keyboard.press(
+            "Escape"
         )
 
-        log(f"HTTP: {r.status_code}")
-        log(f"Content-Type: {r.headers.get('content-type', '')}")
-
-        HTML_FILE.write_text(
-            r.text,
-            encoding="utf-8",
-        )
-
-        log(f"HTML guardado: {HTML_FILE}")
-
-        return r.status_code, r.text
-
-    except Exception as e:
-        log(f"ERROR descargando HTML: {e}")
-        return 0, ""
+    except Exception:
+        pass
 
 
-def main():
-    LOG_FILE.write_text("", encoding="utf-8")
+# ============================================================
+# SCRAPER
+# ============================================================
 
-    log("=== PortalGames PS3 - prueba Anime ===")
-    log(f"URL: {ANIME_URL}")
+async def main():
 
-    status, html = descargar_html()
+    LOG_FILE.write_text(
+        "",
+        encoding="utf-8"
+    )
 
-    # Si Cloudflare bloquea la descarga, igualmente intentamos
-    # analizar un HTML previamente guardado.
-    if not html or status >= 400:
-        if HTML_FILE.exists():
-            log("Usando HTML local previamente guardado.")
-            html = HTML_FILE.read_text(
-                encoding="utf-8",
-                errors="ignore",
-            )
-        else:
-            log("No hay HTML disponible para analizar.")
-            return
+    log("=" * 60)
 
-    productos = extraer_productos(html)
+    log(
+        "PORTALGAMES PS3 - ANIME"
+    )
 
-    with CSV_FILE.open(
-        "w",
-        newline="",
-        encoding="utf-8-sig",
-    ) as f:
-        campos = [
-            "fuente",
-            "nombre",
-            "categoria",
-            "precio",
-            "moneda",
-            "precio_mostrado",
-            "url",
-        ]
+    log(
+        "Prueba Playwright basada en sistema antiguo de Colab"
+    )
 
-        writer = csv.DictWriter(f, fieldnames=campos)
-        writer.writeheader()
-        writer.writerows(productos)
+    log("=" * 60)
 
-    log(f"PRODUCTOS ENCONTRADOS: {len(productos)}")
-    log(f"CSV generado: {CSV_FILE}")
+    log(
+        f"URL: {URL}"
+    )
 
-    for i, producto in enumerate(productos, 1):
+
+    async with async_playwright() as p:
+
+        # ----------------------------------------------------
+        # Chromium
+        # ----------------------------------------------------
+
         log(
-            f"{i:02d}. {producto['nombre']} | "
-            f"{producto['precio_mostrado']} | "
-            f"{producto['url']}"
+            "Iniciando Chromium..."
         )
 
+        browser = await p.chromium.launch(
+
+            headless=True,
+
+            args=[
+
+                "--no-sandbox",
+
+                "--disable-dev-shm-usage",
+
+                "--disable-blink-features=AutomationControlled"
+
+            ]
+
+        )
+
+
+        # ----------------------------------------------------
+        # CONTEXTO
+        # ----------------------------------------------------
+
+        context = await browser.new_context(
+
+            viewport={
+                "width": 1400,
+                "height": 900
+            },
+
+            user_agent=(
+                "Mozilla/5.0 "
+                "(Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 "
+                "(KHTML, like Gecko) "
+                "Chrome/124.0.0.0 "
+                "Safari/537.36"
+            ),
+
+            locale="es-419",
+
+            timezone_id="America/Montevideo",
+
+            java_script_enabled=True
+
+        )
+
+
+        page = await context.new_page()
+
+
+        try:
+
+            # ------------------------------------------------
+            # ENTRAR
+            # ------------------------------------------------
+
+            log(
+                "Abriendo PortalGames..."
+            )
+
+            try:
+
+                response = await page.goto(
+
+                    URL,
+
+                    wait_until="networkidle",
+
+                    timeout=90000
+
+                )
+
+            except Exception as e:
+
+                log(
+                    f"networkidle falló: {e}"
+                )
+
+                log(
+                    "Intentando domcontentloaded..."
+                )
+
+                response = await page.goto(
+
+                    URL,
+
+                    wait_until="domcontentloaded",
+
+                    timeout=60000
+
+                )
+
+
+            status = (
+                response.status
+                if response
+                else 0
+            )
+
+            log(
+                f"HTTP inicial: {status}"
+            )
+
+
+            # ------------------------------------------------
+            # ESPERA
+            # ------------------------------------------------
+
+            log(
+                "Esperando JavaScript..."
+            )
+
+            await page.wait_for_timeout(
+                5000
+            )
+
+
+            # ------------------------------------------------
+            # POPUPS
+            # ------------------------------------------------
+
+            await close_popups(page)
+
+            await page.wait_for_timeout(
+                1000
+            )
+
+
+            # ------------------------------------------------
+            # SCROLL
+            # ------------------------------------------------
+
+            for i in range(5):
+
+                log(
+                    f"Scroll {i + 1}/5"
+                )
+
+                await page.mouse.wheel(
+                    0,
+                    5000
+                )
+
+                await page.wait_for_timeout(
+                    2000
+                )
+
+
+            # ------------------------------------------------
+            # HTML REAL DEL NAVEGADOR
+            # ------------------------------------------------
+
+            log(
+                "Obteniendo HTML mediante page.content()..."
+            )
+
+            html = await page.content()
+
+
+            # ------------------------------------------------
+            # TEXTO VISIBLE
+            # ------------------------------------------------
+
+            text = await page.evaluate(
+                "() => document.body ? document.body.innerText : ''"
+            )
+
+
+            # ------------------------------------------------
+            # GUARDAR HTML
+            # ------------------------------------------------
+
+            HTML_FILE.write_text(
+                html,
+                encoding="utf-8"
+            )
+
+
+            TXT_FILE.write_text(
+                text,
+                encoding="utf-8"
+            )
+
+
+            log(
+                f"HTML guardado: "
+                f"{HTML_FILE} "
+                f"({len(html)} caracteres)"
+            )
+
+            log(
+                f"Texto guardado: "
+                f"{TXT_FILE} "
+                f"({len(text)} caracteres)"
+            )
+
+
+            # ------------------------------------------------
+            # DETECTAR CLOUDFLARE
+            # ------------------------------------------------
+
+            if (
+                "Just a moment" in html
+                or
+                "cf-chl" in html
+                or
+                "Enable JavaScript and cookies" in html
+                or
+                "challenge-platform" in html
+            ):
+
+                log(
+                    "⚠️ CLOUDFLARE DETECTADO"
+                )
+
+            else:
+
+                log(
+                    "✅ No se detectó el HTML típico del Challenge"
+                )
+
+
+            # ------------------------------------------------
+            # EXTRAER PRODUCTOS
+            # ------------------------------------------------
+
+            products = extract_products(
+                html
+            )
+
+
+            log(
+                f"PRODUCTOS ENCONTRADOS: "
+                f"{len(products)}"
+            )
+
+
+            # ------------------------------------------------
+            # CSV
+            # ------------------------------------------------
+
+            with CSV_FILE.open(
+
+                "w",
+
+                newline="",
+
+                encoding="utf-8-sig"
+
+            ) as f:
+
+                fields = [
+
+                    "fuente",
+
+                    "nombre",
+
+                    "categoria",
+
+                    "precio",
+
+                    "moneda",
+
+                    "precio_mostrado",
+
+                    "url"
+
+                ]
+
+
+                writer = csv.DictWriter(
+
+                    f,
+
+                    fieldnames=fields
+
+                )
+
+
+                writer.writeheader()
+
+                writer.writerows(
+                    products
+                )
+
+
+            log(
+                f"CSV generado: "
+                f"{CSV_FILE}"
+            )
+
+
+            # ------------------------------------------------
+            # MOSTRAR PRODUCTOS
+            # ------------------------------------------------
+
+            for i, product in enumerate(
+                products,
+                1
+            ):
+
+                log(
+
+                    f"{i:02d}. "
+                    f"{product['nombre']} | "
+                    f"{product['precio_mostrado']} | "
+                    f"{product['url']}"
+
+                )
+
+
+            # ------------------------------------------------
+            # DIAGNÓSTICO DE SELECTORES
+            # ------------------------------------------------
+
+            soup = BeautifulSoup(
+                html,
+                "html.parser"
+            )
+
+
+            log("")
+            log(
+                "--- DIAGNÓSTICO DE CARDS ---"
+            )
+
+
+            selectors = [
+
+                "li.product",
+
+                "div.product",
+
+                ".product-small",
+
+                ".type-product",
+
+                ".products li",
+
+                ".woocommerce-loop-product__title"
+
+            ]
+
+
+            for selector in selectors:
+
+                count = len(
+                    soup.select(
+                        selector
+                    )
+                )
+
+                if count:
+
+                    log(
+                        f"{selector} -> "
+                        f"{count}"
+                    )
+
+
+            # ------------------------------------------------
+            # TEXTO INICIAL
+            # ------------------------------------------------
+
+            log("")
+
+            log(
+                "--- PRIMEROS 1500 CARACTERES ---"
+            )
+
+            log(
+                text[:1500]
+                .replace(
+                    "\n",
+                    " | "
+                )
+            )
+
+
+        except Exception as e:
+
+            log(
+                f"ERROR GENERAL: "
+                f"{type(e).__name__}: {e}"
+            )
+
+
+        finally:
+
+            await browser.close()
+
+
+# ============================================================
+# EJECUTAR
+# ============================================================
 
 if __name__ == "__main__":
-    main()
+
+    asyncio.run(
+        main()
+        )
