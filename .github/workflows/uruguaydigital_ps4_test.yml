@@ -1,0 +1,70 @@
+name: ABC Gaming - UruguayDigital PS4 TEST
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    # PS4 tiene ~1070 productos y muchas páginas. Dejamos margen amplio.
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: Ejecutar scraper UruguayDigital PS4
+        run: python uruguaydigital_ps4_test.py
+
+      - name: Mostrar log
+        if: always()
+        run: |
+          echo '===== LOG ====='
+          [ -f uruguaydigital_ps4_test.log.txt ] && cat uruguaydigital_ps4_test.log.txt || echo 'No se encontró el log.'
+
+      - name: Mostrar resumen CSV
+        if: always()
+        run: |
+          echo '===== CSV ====='
+          if [ -f uruguaydigital_ps4_test.csv ]; then
+            wc -l uruguaydigital_ps4_test.csv
+            head -10 uruguaydigital_ps4_test.csv
+          else
+            echo 'No se encontró el CSV.'
+          fi
+
+      - name: Subir resultados como artefactos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: uruguaydigital-ps4-test
+          path: |
+            uruguaydigital_ps4_test.csv
+            uruguaydigital_ps4_test.log.txt
+          if-no-files-found: warn
+
+      - name: Commit y push de resultados
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add uruguaydigital_ps4_test.csv uruguaydigital_ps4_test.log.txt
+          if git diff --cached --quiet; then
+            echo 'No hay cambios para commitear.'
+          else
+            git commit -m 'ABC Gaming: UruguayDigital PS4 test'
+            git push
+          fi
