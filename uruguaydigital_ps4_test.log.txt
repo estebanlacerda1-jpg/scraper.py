@@ -1,0 +1,147 @@
+======================================================================
+ABC Gaming - UruguayDigital PS4 TEST
+URL inicial: https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/
+Categoría: PS4
+Moneda: UYU
+======================================================================
+[Página 1] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/ | intento 1
+[Página 1] Productos: 32 | Nuevos: 16 | Total: 16
+[Página 2] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/2/ | intento 1
+[Página 2] Productos: 32 | Nuevos: 16 | Total: 32
+[Página 3] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/3/ | intento 1
+[Página 3] Productos: 32 | Nuevos: 16 | Total: 48
+[Página 4] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/4/ | intento 1
+[Página 4] Productos: 32 | Nuevos: 16 | Total: 64
+[Página 5] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/5/ | intento 1
+[Página 5] Productos: 32 | Nuevos: 16 | Total: 80
+[Página 6] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/6/ | intento 1
+[Página 6] Productos: 32 | Nuevos: 16 | Total: 96
+[Página 7] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/7/ | intento 1
+[Página 7] Productos: 32 | Nuevos: 16 | Total: 112
+[Página 8] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/8/ | intento 1
+[Página 8] Productos: 32 | Nuevos: 16 | Total: 128
+[Página 9] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/9/ | intento 1
+[Página 9] Productos: 32 | Nuevos: 16 | Total: 144
+[Página 10] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/10/ | intento 1
+[Página 10] Productos: 32 | Nuevos: 16 | Total: 160
+[Página 11] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/11/ | intento 1
+[Página 11] Productos: 32 | Nuevos: 16 | Total: 176
+[Página 12] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/12/ | intento 1
+[Página 12] Productos: 32 | Nuevos: 16 | Total: 192
+[Página 13] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/13/ | intento 1
+[Página 13] Productos: 32 | Nuevos: 16 | Total: 208
+[Página 14] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/14/ | intento 1
+[Página 14] Productos: 32 | Nuevos: 16 | Total: 224
+[Página 15] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/15/ | intento 1
+[Página 15] Productos: 32 | Nuevos: 16 | Total: 240
+[Página 16] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/16/ | intento 1
+[Página 16] Productos: 32 | Nuevos: 16 | Total: 256
+[Página 17] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/17/ | intento 1
+[Página 17] Productos: 32 | Nuevos: 16 | Total: 272
+[Página 18] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/18/ | intento 1
+[Página 18] Productos: 32 | Nuevos: 16 | Total: 288
+[Página 19] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/19/ | intento 1
+[Página 19] Productos: 32 | Nuevos: 16 | Total: 304
+[Página 20] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/20/ | intento 1
+[Página 20] Productos: 32 | Nuevos: 16 | Total: 320
+[Página 21] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/21/ | intento 1
+[Página 21] Productos: 32 | Nuevos: 16 | Total: 336
+[Página 22] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/22/ | intento 1
+[Página 22] Productos: 32 | Nuevos: 16 | Total: 352
+[Página 23] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/23/ | intento 1
+[Página 23] Productos: 32 | Nuevos: 16 | Total: 368
+[Página 24] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/24/ | intento 1
+[Página 24] Productos: 32 | Nuevos: 16 | Total: 384
+[Página 25] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/25/ | intento 1
+[Página 25] Productos: 32 | Nuevos: 16 | Total: 400
+[Página 26] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/26/ | intento 1
+[Página 26] Productos: 32 | Nuevos: 16 | Total: 416
+[Página 27] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/27/ | intento 1
+[Página 27] Productos: 32 | Nuevos: 16 | Total: 432
+[Página 28] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/28/ | intento 1
+[Página 28] Productos: 32 | Nuevos: 16 | Total: 448
+[Página 29] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/29/ | intento 1
+[Página 29] Productos: 32 | Nuevos: 16 | Total: 464
+[Página 30] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/30/ | intento 1
+[Página 30] Productos: 32 | Nuevos: 16 | Total: 480
+[Página 31] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/31/ | intento 1
+[Página 31] Productos: 32 | Nuevos: 16 | Total: 496
+[Página 32] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/32/ | intento 1
+[Página 32] Productos: 32 | Nuevos: 16 | Total: 512
+[Página 33] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/33/ | intento 1
+[Página 33] Productos: 32 | Nuevos: 16 | Total: 528
+[Página 34] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/34/ | intento 1
+[Página 34] Productos: 32 | Nuevos: 16 | Total: 544
+[Página 35] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/35/ | intento 1
+[Página 35] Productos: 32 | Nuevos: 16 | Total: 560
+[Página 36] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/36/ | intento 1
+[Página 36] Productos: 32 | Nuevos: 16 | Total: 576
+[Página 37] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/37/ | intento 1
+[Página 37] Productos: 32 | Nuevos: 16 | Total: 592
+[Página 38] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/38/ | intento 1
+[Página 38] Productos: 32 | Nuevos: 16 | Total: 608
+[Página 39] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/39/ | intento 1
+[Página 39] Productos: 32 | Nuevos: 16 | Total: 624
+[Página 40] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/40/ | intento 1
+[Página 40] Productos: 32 | Nuevos: 16 | Total: 640
+[Página 41] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/41/ | intento 1
+[Página 41] Productos: 32 | Nuevos: 16 | Total: 656
+[Página 42] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/42/ | intento 1
+[Página 42] Productos: 32 | Nuevos: 16 | Total: 672
+[Página 43] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/43/ | intento 1
+[Página 43] Productos: 32 | Nuevos: 16 | Total: 688
+[Página 44] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/44/ | intento 1
+[Página 44] Productos: 32 | Nuevos: 16 | Total: 704
+[Página 45] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/45/ | intento 1
+[Página 45] Productos: 32 | Nuevos: 16 | Total: 720
+[Página 46] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/46/ | intento 1
+[Página 46] Productos: 32 | Nuevos: 16 | Total: 736
+[Página 47] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/47/ | intento 1
+[Página 47] Productos: 32 | Nuevos: 16 | Total: 752
+[Página 48] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/48/ | intento 1
+[Página 48] Productos: 32 | Nuevos: 16 | Total: 768
+[Página 49] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/49/ | intento 1
+[Página 49] Productos: 32 | Nuevos: 16 | Total: 784
+[Página 50] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/50/ | intento 1
+[Página 50] Productos: 32 | Nuevos: 16 | Total: 800
+[Página 51] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/51/ | intento 1
+[Página 51] Productos: 32 | Nuevos: 16 | Total: 816
+[Página 52] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/52/ | intento 1
+[Página 52] Productos: 32 | Nuevos: 16 | Total: 832
+[Página 53] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/53/ | intento 1
+[Página 53] Productos: 32 | Nuevos: 16 | Total: 848
+[Página 54] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/54/ | intento 1
+[Página 54] Productos: 32 | Nuevos: 16 | Total: 864
+[Página 55] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/55/ | intento 1
+[Página 55] Productos: 32 | Nuevos: 16 | Total: 880
+[Página 56] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/56/ | intento 1
+[Página 56] Productos: 32 | Nuevos: 16 | Total: 896
+[Página 57] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/57/ | intento 1
+[Página 57] Productos: 32 | Nuevos: 16 | Total: 912
+[Página 58] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/58/ | intento 1
+[Página 58] Productos: 32 | Nuevos: 16 | Total: 928
+[Página 59] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/59/ | intento 1
+[Página 59] Productos: 32 | Nuevos: 16 | Total: 944
+[Página 60] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/60/ | intento 1
+[Página 60] Productos: 32 | Nuevos: 16 | Total: 960
+[Página 61] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/61/ | intento 1
+[Página 61] Productos: 32 | Nuevos: 16 | Total: 976
+[Página 62] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/62/ | intento 1
+[Página 62] Productos: 32 | Nuevos: 16 | Total: 992
+[Página 63] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/63/ | intento 1
+[Página 63] Productos: 32 | Nuevos: 16 | Total: 1008
+[Página 64] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/64/ | intento 1
+[Página 64] Productos: 32 | Nuevos: 16 | Total: 1024
+[Página 65] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/65/ | intento 1
+[Página 65] Productos: 32 | Nuevos: 16 | Total: 1040
+[Página 66] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/66/ | intento 1
+[Página 66] Productos: 32 | Nuevos: 16 | Total: 1056
+[Página 67] HTTP 200 | https://uruguayjuegosdigitales.com/product-category/juegos-digitales-ps4/page/67/ | intento 1
+[Página 67] Productos: 28 | Nuevos: 14 | Total: 1070
+[Página 67] No hay rel="next". Fin.
+======================================================================
+RESUMEN FINAL
+Páginas procesadas: 67
+Productos únicos: 1070
+CSV: uruguaydigital_ps4_test.csv
+======================================================================
