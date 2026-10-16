@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "scrapers/zonadigital.py"
+      - "zonadigital.py"
       - ".github/workflows/zonadigital.yml"
 
 permissions:
@@ -31,5 +31,5 @@ jobs:
           pip install requests beautifulsoup4
 
       - name: Ejecutar scraper de prueba
-        run: python -u scrapers/zonadigital.py
+        run: python -u zonadigital.py
         
