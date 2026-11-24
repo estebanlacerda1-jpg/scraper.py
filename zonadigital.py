@@ -90,47 +90,58 @@ def extraer_productos(html):
     soup = BeautifulSoup(html, "html.parser")
     encontrados = {}
 
-    # Selector observado en el HTML de ZonaDigital.
+    # ZonaDigital entrega tarjetas app-item-gift con id product-N.
+    # En algunas respuestas los enlaces no quedan anidados dentro de la tarjeta,
+    # por eso primero se buscan los enlaces globalmente y luego se emparejan
+    # por orden con las tarjetas identificadas.
     tarjetas = soup.select("app-item-gift")
+    enlaces = soup.select('a[href*="producto"]')
 
-    # Alternativa por si alguna categoría usa tarjetas diferentes.
     if not tarjetas:
-        enlaces = soup.select('a[href*="/producto/"]')
-        tarjetas = []
-        vistos = set()
-        for enlace in enlaces:
-            href = enlace.get("href", "")
-            if href and href not in vistos:
-                vistos.add(href)
-                tarjetas.append(enlace)
+        tarjetas = soup.select('[id^="product-"]')
 
-    for tarjeta in tarjetas:
-        enlace = tarjeta.select_one('a[href*="/producto/"]')
-        titulo = tarjeta.select_one(".item-gift__content-title")
+    enlaces_validos = []
+    vistos = set()
+    for enlace in enlaces:
+        href = enlace.get("href", "")
+        if not href:
+            continue
+        url_producto = normalizar_url(href)
+        if "producto" not in urlparse(url_producto).path.lower():
+            continue
+        if url_producto not in vistos:
+            vistos.add(url_producto)
+            enlaces_validos.append((enlace, url_producto))
 
-        if not enlace and tarjeta.name == "a":
-            enlace = tarjeta
+    for indice, tarjeta in enumerate(tarjetas):
+        enlace = tarjeta.select_one('a[href*="producto"]')
+        url_producto = None
 
-        if not enlace:
+        if enlace:
+            url_producto = normalizar_url(enlace.get("href", ""))
+        elif indice < len(enlaces_validos):
+            enlace, url_producto = enlaces_validos[indice]
+
+        if not url_producto or "producto" not in urlparse(url_producto).path.lower():
             continue
 
-        url_producto = normalizar_url(enlace.get("href", ""))
-        if "/producto/" not in url_producto:
-            continue
+        titulo = tarjeta.select_one(
+            ".item-gift__content-title, .item-gift__title, [class*='title']"
+        )
+        nombre = titulo.get_text(" ", strip=True) if titulo else ""
 
-        if titulo:
-            nombre = titulo.get_text(" ", strip=True)
-        else:
+        if not nombre and enlace:
             nombre = enlace.get_text(" ", strip=True)
-
         if not nombre:
-            nombre = enlace.get("title", "").strip()
+            nombre = tarjeta.get("data-name", "").strip()
+        if not nombre:
+            nombre = tarjeta.get_text(" ", strip=True)
 
         if not nombre:
             continue
 
         precio_elemento = tarjeta.select_one(
-            "app-item-price-gift .price, .item-gift__price .price, .price"
+            "app-item-price-gift .price, .item-gift__price .price, .price, [class*='price']"
         )
         precio = (
             precio_elemento.get_text(" ", strip=True)
