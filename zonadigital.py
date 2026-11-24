@@ -1,5 +1,5 @@
-
 import re
+import sys
 import time
 from urllib.parse import urljoin, urlparse, urlunparse, parse_qsl, urlencode
 
@@ -42,6 +42,7 @@ CATEGORIAS = {
 SESSION = requests.Session()
 SESSION.headers.update(HEADERS)
 
+
 def normalizar_url(url):
     """Quita parámetros de paginación y fragmentos para deduplicar."""
     absoluta = urljoin(BASE_URL, url)
@@ -55,10 +56,35 @@ def normalizar_url(url):
         urlencode(params), ""
     ))
 
-def obtener_html(url):
+
+def obtener_respuesta(url):
     respuesta = SESSION.get(url, timeout=35)
     respuesta.raise_for_status()
-    return respuesta.text
+    return respuesta
+
+
+def diagnosticar_html(html, respuesta, pagina):
+    soup = BeautifulSoup(html, "html.parser")
+    titulo_pagina = soup.title.get_text(" ", strip=True) if soup.title else "(sin title)"
+    tarjetas = len(soup.select("app-item-gift"))
+    enlaces_producto = len(soup.select('a[href*="/producto/"]'))
+    ids_producto = len(soup.select('[id^="product-"]'))
+    print(
+        f"DIAGNÓSTICO página {pagina}: HTTP {respuesta.status_code}; "
+        f"{len(respuesta.content)} bytes; "
+        f"Content-Type={respuesta.headers.get('Content-Type', 'no informado')}; "
+        f"URL final={respuesta.url}"
+    )
+    print(
+        f"DIAGNÓSTICO HTML: título={titulo_pagina!r}; "
+        f"app-item-gift={tarjetas}; enlaces /producto/={enlaces_producto}; "
+        f"IDs product-= {ids_producto}"
+    )
+    if tarjetas == 0 and enlaces_producto == 0:
+        texto = soup.get_text(" ", strip=True)
+        print(f"DIAGNÓSTICO sin tarjetas: texto visible={texto[:350]!r}")
+        print(f"DIAGNÓSTICO inicio HTML={html[:350]!r}")
+
 
 def extraer_productos(html):
     soup = BeautifulSoup(html, "html.parser")
@@ -119,29 +145,31 @@ def extraer_productos(html):
 
     return encontrados
 
+
 def escanear_categoria(nombre_categoria, ruta):
     url_base = urljoin(BASE_URL, ruta)
     productos_categoria = {}
     paginas_sin_novedades = 0
+    hubo_error_http = False
 
     print(f"\n{'=' * 70}")
     print(f"CATEGORÍA: {nombre_categoria}")
     print(f"URL: {url_base}")
     print("=" * 70)
 
-    # La paginación observada es acumulativa: page=5 puede devolver
-    # más productos que page=1, no solo una página individual.
+    # La paginación observada es acumulativa.
     for pagina in range(1, 101):
-        if pagina == 1:
-            url = url_base
-        else:
-            url = f"{url_base}?page={pagina}"
+        url = url_base if pagina == 1 else f"{url_base}?page={pagina}"
 
         try:
-            html = obtener_html(url)
+            respuesta = obtener_respuesta(url)
+            html = respuesta.text
+            if pagina == 1:
+                diagnosticar_html(html, respuesta, pagina)
             productos = extraer_productos(html)
         except requests.RequestException as error:
-            print(f"[ERROR] Página {pagina}: {error}")
+            print(f"[ERROR HTTP/RED] Página {pagina}: {error}")
+            hubo_error_http = True
             break
 
         nuevos = 0
@@ -161,8 +189,6 @@ def escanear_categoria(nombre_categoria, ruta):
         else:
             paginas_sin_novedades = 0
 
-        # Dos respuestas consecutivas sin novedades indican que
-        # probablemente alcanzamos el final del catálogo.
         if pagina > 1 and paginas_sin_novedades >= 2:
             print("Fin probable del catálogo: no aparecen productos nuevos.")
             break
@@ -175,19 +201,27 @@ def escanear_categoria(nombre_categoria, ruta):
         print(f"  URL: {producto['url']}")
 
     print(f"Total observado en {nombre_categoria}: {len(productos_categoria)}")
-    return productos_categoria
+    if len(productos_categoria) == 0:
+        print(f"[ADVERTENCIA] La categoría {nombre_categoria} terminó con cero productos.")
+    return productos_categoria, hubo_error_http
+
 
 def main():
     catalogo_global = {}
     errores = []
+    categorias_vacias = []
 
-    print("ABC GAMING | ZONADIGITAL | MODO DE PRUEBA")
+    print("ABC GAMING | ZONADIGITAL | MODO DE DIAGNÓSTICO")
     print("No se guardarán archivos.")
     print(f"Categorías configuradas: {len(CATEGORIAS)}")
 
     for nombre, ruta in CATEGORIAS.items():
         try:
-            productos = escanear_categoria(nombre, ruta)
+            productos, hubo_error_http = escanear_categoria(nombre, ruta)
+            if not productos:
+                categorias_vacias.append(nombre)
+            if hubo_error_http:
+                errores.append((nombre, "Error HTTP/red; ver diagnóstico de página"))
 
             duplicados = sum(
                 1 for url in productos if url in catalogo_global
@@ -213,14 +247,26 @@ def main():
     print("=" * 70)
     print(f"Categorías configuradas: {len(CATEGORIAS)}")
     print(f"Productos únicos globales: {len(catalogo_global)}")
-    print(f"Categorías con errores: {len(errores)}")
+    print(f"Categorías vacías: {len(categorias_vacias)}")
+    print(f"Categorías con errores HTTP/red: {len(errores)}")
+
+    if categorias_vacias:
+        print("Categorías sin productos:")
+        for categoria in categorias_vacias:
+            print(f"- {categoria}")
 
     if errores:
+        print("Errores:")
         for categoria, error in errores:
             print(f"- {categoria}: {error}")
 
     print("\nPrueba terminada. No se generaron archivos.")
 
+    # Una ejecución sin productos no debe aparecer como exitosa en Actions.
+    if not catalogo_global:
+        print("[FALLO] No se detectó ningún producto. Revisar diagnóstico HTML.")
+        sys.exit(1)
+
+
 if __name__ == "__main__":
     main()
-  
